@@ -87,6 +87,12 @@
         </dependency>
 
 
+        <!-- addon dependencies -->
+        <dependency>
+            <groupId>org.jboss.forge.addon</groupId>
+            <artifactId>resources-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.jboss.forge.addon</groupId>
             <artifactId>core</artifactId>
