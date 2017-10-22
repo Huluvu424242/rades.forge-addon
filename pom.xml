@@ -18,11 +18,7 @@
     <dependencyManagement>
         <dependencies>
 
-            <!--<dependency>-->
-            <!--<groupId>javax</groupId>-->
-            <!--<artifactId>javaee-api</artifactId>-->
-            <!--<version>8.0</version>-->
-            <!--</dependency>-->
+            <!-- native dependencies -->
             <dependency>
                 <groupId>javax.annotation</groupId>
                 <artifactId>jsr250-api</artifactId>
@@ -34,30 +30,31 @@
                 <version>7.0</version>
             </dependency>
 
+            <!-- addon dependencies -->
             <dependency>
                 <groupId>org.jboss.forge.addon</groupId>
                 <artifactId>ui-api</artifactId>
-                <version>3.7.2.Final</version>
+                <version>${version.forge}</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.forge.addon</groupId>
                 <artifactId>resources-api</artifactId>
-                <version>3.7.2.Final</version>
+                <version>${version.forge}</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.forge.addon</groupId>
                 <artifactId>projects-api</artifactId>
-                <version>3.7.2.Final</version>
+                <version>${version.forge}</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.forge.addon</groupId>
                 <artifactId>maven-api</artifactId>
-                <version>3.7.2.Final</version>
+                <version>${version.forge}</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.forge.addon</groupId>
                 <artifactId>parser-java-api</artifactId>
-                <version>3.7.2.Final</version>
+                <version>${version.forge}</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.forge</groupId>
@@ -91,6 +88,26 @@
         <dependency>
             <groupId>org.jboss.forge.addon</groupId>
             <artifactId>resources-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.forge.addon</groupId>
+            <artifactId>ui-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.forge.addon</groupId>
+            <artifactId>projects-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.forge.addon</groupId>
+            <artifactId>maven-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.forge.addon</groupId>
+            <artifactId>parser-java-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
