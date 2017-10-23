@@ -1,5 +1,6 @@
 package com.github.funthomas424242.rades.commands;
 
+import org.jboss.forge.addon.facets.Faceted;
 import org.jboss.forge.addon.maven.projects.MavenBuildSystem;
 import org.jboss.forge.addon.maven.projects.MavenPluginFacet;
 import org.jboss.forge.addon.parser.java.facets.JavaCompilerFacet;
@@ -10,8 +11,7 @@ import org.jboss.forge.addon.projects.ProjectFactory;
 import org.jboss.forge.addon.projects.facets.DependencyFacet;
 import org.jboss.forge.addon.projects.facets.MetadataFacet;
 import org.jboss.forge.addon.projects.facets.ResourcesFacet;
-import org.jboss.forge.addon.projects.stacks.Stack;
-import org.jboss.forge.addon.projects.stacks.StackFacet;
+import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.resource.ResourceFactory;
 import org.jboss.forge.addon.ui.command.AbstractUICommand;
 import org.jboss.forge.addon.ui.command.UICommand;
@@ -32,6 +32,7 @@ import org.jboss.forge.addon.resource.Resource;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -80,7 +81,7 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     protected UIInput<String> groupId;
 
     @Inject
-    @WithAttributes(label = "Artifact ID:",  required = true, defaultValue = "test")
+    @WithAttributes(label = "Artifact ID:", required = true, defaultValue = "test")
     protected UIInput<String> artifactId;
 
     @Inject
@@ -92,7 +93,7 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     protected UIInput<String> bintrayUsername;
 
     @Inject
-    @WithAttributes(label = "Maven Repos", required = true, description="Auswahl der zu verwendenden Maven Repositories")
+    @WithAttributes(label = "Maven Repos", required = true, description = "Auswahl der zu verwendenden Maven Repositories")
     protected UISelectMany<String> repositories;
 
     @Override
@@ -120,21 +121,54 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     @Override
     public Result execute(UIExecutionContext context) throws Exception {
 
-        final String projectGroupId = groupId.getValue();
-
         final UIOutput log = context.getUIContext().getProvider().getOutput();
+        generateProjectDescriptionFile(log);
 
+        return Results
+                .success("Command 'rades-new-libproject' successfully executed!");
+    }
+
+
+    // final UIOutput log = context.getUIContext().getProvider().getOutput();
+    //        log.info(log.out(), "Verwende als Projektverzeichnis " + projectDir);
+    // final DirectoryResource location = projectDir.reify(
+    // DirectoryResource.class).getOrCreateChildDirectory("test2");
+    // System.out.println("Location directory" + location);
+    //        generateReadme(project);
+    //        generateLicense(project);
+    //        final Optional<Stack> metadata = project.getStack<ProjectFacet>();
+    // add project coordinates
+    //        metadata.setProjectName(projectArtifactId);
+    //        metadata.setProjectGroupName(projectGroupId);
+    //        metadata.setProjectVersion(projectVersion);
+
+
+    protected void generateProjectDescriptionFile(final UIOutput log) throws IOException {
+
+        // TODO Das File muss in einem Directory erstellt werden
+
+        final File projectDescriptionFile = new File("rades.json");
+        projectDescriptionFile.createNewFile();
+
+//        log.info(log.out(), "File:"+projectDescriptionFile.toString());
+        final Resource<File> fileResource = resourceFactory.create(projectDescriptionFile);
+//        log.info(log.out(), "Resource<File>:"+fileResource.getName());
+        final FileResource<?> projectFileResource = fileResource.reify(FileResource.class);
+        log.info(log.out(), "FileResource:"+projectFileResource);
+//        boolean isCreated=projectFileResource.createNewFile();
+
+        // projektFile befüllen
+        final String projectGroupId = groupId.getValue();
+    }
+
+
+    protected void generateProject() {
 
         final File dir = new File("testProject");
         dir.mkdirs();
         final Resource<File> projectDir = resourceFactory.create(dir);
-//        log.info(log.out(), "Verwende als Projektverzeichnis " + projectDir);
 
-        // final DirectoryResource location = projectDir.reify(
-        // DirectoryResource.class).getOrCreateChildDirectory("test2");
-        // System.out.println("Location directory" + location);
-
-        List<Class<? extends ProjectFacet>> facets = new ArrayList<>();
+        final List<Class<? extends ProjectFacet>> facets = new ArrayList<>();
         facets.add(ResourcesFacet.class);
         facets.add(MetadataFacet.class);
         facets.add(JavaSourceFacet.class);
@@ -144,16 +178,6 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
         final Project project = projectFactory.createProject(projectDir,
                 buildSystem, facets);
 
-//        generateReadme(project);
-//        generateLicense(project);
-
-//        final Optional<Stack> metadata = project.getStack<ProjectFacet>();
-        // add project coordinates
-//        metadata.setProjectName(projectArtifactId);
-//        metadata.setProjectGroupName(projectGroupId);
-//        metadata.setProjectVersion(projectVersion);
-
-        return Results
-                .success("Command 'rades-new-libproject' successfully executed!");
     }
+
 }

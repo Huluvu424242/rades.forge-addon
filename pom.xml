@@ -43,6 +43,21 @@
             </dependency>
             <dependency>
                 <groupId>org.jboss.forge.addon</groupId>
+                <artifactId>resources</artifactId>
+                <version>${version.forge}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.forge.addon</groupId>
+                <artifactId>facets</artifactId>
+                <version>${version.forge}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.forge.addon</groupId>
+                <artifactId>facets-api</artifactId>
+                <version>${version.forge}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.forge.addon</groupId>
                 <artifactId>projects-api</artifactId>
                 <version>${version.forge}</version>
             </dependency>
@@ -88,6 +103,21 @@
         <dependency>
             <groupId>org.jboss.forge.addon</groupId>
             <artifactId>resources-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.forge.addon</groupId>
+            <artifactId>resources</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.forge.addon</groupId>
+            <artifactId>facets</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.forge.addon</groupId>
+            <artifactId>facets-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -194,9 +224,17 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <id>central</id>
+            <id>bintray</id>
             <name>bintray</name>
             <url>https://jcenter.bintray.com</url>
+        </repository>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>mvnrepo</id>
+            <name>mvnrepo</name>
+            <url>https://mvnrepository.com/artifact</url>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -204,9 +242,17 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <id>central</id>
+            <id>bintray</id>
             <name>bintray-plugins</name>
             <url>https://jcenter.bintray.com</url>
+        </pluginRepository>
+        <pluginRepository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>mvnrepo</id>
+            <name>mvnrepo-plugins</name>
+            <url>https://mvnrepository.com/artifact</url>
         </pluginRepository>
     </pluginRepositories>
 
