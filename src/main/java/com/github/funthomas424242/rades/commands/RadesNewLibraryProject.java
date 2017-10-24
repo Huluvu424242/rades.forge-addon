@@ -1,5 +1,9 @@
 package com.github.funthomas424242.rades.commands;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.corba.se.impl.orbutil.ObjectWriter;
 import org.jboss.forge.addon.facets.Faceted;
 import org.jboss.forge.addon.maven.projects.MavenBuildSystem;
 import org.jboss.forge.addon.maven.projects.MavenPluginFacet;
@@ -19,6 +23,7 @@ import org.jboss.forge.addon.ui.context.UIBuilder;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UIExecutionContext;
 import org.jboss.forge.addon.ui.input.UIInput;
+import org.jboss.forge.addon.ui.input.UIPrompt;
 import org.jboss.forge.addon.ui.input.UISelectMany;
 import org.jboss.forge.addon.ui.input.UISelectOne;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
@@ -33,6 +38,12 @@ import org.jboss.forge.addon.resource.Resource;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -122,7 +133,9 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     public Result execute(UIExecutionContext context) throws Exception {
 
         final UIOutput log = context.getUIContext().getProvider().getOutput();
-        generateProjectDescriptionFile(log);
+        final UIPrompt prompt = context.getPrompt();
+
+        generateProjectDescriptionFile(prompt, log);
 
         return Results
                 .success("Command 'rades-new-libproject' successfully executed!");
@@ -143,22 +156,47 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     //        metadata.setProjectVersion(projectVersion);
 
 
-    protected void generateProjectDescriptionFile(final UIOutput log) throws IOException {
+    protected void generateProjectDescriptionFile(final UIPrompt prompt, final UIOutput log) throws IOException {
 
-        // TODO Das File muss in einem Directory erstellt werden
+        final FileResource<?> projectFileResource;
+        /* create projectFileResource reference */
+        {
+            final Path curPath = Paths.get(".");
+            final File projectDescriptionFile = new File(curPath.toFile(), "rades.json");
+            final Resource<File> fileResource = resourceFactory.create(projectDescriptionFile);
+            projectFileResource = fileResource.reify(FileResource.class);
+        }
 
-        final File projectDescriptionFile = new File("rades.json");
-        projectDescriptionFile.createNewFile();
+        if (projectFileResource.exists()) {
 
-//        log.info(log.out(), "File:"+projectDescriptionFile.toString());
-        final Resource<File> fileResource = resourceFactory.create(projectDescriptionFile);
-//        log.info(log.out(), "Resource<File>:"+fileResource.getName());
-        final FileResource<?> projectFileResource = fileResource.reify(FileResource.class);
-        log.info(log.out(), "FileResource:"+projectFileResource);
-//        boolean isCreated=projectFileResource.createNewFile();
+            final boolean shouldOverride = prompt.promptBoolean("Override the rades.json?", true);
+            if (!shouldOverride) {
+                log.info(log.out(), "Warning: Creating of project canceled!");
+                return;
+            } else {
+                projectFileResource.delete();
+            }
+        }
+
+        projectFileResource.refresh();
+        boolean isCreated = projectFileResource.createNewFile();
 
         // projektFile befüllen
         final String projectGroupId = groupId.getValue();
+        final String projectArtifactId = artifactId.getValue();
+        final String projectVersion = version.getValue();
+
+        final RadesProject radesProject = new RadesProject(projectGroupId, projectArtifactId, null, projectVersion);
+        final PipedOutputStream pipeOut = new PipedOutputStream();
+        final PipedInputStream pipeIn = new PipedInputStream(pipeOut);
+        final ObjectMapper objMapper = new ObjectMapper();
+        objMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        objMapper.writer().writeValue(pipeOut, radesProject);
+//        String json = ow.writeValueAsString(radesProject);
+        projectFileResource.setContents(pipeIn);
+        pipeOut.flush();
+        pipeOut.close();
+        pipeIn.close();
     }
 
 
