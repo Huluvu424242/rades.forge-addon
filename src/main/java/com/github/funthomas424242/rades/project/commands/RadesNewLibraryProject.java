@@ -1,4 +1,4 @@
-package com.github.funthomas424242.rades.commands;
+package com.github.funthomas424242.rades.project.commands;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
