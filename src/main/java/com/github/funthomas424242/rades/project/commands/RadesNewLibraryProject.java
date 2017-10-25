@@ -200,7 +200,7 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     }
 
 
-    protected void generateProject() {
+    protected void generateProject(final UIPrompt prompt, final UIOutput log) throws IOException {
 
         final File dir = new File("testProject");
         dir.mkdirs();

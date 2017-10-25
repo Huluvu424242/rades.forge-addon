@@ -1,7 +1,15 @@
 package com.github.funthomas424242.rades.project.domain;
 
+import org.apache.commons.lang3.StringUtils;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import java.util.HashSet;
+import java.util.Set;
 
 public class RadesProjectBuilder {
 
@@ -44,6 +52,22 @@ public class RadesProjectBuilder {
         project.artifactID = this.artifactID;
         project.classifier = this.classifier;
         project.version = this.version;
+
+        final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        final Validator validator = factory.getValidator();
+        final Set<ConstraintViolation<RadesProject>> constraintViolations  =validator.validate(project);
+
+        if (constraintViolations.size() > 0) {
+            final Set<String> violationMessages = new HashSet<String>();
+
+            for (ConstraintViolation<RadesProject> constraintViolation : constraintViolations) {
+                violationMessages.add(constraintViolation.getPropertyPath() + ": " + constraintViolation.getMessage());
+            }
+
+            throw new RuntimeException("RadesProject is not valid:\n" + StringUtils.join(violationMessages, "\n"));
+        }
+
+
         return project;
     }
 }
