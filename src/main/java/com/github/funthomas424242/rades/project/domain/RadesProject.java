@@ -13,11 +13,6 @@ public class RadesProject {
 
     protected String version;
 
+    protected RadesProject(){};
 
-    public RadesProject(String groupID, String artifactID, String classifier, String version) {
-        this.groupID = groupID;
-        this.artifactID = artifactID;
-        this.classifier = classifier;
-        this.version = version;
-    }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.funthomas424242.rades.project.domain.RadesProject;
+import com.github.funthomas424242.rades.project.domain.RadesProjectBuilder;
 import org.jboss.forge.addon.maven.projects.MavenBuildSystem;
 import org.jboss.forge.addon.maven.projects.MavenPluginFacet;
 import org.jboss.forge.addon.parser.java.facets.JavaCompilerFacet;
@@ -181,13 +182,17 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
         final String projectArtifactId = artifactId.getValue();
         final String projectVersion = version.getValue();
 
-        final RadesProject radesProject = new RadesProject(projectGroupId, projectArtifactId, null, projectVersion);
+        final RadesProject radesProject = new RadesProjectBuilder()
+                .withGroupID(projectGroupId)
+                .withArtifactID(projectArtifactId)
+                .withClassifier(null)
+                .withVersion(projectVersion)
+                .build();
         final PipedOutputStream pipeOut = new PipedOutputStream();
         final PipedInputStream pipeIn = new PipedInputStream(pipeOut);
         final ObjectMapper objMapper = new ObjectMapper();
         objMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         objMapper.writer().writeValue(pipeOut, radesProject);
-//        String json = ow.writeValueAsString(radesProject);
         projectFileResource.setContents(pipeIn);
         pipeOut.flush();
         pipeOut.close();
