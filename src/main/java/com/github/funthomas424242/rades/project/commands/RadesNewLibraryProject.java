@@ -134,19 +134,14 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
         final DirectoryResource projectDir;
          /* create projectFileResource reference */
         {
-            final File projectDirFile = new File(Paths.get(".").toFile().getAbsolutePath());
-            File parentFile = projectDirFile.getParentFile();
-//            parentFile = new File(parentFile.getParentFile(), parentFile.getName());
-            log.info(log.out(), "parent:" + parentFile.getParent());
-            log.info(log.out(), "subDir:" + parentFile.getAbsolutePath());
-            log.info(log.out(), "isDir:" + parentFile.isDirectory());
-            log.info(log.out(), "resourceFactory:" + resourceFactory);
+            final File curDirFile = Paths.get(".").toAbsolutePath().toFile();
+            File parentFile = curDirFile.getParentFile();
             final Resource<File> parentDirResource = resourceFactory.create(parentFile);
             final DirectoryResource location = parentDirResource.reify(DirectoryResource.class);
             projectDir = location.getOrCreateChildDirectory("testProject");
         }
 
-
+        // Actions
         generateProjectDescriptionFile(prompt, log, projectDir);
         log.info(log.out(), "Generator:" + libProjectGenerator);
         libProjectGenerator.generate(prompt, log, projectDir);
@@ -155,6 +150,7 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
                 .success("Command 'rades-new-libproject' successfully executed!");
     }
 
+    // TODO extract to separate generator class
     protected void generateProjectDescriptionFile(final UIPrompt prompt, final UIOutput log, DirectoryResource projectDir) throws IOException {
 
         final FileResource<?> radesProjectFile = projectDir.getChild("rades.json").reify(FileResource.class);
