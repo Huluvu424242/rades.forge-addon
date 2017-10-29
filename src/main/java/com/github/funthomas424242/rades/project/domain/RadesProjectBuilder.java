@@ -10,6 +10,7 @@ import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Generated("com.github.funthomas424242.rades.builder.annotation.RadesAbstractDomainobject")
@@ -43,8 +44,10 @@ public class RadesProjectBuilder {
     protected String artifactID;
     protected String classifier;
     protected String version;
+    final protected Set<Repository> repositories;
 
     public RadesProjectBuilder() {
+        repositories= new HashSet<Repository>();
     }
 
 
@@ -69,15 +72,16 @@ public class RadesProjectBuilder {
     }
 
     public RadesProject build() {
-        final RadesProject project = new RadesProjectImpl();
-        project.groupID = this.groupID;
-        project.artifactID = this.artifactID;
-        project.classifier = this.classifier;
-        project.version = this.version;
+        final RadesProject radesProject = new RadesProjectImpl();
+        radesProject.groupID = this.groupID;
+        radesProject.artifactID = this.artifactID;
+        radesProject.classifier = this.classifier;
+        radesProject.version = this.version;
+        radesProject.repositories=this.repositories;
 
         final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         final Validator validator = factory.getValidator();
-        final Set<ConstraintViolation<RadesProject>> constraintViolations  =validator.validate(project);
+        final Set<ConstraintViolation<RadesProject>> constraintViolations  =validator.validate(radesProject);
 
         if (constraintViolations.size() > 0) {
             final Set<String> violationMessages = new HashSet<String>();
@@ -90,6 +94,6 @@ public class RadesProjectBuilder {
         }
 
 
-        return project;
+        return radesProject;
     }
 }

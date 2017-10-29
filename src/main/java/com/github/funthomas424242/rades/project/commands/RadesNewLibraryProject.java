@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.funthomas424242.rades.project.domain.RadesProject;
 import com.github.funthomas424242.rades.project.domain.RadesProjectBuilder;
+import com.github.funthomas424242.rades.project.generator.NewLibraryProjectGenerator;
 import org.jboss.forge.addon.maven.projects.MavenBuildSystem;
 import org.jboss.forge.addon.maven.projects.MavenPluginFacet;
 import org.jboss.forge.addon.parser.java.facets.JavaCompilerFacet;
@@ -15,8 +16,10 @@ import org.jboss.forge.addon.projects.ProjectFactory;
 import org.jboss.forge.addon.projects.facets.DependencyFacet;
 import org.jboss.forge.addon.projects.facets.MetadataFacet;
 import org.jboss.forge.addon.projects.facets.ResourcesFacet;
+import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.resource.ResourceFactory;
+import org.jboss.forge.addon.resource.util.ResourceUtil;
 import org.jboss.forge.addon.ui.command.AbstractUICommand;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIBuilder;
@@ -65,10 +68,7 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     protected ResourceFactory resourceFactory;
 
     @Inject
-    protected ProjectFactory projectFactory;
-
-    @Inject
-    protected MavenBuildSystem buildSystem;
+    protected NewLibraryProjectGenerator libProjectGenerator;
 
 
     // /////////////////////////////////////////////////////////////////////////
@@ -131,51 +131,47 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
         final UIOutput log = context.getUIContext().getProvider().getOutput();
         final UIPrompt prompt = context.getPrompt();
 
-        generateProjectDescriptionFile(prompt, log);
+        final DirectoryResource projectDir;
+         /* create projectFileResource reference */
+        {
+            final File projectDirFile = new File(Paths.get(".").toFile().getAbsolutePath());
+            File parentFile = projectDirFile.getParentFile();
+            parentFile = new File(parentFile.getParentFile(), parentFile.getName());
+            log.info(log.out(), "parent:" + parentFile.getParent());
+            log.info(log.out(), "subDir:" + parentFile.getAbsolutePath());
+            log.info(log.out(), "isDir:" + parentFile.isDirectory());
+            log.info(log.out(), "resourceFactory:" + resourceFactory);
+            final Resource<File> parentDirResource = resourceFactory.create(parentFile);
+            final DirectoryResource location = parentDirResource.reify(DirectoryResource.class);
+            projectDir = location.getOrCreateChildDirectory("testProject");
+        }
+
+
+        generateProjectDescriptionFile(prompt, log, projectDir);
+        log.info(log.out(), "Generator:" + libProjectGenerator);
+        libProjectGenerator.generate(prompt, log, projectDir);
 
         return Results
                 .success("Command 'rades-new-libproject' successfully executed!");
     }
 
+    protected void generateProjectDescriptionFile(final UIPrompt prompt, final UIOutput log, DirectoryResource projectDir) throws IOException {
 
-    // final UIOutput log = context.getUIContext().getProvider().getOutput();
-    //        log.info(log.out(), "Verwende als Projektverzeichnis " + projectDir);
-    // final DirectoryResource location = projectDir.reify(
-    // DirectoryResource.class).getOrCreateChildDirectory("test2");
-    // System.out.println("Location directory" + location);
-    //        generateReadme(project);
-    //        generateLicense(project);
-    //        final Optional<Stack> metadata = project.getStack<ProjectFacet>();
-    // add project coordinates
-    //        metadata.setProjectName(projectArtifactId);
-    //        metadata.setProjectGroupName(projectGroupId);
-    //        metadata.setProjectVersion(projectVersion);
+        final FileResource<?> radesProjectFile = projectDir.getChild("rades.json").reify(FileResource.class);
 
-
-    protected void generateProjectDescriptionFile(final UIPrompt prompt, final UIOutput log) throws IOException {
-
-        final FileResource<?> projectFileResource;
-        /* create projectFileResource reference */
-        {
-            final Path curPath = Paths.get(".");
-            final File projectDescriptionFile = new File(curPath.toFile(), "rades.json");
-            final Resource<File> fileResource = resourceFactory.create(projectDescriptionFile);
-            projectFileResource = fileResource.reify(FileResource.class);
-        }
-
-        if (projectFileResource.exists()) {
+        if (radesProjectFile.exists()) {
 
             final boolean shouldOverride = prompt.promptBoolean("Override the rades.json?", true);
             if (!shouldOverride) {
                 log.info(log.out(), "Warning: Creating of project canceled!");
                 return;
             } else {
-                projectFileResource.delete();
+                radesProjectFile.delete();
             }
         }
 
-        projectFileResource.refresh();
-        boolean isCreated = projectFileResource.createNewFile();
+        radesProjectFile.refresh();
+        boolean isCreated = radesProjectFile.createNewFile();
 
         // projektFile befüllen
         final String projectGroupId = groupId.getValue();
@@ -193,29 +189,10 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
         final ObjectMapper objMapper = new ObjectMapper();
         objMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         objMapper.writer().writeValue(pipeOut, radesProject);
-        projectFileResource.setContents(pipeIn);
+        radesProjectFile.setContents(pipeIn);
         pipeOut.flush();
         pipeOut.close();
         pipeIn.close();
-    }
-
-
-    protected void generateProject(final UIPrompt prompt, final UIOutput log) throws IOException {
-
-        final File dir = new File("testProject");
-        dir.mkdirs();
-        final Resource<File> projectDir = resourceFactory.create(dir);
-
-        final List<Class<? extends ProjectFacet>> facets = new ArrayList<>();
-        facets.add(ResourcesFacet.class);
-        facets.add(MetadataFacet.class);
-        facets.add(JavaSourceFacet.class);
-        facets.add(JavaCompilerFacet.class);
-        facets.add(MavenPluginFacet.class);
-        facets.add(DependencyFacet.class);
-        final Project project = projectFactory.createProject(projectDir,
-                buildSystem, facets);
-
     }
 
 }
