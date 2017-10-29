@@ -2,6 +2,7 @@ package com.github.funthomas424242.rades.project.domain;
 
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Generated;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -11,15 +12,36 @@ import javax.validation.constraints.Null;
 import java.util.HashSet;
 import java.util.Set;
 
+@Generated("com.github.funthomas424242.rades.builder.annotation.RadesAbstractDomainobject")
+class RadesProjectImpl extends RadesProject{
+
+    @Override
+    public String getGroupID() {
+        return groupID;
+    }
+
+    @Override
+    public String getArtifactID() {
+        return artifactID;
+    }
+
+    @Override
+    public String getClassifier() {
+        return classifier;
+    }
+
+    @Override
+    public String getVersion() {
+        return version;
+    }
+}
+
+@Generated("com.github.funthomas424242.rades.builder.annotation.RadesAbstractDomainobject")
 public class RadesProjectBuilder {
 
-    @NotNull
     protected String groupID;
-    @NotNull
     protected String artifactID;
-    @Null
     protected String classifier;
-    @NotNull
     protected String version;
 
     public RadesProjectBuilder() {
@@ -47,7 +69,7 @@ public class RadesProjectBuilder {
     }
 
     public RadesProject build() {
-        final RadesProject project = new RadesProject();
+        final RadesProject project = new RadesProjectImpl();
         project.groupID = this.groupID;
         project.artifactID = this.artifactID;
         project.classifier = this.classifier;
