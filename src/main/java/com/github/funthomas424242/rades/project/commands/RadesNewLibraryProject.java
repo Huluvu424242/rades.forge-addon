@@ -136,7 +136,7 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
         {
             final File projectDirFile = new File(Paths.get(".").toFile().getAbsolutePath());
             File parentFile = projectDirFile.getParentFile();
-            parentFile = new File(parentFile.getParentFile(), parentFile.getName());
+//            parentFile = new File(parentFile.getParentFile(), parentFile.getName());
             log.info(log.out(), "parent:" + parentFile.getParent());
             log.info(log.out(), "subDir:" + parentFile.getAbsolutePath());
             log.info(log.out(), "isDir:" + parentFile.isDirectory());
