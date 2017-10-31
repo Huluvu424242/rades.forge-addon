@@ -13,6 +13,8 @@ public interface RadesProjectAccessor {
 
     String getVersion();
 
+    String getProjectDirName();
+
 
 
 }

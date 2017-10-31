@@ -165,8 +165,9 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
         final RadesProject radesProject = new RadesProjectBuilder()
                 .withGroupID(projectGroupId)
                 .withArtifactID(projectArtifactId)
-                .withClassifier(null)
+//                .withClassifier(null)
                 .withVersion(projectVersion)
+                .withProjectDirName(projectDirName.getValue())
                 .build();
         final PipedOutputStream pipeOut = new PipedOutputStream();
         final PipedInputStream pipeIn = new PipedInputStream(pipeOut);

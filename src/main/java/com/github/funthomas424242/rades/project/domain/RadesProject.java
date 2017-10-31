@@ -26,6 +26,9 @@ public abstract class RadesProject implements RadesProjectAccessor{
     @Pattern(regexp=".+\\..+", message="Invalid version format!")
     protected String version;
 
+    @NotNull
+    protected String projectDirName;
+
     // Repositories
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @NotNull
