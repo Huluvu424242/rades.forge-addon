@@ -129,17 +129,26 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
             projectDir = location.getOrCreateChildDirectory(projectDirName.getValue());
         }
 
+        // radesProject befüllen
+        final RadesProject radesProject = new RadesProjectBuilder()
+                .withGroupID(groupId.getValue())
+                .withArtifactID(artifactId.getValue())
+                .withVersion(version.getValue())
+                .withProjectDirName(projectDirName.getValue())
+                .build();
+
+
         // Actions
-        generateProjectDescriptionFile(prompt, log, projectDir);
+        generateProjectDescriptionFile(prompt, log, projectDir, radesProject);
         log.info(log.out(), "Generator:" + libProjectGenerator);
-        libProjectGenerator.generate(prompt, log, projectDir);
+        libProjectGenerator.generate(prompt, log, projectDir, radesProject);
 
         return Results
                 .success("Command 'rades-new-libproject' successfully executed!");
     }
 
     // TODO extract to separate generator class
-    protected void generateProjectDescriptionFile(final UIPrompt prompt, final UIOutput log, DirectoryResource projectDir) throws IOException {
+    protected void generateProjectDescriptionFile(final UIPrompt prompt, final UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws IOException {
 
         final FileResource<?> radesProjectFile = projectDir.getChild("rades.json").reify(FileResource.class);
 
@@ -157,18 +166,7 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
         radesProjectFile.refresh();
         boolean isCreated = radesProjectFile.createNewFile();
 
-        // projektFile befüllen
-        final String projectGroupId = groupId.getValue();
-        final String projectArtifactId = artifactId.getValue();
-        final String projectVersion = version.getValue();
 
-        final RadesProject radesProject = new RadesProjectBuilder()
-                .withGroupID(projectGroupId)
-                .withArtifactID(projectArtifactId)
-//                .withClassifier(null)
-                .withVersion(projectVersion)
-                .withProjectDirName(projectDirName.getValue())
-                .build();
         final PipedOutputStream pipeOut = new PipedOutputStream();
         final PipedInputStream pipeIn = new PipedInputStream(pipeOut);
         final ObjectMapper objMapper = new ObjectMapper();

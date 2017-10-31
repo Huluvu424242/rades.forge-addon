@@ -1,5 +1,6 @@
 package com.github.funthomas424242.rades.project.generator;
 
+import com.github.funthomas424242.rades.project.domain.RadesProject;
 import org.jboss.forge.addon.maven.projects.MavenBuildSystem;
 import org.jboss.forge.addon.maven.projects.MavenPluginFacet;
 import org.jboss.forge.addon.parser.java.facets.JavaCompilerFacet;
@@ -32,13 +33,7 @@ public class NewLibraryProjectGenerator {
     protected MavenBuildSystem buildSystem;
 
 
-    public void generate(final UIPrompt prompt, UIOutput log, final DirectoryResource projectDir) throws IOException {
-        generateProject(prompt, log, projectDir);
-
-    }
-
-
-    protected void generateProject(final UIPrompt prompt, final UIOutput log, final DirectoryResource projectDir) throws IOException {
+    public void generate(final UIPrompt prompt, UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws IOException {
 
         final List<Class<? extends ProjectFacet>> facets = new ArrayList<>();
         facets.add(ResourcesFacet.class);
@@ -51,10 +46,9 @@ public class NewLibraryProjectGenerator {
                 buildSystem, facets);
 
         final MetadataFacet facet = project.getFacet(MetadataFacet.class);
-        facet.setProjectName("my-demo-project");
-        facet.setProjectVersion("1.0.0-SNAPSHOT");
-        facet.setProjectGroupName("com.mycompany.project");
-
+        facet.setProjectGroupName(radesProject.getGroupID());
+        facet.setProjectName(radesProject.getArtifactID());
+        facet.setProjectVersion(radesProject.getVersion());
 
     }
 
