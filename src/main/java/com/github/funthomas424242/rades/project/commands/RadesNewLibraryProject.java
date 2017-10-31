@@ -1,14 +1,11 @@
 package com.github.funthomas424242.rades.project.commands;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.funthomas424242.rades.project.domain.RadesProject;
 import com.github.funthomas424242.rades.project.domain.RadesProjectBuilder;
 import com.github.funthomas424242.rades.project.generator.NewLibraryProjectGenerator;
+import com.github.funthomas424242.rades.project.generator.NewProjectReadmeFile;
 import com.github.funthomas424242.rades.project.generator.NewRadesProjectDescriptionFile;
 import org.jboss.forge.addon.resource.DirectoryResource;
-import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.resource.Resource;
 import org.jboss.forge.addon.resource.ResourceFactory;
 import org.jboss.forge.addon.ui.command.AbstractUICommand;
@@ -29,9 +26,6 @@ import org.jboss.forge.addon.ui.util.Metadata;
 
 import javax.inject.Inject;
 import java.io.File;
-import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -46,10 +40,14 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     protected ResourceFactory resourceFactory;
 
     @Inject
-    protected NewLibraryProjectGenerator libProjectGenerator;
+    protected NewLibraryProjectGenerator newLibProjectGenerator;
 
     @Inject
-    protected NewRadesProjectDescriptionFile radesProjectDescriptionFile;
+    protected NewRadesProjectDescriptionFile newRadesProjectDescriptionFileGenerator;
+
+    @Inject
+    protected NewProjectReadmeFile newProjectReadmeFileGenerator;
+
 
     // /////////////////////////////////////////////////////////////////////////
     //
@@ -143,9 +141,11 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
 
         // Actions
         log.info(log.out(), "Generiere RadesDescriptionfile: rades.json in "+projectDir.getName());
-        radesProjectDescriptionFile.generateProjectDescriptionFile(prompt, log, projectDir, radesProject);
+        newRadesProjectDescriptionFileGenerator.generateProjectDescriptionFile(prompt, log, projectDir, radesProject);
         log.info(log.out(), "Generiere project facets such as pom.xml etc. in "+projectDir.getName());
-        libProjectGenerator.generate(prompt, log, projectDir, radesProject);
+        newLibProjectGenerator.generate(prompt, log, projectDir, radesProject);
+        log.info(log.out(), "Generiere project README.md in "+projectDir.getName());
+        newProjectReadmeFileGenerator.generate(prompt, log, projectDir, radesProject);
 
         return Results
                 .success("Command 'rades-new-libproject' successfully executed!");
