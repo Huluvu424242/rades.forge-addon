@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.funthomas424242.rades.project.domain.RadesProject;
 import com.github.funthomas424242.rades.project.domain.RadesProjectBuilder;
 import com.github.funthomas424242.rades.project.generator.NewLibraryProjectGenerator;
+import com.github.funthomas424242.rades.project.generator.NewRadesProjectDescriptionFile;
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.resource.Resource;
@@ -47,6 +48,8 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     @Inject
     protected NewLibraryProjectGenerator libProjectGenerator;
 
+    @Inject
+    protected NewRadesProjectDescriptionFile radesProjectDescriptionFile;
 
     // /////////////////////////////////////////////////////////////////////////
     //
@@ -139,43 +142,14 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
 
 
         // Actions
-        generateProjectDescriptionFile(prompt, log, projectDir, radesProject);
-        log.info(log.out(), "Generator:" + libProjectGenerator);
+        log.info(log.out(), "Generiere RadesDescriptionfile: rades.json in "+projectDir.getName());
+        radesProjectDescriptionFile.generateProjectDescriptionFile(prompt, log, projectDir, radesProject);
+        log.info(log.out(), "Generiere project facets such as pom.xml etc. in "+projectDir.getName());
         libProjectGenerator.generate(prompt, log, projectDir, radesProject);
 
         return Results
                 .success("Command 'rades-new-libproject' successfully executed!");
     }
 
-    // TODO extract to separate generator class
-    protected void generateProjectDescriptionFile(final UIPrompt prompt, final UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws IOException {
-
-        final FileResource<?> radesProjectFile = projectDir.getChild("rades.json").reify(FileResource.class);
-
-        if (radesProjectFile.exists()) {
-
-            final boolean shouldOverride = prompt.promptBoolean("Override the rades.json?", true);
-            if (!shouldOverride) {
-                log.info(log.out(), "Warning: Creating of project canceled!");
-                return;
-            } else {
-                radesProjectFile.delete();
-            }
-        }
-
-        radesProjectFile.refresh();
-        boolean isCreated = radesProjectFile.createNewFile();
-
-
-        final PipedOutputStream pipeOut = new PipedOutputStream();
-        final PipedInputStream pipeIn = new PipedInputStream(pipeOut);
-        final ObjectMapper objMapper = new ObjectMapper();
-        objMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-        objMapper.writer().writeValue(pipeOut, radesProject);
-        radesProjectFile.setContents(pipeIn);
-        pipeOut.flush();
-        pipeOut.close();
-        pipeIn.close();
-    }
 
 }
