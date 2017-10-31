@@ -1,3 +1,12 @@
 package com.github.funthomas424242.rades;
-public abstract class AbstractTestCase {
+
+import org.junit.Test;
+
+
+public  class AbstractTestCase {
+
+    @Test
+    public void testNurUmCoveragefileZuErzeugen(){
+
+    }
 }
