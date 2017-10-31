@@ -58,11 +58,11 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
 
     // Eine Pflichteingabe ohne Default ist notwendig um in den interaktiven Modus zu kommen
     @Inject
-    @WithAttributes(label = "Group ID:", required = true, defaultValue = "com.github.funthomas424242")
+    @WithAttributes(label = "Group ID:", required = true, defaultValue = "com.github.myUsername")
     protected UIInput<String> groupId;
 
     @Inject
-    @WithAttributes(label = "Artifact ID:", required = true, defaultValue = "test")
+    @WithAttributes(label = "Artifact ID:", required = true, defaultValue = "myArtifactID")
     protected UIInput<String> artifactId;
 
     @Inject
@@ -73,8 +73,14 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     @WithAttributes(label = "Projektverzeichnis:", required = true)
     protected UIInput<String> projectDirName;
 
+
     @Inject
-    @WithAttributes(label = "Bintray Username:", required = true, defaultValue = "funthomas424242")
+    @WithAttributes(label = "Github Username:", required = true, defaultValue = "myGithubUsername")
+    protected UIInput<String> githubUsername;
+
+
+    @Inject
+    @WithAttributes(label = "Bintray Username:", required = true, defaultValue = "myBintrayUsername")
     protected UIInput<String> bintrayUsername;
 
     @Inject
@@ -110,6 +116,7 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
         builder.add(artifactId);
         builder.add(version);
         builder.add(projectDirName);
+        builder.add(githubUsername);
         builder.add(bintrayUsername);
         builder.add(repositories);
     }
@@ -136,6 +143,7 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
                 .withArtifactID(artifactId.getValue())
                 .withVersion(version.getValue())
                 .withProjectDirName(projectDirName.getValue())
+                .withGithubUsername(githubUsername.getValue())
                 .build();
 
 

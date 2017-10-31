@@ -31,7 +31,7 @@ public class NewProjectReadmeFile {
         projectReadmeFile.refresh();
         boolean isCreated = projectReadmeFile.createNewFile();
 
-        final String githubUsername = "myGithubUserName";
+        final String githubUsername = radesProject.getGithubUsername();
         final String githubRepositoryname = "myGithubRepo";
         final String githubProjectDescription="Kurze Beschreibung des Projektes in einem Satz.";
 

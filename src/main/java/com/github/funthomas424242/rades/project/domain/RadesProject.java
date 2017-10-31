@@ -3,7 +3,6 @@ package com.github.funthomas424242.rades.project.domain;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 import java.util.Set;
 
@@ -19,7 +18,6 @@ public abstract class RadesProject implements RadesProjectAccessor{
     protected String artifactID;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @Null
     protected String classifier;
 
     @NotNull
@@ -37,11 +35,9 @@ public abstract class RadesProject implements RadesProjectAccessor{
     // social account names TODO extract to separate class
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @Null
     protected String githubUsername;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @Null
     protected String bintrayUsername;
 
 

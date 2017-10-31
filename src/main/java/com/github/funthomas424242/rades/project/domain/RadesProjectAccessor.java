@@ -15,6 +15,8 @@ public interface RadesProjectAccessor {
 
     String getProjectDirName();
 
+    String getGithubUsername();
+
 
 
 }

@@ -37,6 +37,11 @@ class RadesProjectImpl extends RadesProject {
     public String getProjectDirName() {
         return projectDirName;
     }
+
+    @Override
+    public String getGithubUsername() {
+        return githubUsername;
+    }
 }
 
 @Generated("com.github.funthomas424242.rades.builder.annotation.RadesAbstractDomainobject")
@@ -47,6 +52,7 @@ public class RadesProjectBuilder {
     protected String classifier;
     protected String version;
     protected String projectDirName;
+    protected String githubUsername;
     final protected Set<Repository> repositories;
 
     public RadesProjectBuilder() {
@@ -79,6 +85,11 @@ public class RadesProjectBuilder {
         return this;
     }
 
+    public RadesProjectBuilder withGithubUsername(final String githubUsername) {
+        this.githubUsername = githubUsername;
+        return this;
+    }
+
     public RadesProject build() {
         final RadesProject radesProject = new RadesProjectImpl();
         radesProject.groupID = this.groupID;
@@ -86,6 +97,7 @@ public class RadesProjectBuilder {
         radesProject.classifier = this.classifier;
         radesProject.version = this.version;
         radesProject.projectDirName = this.projectDirName;
+        radesProject.githubUsername=this.githubUsername;
         radesProject.repositories = this.repositories;
 
         final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
