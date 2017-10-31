@@ -6,20 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.funthomas424242.rades.project.domain.RadesProject;
 import com.github.funthomas424242.rades.project.domain.RadesProjectBuilder;
 import com.github.funthomas424242.rades.project.generator.NewLibraryProjectGenerator;
-import org.jboss.forge.addon.maven.projects.MavenBuildSystem;
-import org.jboss.forge.addon.maven.projects.MavenPluginFacet;
-import org.jboss.forge.addon.parser.java.facets.JavaCompilerFacet;
-import org.jboss.forge.addon.parser.java.facets.JavaSourceFacet;
-import org.jboss.forge.addon.projects.Project;
-import org.jboss.forge.addon.projects.ProjectFacet;
-import org.jboss.forge.addon.projects.ProjectFactory;
-import org.jboss.forge.addon.projects.facets.DependencyFacet;
-import org.jboss.forge.addon.projects.facets.MetadataFacet;
-import org.jboss.forge.addon.projects.facets.ResourcesFacet;
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.FileResource;
+import org.jboss.forge.addon.resource.Resource;
 import org.jboss.forge.addon.resource.ResourceFactory;
-import org.jboss.forge.addon.resource.util.ResourceUtil;
 import org.jboss.forge.addon.ui.command.AbstractUICommand;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIBuilder;
@@ -31,35 +21,22 @@ import org.jboss.forge.addon.ui.input.UISelectMany;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.metadata.WithAttributes;
 import org.jboss.forge.addon.ui.output.UIOutput;
-import org.jboss.forge.addon.ui.util.Metadata;
-import org.jboss.forge.addon.ui.util.Categories;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.forge.addon.ui.result.Results;
-import org.jboss.forge.addon.resource.Resource;
+import org.jboss.forge.addon.ui.util.Categories;
+import org.jboss.forge.addon.ui.util.Metadata;
 
 import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 public class RadesNewLibraryProject extends AbstractUICommand implements UICommand {
-
-
-//    protected static final List<String> DEP_STARTER_LIST = Arrays.asList(
-//            "spring-boot-starter-parent", "spring-boot-starter-batch",
-//            "spring-boot-starter-jetty", "spring-boot-starter-tomcat",
-//            "spring-boot-starter-logging", "spring-boot-starter-aop",
-//            "spring-boot-starter-jpa", "spring-boot-starter-jetty-jdbc",
-//            "spring-boot-starter-thymeleaf", "spring-boot-starter-web",
-//            "spring-boot-starter-actuator", "spring-boot-starter-security",
-//            "spring-boot-starter-test");
-
 
     protected static final List<String> MAVEN_REPO_LIST = Arrays.asList(
             "https://mvnrepository.com/artifact", "https://jcenter.bintray.com/");
@@ -77,12 +54,8 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     //
     // /////////////////////////////////////////////////////////////////////////
 
-//    @Inject
-//    @WithAttributes(label = "Specific Name in spring-boot-starter-specificname:", required = true)
-//    protected UIInput<String> specificName;
 
     // Eine Pflichteingabe ohne Default ist notwendig um in den interaktiven Modus zu kommen
-
     @Inject
     @WithAttributes(label = "Group ID:", required = true, defaultValue = "com.github.funthomas424242")
     protected UIInput<String> groupId;
@@ -94,6 +67,10 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     @Inject
     @WithAttributes(label = "Version:", required = true, defaultValue = "1.0.0-SNAPSHOT")
     protected UIInput<String> version;
+
+    @Inject
+    @WithAttributes(label = "Projektverzeichnis:", required = true)
+    protected UIInput<String> projectDirName;
 
     @Inject
     @WithAttributes(label = "Bintray Username:", required = true, defaultValue = "funthomas424242")
@@ -116,11 +93,22 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
 
         // Auswahlen initialisieren
         repositories.setValueChoices(MAVEN_REPO_LIST);
+        projectDirName.setDefaultValue(
+                new Callable<String>() {
+                    @Override
+                    public String call() {
+                        if (artifactId.getValue() == null) {
+                            return "myproject";
+                        }
+                        return artifactId.getValue();
+                    }
+                });
 
         // add the inputs
         builder.add(groupId);
         builder.add(artifactId);
         builder.add(version);
+        builder.add(projectDirName);
         builder.add(bintrayUsername);
         builder.add(repositories);
     }
@@ -138,7 +126,7 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
             File parentFile = curDirFile.getParentFile();
             final Resource<File> parentDirResource = resourceFactory.create(parentFile);
             final DirectoryResource location = parentDirResource.reify(DirectoryResource.class);
-            projectDir = location.getOrCreateChildDirectory("testProject");
+            projectDir = location.getOrCreateChildDirectory(projectDirName.getValue());
         }
 
         // Actions
