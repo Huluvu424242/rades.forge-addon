@@ -1,6 +1,7 @@
-package com.github.funthomas424242.rades.project.domain;
+package com.github.funthomas424242.rades.project;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.github.funthomas424242.rades.project.RepositoryDescriptionAccessor;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;

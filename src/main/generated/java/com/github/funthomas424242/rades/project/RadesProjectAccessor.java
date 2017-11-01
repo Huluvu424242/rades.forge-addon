@@ -1,4 +1,4 @@
-package com.github.funthomas424242.rades.project.domain;
+package com.github.funthomas424242.rades.project;
 
 import javax.annotation.Generated;
 

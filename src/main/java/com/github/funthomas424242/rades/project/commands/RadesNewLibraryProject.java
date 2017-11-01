@@ -2,8 +2,8 @@ package com.github.funthomas424242.rades.project.commands;
 
 import com.github.funthomas424242.rades.project.generators.NewTravisFileGenerator;
 import com.github.funthomas424242.rades.validationrules.*;
-import com.github.funthomas424242.rades.project.domain.RadesProject;
-import com.github.funthomas424242.rades.project.domain.RadesProjectBuilder;
+import com.github.funthomas424242.rades.project.RadesProject;
+import com.github.funthomas424242.rades.project.RadesProjectBuilder;
 import com.github.funthomas424242.rades.project.generators.NewLibraryProjectGenerator;
 import com.github.funthomas424242.rades.project.generators.NewProjectReadmeFileGenerator;
 import com.github.funthomas424242.rades.project.generators.NewRadesProjectDescriptionFileGenerator;

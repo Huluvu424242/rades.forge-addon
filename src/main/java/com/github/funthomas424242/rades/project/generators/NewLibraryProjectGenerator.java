@@ -1,6 +1,6 @@
 package com.github.funthomas424242.rades.project.generators;
 
-import com.github.funthomas424242.rades.project.domain.RadesProject;
+import com.github.funthomas424242.rades.project.RadesProject;
 import org.jboss.forge.addon.maven.projects.MavenBuildSystem;
 import org.jboss.forge.addon.maven.projects.MavenPluginFacet;
 import org.jboss.forge.addon.parser.java.facets.JavaCompilerFacet;
