@@ -48,6 +48,18 @@ class RadesProjectImpl extends RadesProject {
         return githubRepositoryname;
     }
 
+    public String getBintrayUsername() {
+        return bintrayUsername;
+    }
+
+    public String getBintrayRepositoryname() {
+        return bintrayRepositoryname;
+    }
+
+    public String getBintrayPackagename() {
+        return bintrayPackagename;
+    }
+
 }
 
 @Generated("com.github.funthomas424242.rades.builder.annotation.RadesAbstractDomainobject")
@@ -60,6 +72,9 @@ public class RadesProjectBuilder {
     protected String projectDirName;
     protected String githubUsername;
     protected String githubRepositoryname;
+    protected String bintrayUsername;
+    protected String bintrayRepositoryname;
+    protected String bintrayPackagename;
     final protected Set<Repository> repositories;
 
     public RadesProjectBuilder() {
@@ -102,6 +117,21 @@ public class RadesProjectBuilder {
         return this;
     }
 
+    public RadesProjectBuilder withBintrayUsername(final String bintrayUsername){
+        this.bintrayUsername=bintrayUsername;
+        return this;
+    }
+
+    public RadesProjectBuilder withBintrayRepositoryname(final String bintrayRepositoryname){
+        this.bintrayRepositoryname=bintrayRepositoryname;
+        return this;
+    }
+
+    public RadesProjectBuilder withBintrayPackagename(final String bintrayPackagename){
+        this.bintrayPackagename=bintrayPackagename;
+        return this;
+    }
+
     public RadesProject build() {
         final RadesProject radesProject = new RadesProjectImpl();
         radesProject.groupID = this.groupID;
@@ -111,6 +141,9 @@ public class RadesProjectBuilder {
         radesProject.projectDirName = this.projectDirName;
         radesProject.githubUsername = this.githubUsername;
         radesProject.githubRepositoryname = this.githubRepositoryname;
+        radesProject.bintrayUsername=this.bintrayUsername;
+        radesProject.bintrayRepositoryname=this.bintrayRepositoryname;
+        radesProject.bintrayPackagename=this.bintrayPackagename;
         radesProject.repositories = this.repositories;
 
         final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();

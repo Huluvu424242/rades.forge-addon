@@ -17,8 +17,13 @@ public interface RadesProjectAccessor {
 
     String getGithubUsername();
 
-    String getGithubRepositoryname() ;
+    String getGithubRepositoryname();
 
+    String getBintrayUsername();
+
+    String getBintrayRepositoryname();
+
+    String getBintrayPackagename();
 
 
 }

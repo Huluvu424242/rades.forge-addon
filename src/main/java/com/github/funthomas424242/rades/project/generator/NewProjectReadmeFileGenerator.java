@@ -31,11 +31,12 @@ public class NewProjectReadmeFileGenerator {
         projectReadmeFile.refresh();
         boolean isCreated = projectReadmeFile.createNewFile();
 
-        final String bintrayUsername = radesProject.getGithubUsername();
-        final String bintrayRepositoryname = radesProject.getGithubRepositoryname();
         final String githubUsername = radesProject.getGithubUsername();
         final String githubRepositoryname = radesProject.getGithubRepositoryname();
         final String githubProjectDescription="Kurze Beschreibung des Projektes in einem Satz.";
+        final String bintrayUsername = radesProject.getBintrayUsername();
+        final String bintrayRepositoryname = radesProject.getBintrayRepositoryname();
+        final String bintrayPackagename = radesProject.getBintrayPackagename();
         final String projectDirname = radesProject.getProjectDirName();
 
 
@@ -45,10 +46,10 @@ public class NewProjectReadmeFileGenerator {
         // Bintray Download
         writer.println("[![Download](https://api.bintray.com/packages/" +bintrayUsername+
                 "/" +bintrayRepositoryname+
-                "/" +projectDirname+
+                "/" +bintrayPackagename+
                 "/images/download.svg) ](https://bintray.com/" +bintrayUsername+
                 "/" +bintrayRepositoryname+
-                "/" +projectDirname+
+                "/" +bintrayPackagename+
                 "/_latestVersion)");
         // Travis CI Badged
         writer.println("[![Build Status](https://travis-ci.org/" + githubUsername +

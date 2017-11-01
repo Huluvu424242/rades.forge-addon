@@ -89,12 +89,20 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     @GithubRepositoryname
     protected UIInput<String> githubRepositoryname;
 
-
-
     @Inject
     @WithAttributes(label = "Bintray Username:", defaultValue = "myBintrayUsername")
     @BintrayUsername
     protected UIInput<String> bintrayUsername;
+
+    @Inject
+    @WithAttributes(label = "Bintray Repositoryname:", defaultValue = "myBintrayRepositoryname")
+    @BintrayRepositoryname
+    protected UIInput<String> bintrayRepositoryname;
+
+    @Inject
+    @WithAttributes(label = "Bintray Packagename:", defaultValue = "myBintrayPackagename")
+    @BintrayPackagename
+    protected UIInput<String> bintrayPackagename;
 
     @Inject
     @WithAttributes(label = "Maven Repos", required = true, description = "Auswahl der zu verwendenden Maven Repositories")
@@ -143,6 +151,8 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
         builder.add(githubUsername);
         builder.add(githubRepositoryname);
         builder.add(bintrayUsername);
+        builder.add(bintrayRepositoryname);
+        builder.add(bintrayPackagename);
         builder.add(repositories);
     }
 
@@ -170,6 +180,9 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
                 .withProjectDirName(projectDirName.getValue())
                 .withGithubUsername(githubUsername.getValue())
                 .withGithubRepositoryname(githubRepositoryname.getValue())
+                .withBintrayUsername(bintrayUsername.getValue())
+                .withBintrayRepositoryname(bintrayRepositoryname.getValue())
+                .withBintrayPackagename(bintrayPackagename.getValue())
                 .build();
 
 

@@ -18,6 +18,7 @@ Die Versionierung erfolgt nach [Semantic Versioning](http://semver.org/lang/de/)
 - [issue #7](https://github.com/FunThomas424242/rades.forge-addon/issues/7) GithubRepositoryname abfragen
 - [issue #6](https://github.com/FunThomas424242/rades.forge-addon/issues/6) Globale Validierungen einführen
 - [issue #13](https://github.com/FunThomas424242/rades.forge-addon/issues/13) Bintray Badge in die Readme aufgenommen
+- [issue #12](https://github.com/FunThomas424242/rades.forge-addon/issues/12) Bintray Support aufgenommen
 
 ### Changed
 - n/a

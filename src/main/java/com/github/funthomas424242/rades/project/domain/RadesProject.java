@@ -43,7 +43,11 @@ public abstract class RadesProject implements RadesProjectAccessor{
     @BintrayUsername
     protected String bintrayUsername;
 
+    @BintrayRepositoryname
+    protected String bintrayRepositoryname;
 
+    @BintrayPackagename
+    protected String bintrayPackagename;
 
 
 
