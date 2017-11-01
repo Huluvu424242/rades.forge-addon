@@ -75,10 +75,10 @@ public class RadesProjectBuilder {
     protected String bintrayUsername;
     protected String bintrayRepositoryname;
     protected String bintrayPackagename;
-    final protected Set<Repository> repositories;
+    final protected Set<RepositoryDescription> repositories;
 
     public RadesProjectBuilder() {
-        repositories = new HashSet<Repository>();
+        repositories = new HashSet<RepositoryDescription>();
     }
 
 

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
-public abstract class Repository implements  RepositoryAccessor{
+public abstract class RepositoryDescription implements RepositoryDescriptionAccessor {
 
     @NotNull
     protected String id;

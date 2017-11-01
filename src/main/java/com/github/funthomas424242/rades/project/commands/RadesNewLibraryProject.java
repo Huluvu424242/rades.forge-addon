@@ -1,12 +1,12 @@
 package com.github.funthomas424242.rades.project.commands;
 
-import com.github.funthomas424242.rades.project.generator.NewTravisFileGenerator;
+import com.github.funthomas424242.rades.project.generators.NewTravisFileGenerator;
 import com.github.funthomas424242.rades.validationrules.*;
 import com.github.funthomas424242.rades.project.domain.RadesProject;
 import com.github.funthomas424242.rades.project.domain.RadesProjectBuilder;
-import com.github.funthomas424242.rades.project.generator.NewLibraryProjectGenerator;
-import com.github.funthomas424242.rades.project.generator.NewProjectReadmeFileGenerator;
-import com.github.funthomas424242.rades.project.generator.NewRadesProjectDescriptionFileGenerator;
+import com.github.funthomas424242.rades.project.generators.NewLibraryProjectGenerator;
+import com.github.funthomas424242.rades.project.generators.NewProjectReadmeFileGenerator;
+import com.github.funthomas424242.rades.project.generators.NewRadesProjectDescriptionFileGenerator;
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.Resource;
 import org.jboss.forge.addon.resource.ResourceFactory;

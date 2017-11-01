@@ -30,7 +30,7 @@ public abstract class RadesProject implements RadesProjectAccessor{
     // Repositories
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @NotNull
-    protected Set<Repository> repositories;
+    protected Set<RepositoryDescription> repositories;
 
     // social account names TODO extract to separate class
 

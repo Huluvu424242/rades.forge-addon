@@ -1,4 +1,4 @@
-package com.github.funthomas424242.rades.project.generator;
+package com.github.funthomas424242.rades.project.generators;
 
 import com.github.funthomas424242.rades.project.domain.RadesProject;
 import org.jboss.forge.addon.resource.DirectoryResource;
