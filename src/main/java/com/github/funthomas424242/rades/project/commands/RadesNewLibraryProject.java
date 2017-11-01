@@ -1,5 +1,6 @@
 package com.github.funthomas424242.rades.project.commands;
 
+import com.github.funthomas424242.rades.validationrules.*;
 import com.github.funthomas424242.rades.project.domain.RadesProject;
 import com.github.funthomas424242.rades.project.domain.RadesProjectBuilder;
 import com.github.funthomas424242.rades.project.generator.NewLibraryProjectGenerator;
@@ -59,33 +60,40 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     // Eine Pflichteingabe ohne Default ist notwendig um in den interaktiven Modus zu kommen
     @Inject
     @WithAttributes(label = "Group ID:", required = true, defaultValue = "com.github.myUsername")
+    @ProjectGroupId
     protected UIInput<String> groupId;
 
     @Inject
     @WithAttributes(label = "Artifact ID:", required = true, defaultValue = "testProject")
+    @ProjectArtifactId
     protected UIInput<String> artifactId;
 
     @Inject
     @WithAttributes(label = "Version:", required = true, defaultValue = "1.0.0-SNAPSHOT")
+    @ProjectVersion
     protected UIInput<String> version;
 
     @Inject
     @WithAttributes(label = "Projektverzeichnis:", required = true)
+    @ProjectDirname
     protected UIInput<String> projectDirName;
 
 
     @Inject
     @WithAttributes(label = "Github Username:", required = true, defaultValue = "myGithubUsername")
+    @GithubUsername
     protected UIInput<String> githubUsername;
 
     @Inject
     @WithAttributes(label = "Github Repositoryname:", required = true)
+    @GithubRepositoryname
     protected UIInput<String> githubRepositoryname;
 
 
 
     @Inject
-    @WithAttributes(label = "Bintray Username:", required = true, defaultValue = "myBintrayUsername")
+    @WithAttributes(label = "Bintray Username:", defaultValue = "myBintrayUsername")
+    @BintrayUsername
     protected UIInput<String> bintrayUsername;
 
     @Inject

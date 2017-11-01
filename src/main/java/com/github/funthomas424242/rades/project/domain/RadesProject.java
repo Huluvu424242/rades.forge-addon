@@ -1,9 +1,9 @@
 package com.github.funthomas424242.rades.project.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.github.funthomas424242.rades.validationrules.*;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.util.Set;
 
 
@@ -12,19 +12,19 @@ public abstract class RadesProject implements RadesProjectAccessor{
 
 
     // MAVEN Koordinaten TODO extract into separate class with builder
-    @NotNull
+    @ProjectGroupId
     protected String groupID;
-    @NotNull
+
+    @ProjectArtifactId
     protected String artifactID;
 
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @PackageClassifier
     protected String classifier;
 
-    @NotNull
-    @Pattern(regexp=".+\\..+", message="Invalid version format!")
+    @ProjectVersion
     protected String version;
 
-    @NotNull
+    @ProjectDirname
     protected String projectDirName;
 
     // Repositories
@@ -34,13 +34,13 @@ public abstract class RadesProject implements RadesProjectAccessor{
 
     // social account names TODO extract to separate class
 
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @GithubUsername
     protected String githubUsername;
 
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @GithubRepositoryname
     protected String githubRepositoryname;
 
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @BintrayUsername
     protected String bintrayUsername;
 
 
