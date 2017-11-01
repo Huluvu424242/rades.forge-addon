@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
-public class NewRadesProjectDescriptionFile {
+public class NewRadesProjectDescriptionFileGenerator {
 
     public void generateProjectDescriptionFile(final UIPrompt prompt, final UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws IOException {
 

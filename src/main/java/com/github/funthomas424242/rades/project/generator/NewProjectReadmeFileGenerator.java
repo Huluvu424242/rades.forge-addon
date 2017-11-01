@@ -11,7 +11,7 @@ import org.jboss.forge.addon.ui.output.UIOutput;
 
 import java.io.*;
 
-public class NewProjectReadmeFile {
+public class NewProjectReadmeFileGenerator {
 
     public void generate(final UIPrompt prompt, final UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws IOException {
 

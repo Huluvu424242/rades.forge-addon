@@ -3,8 +3,8 @@ package com.github.funthomas424242.rades.project.commands;
 import com.github.funthomas424242.rades.project.domain.RadesProject;
 import com.github.funthomas424242.rades.project.domain.RadesProjectBuilder;
 import com.github.funthomas424242.rades.project.generator.NewLibraryProjectGenerator;
-import com.github.funthomas424242.rades.project.generator.NewProjectReadmeFile;
-import com.github.funthomas424242.rades.project.generator.NewRadesProjectDescriptionFile;
+import com.github.funthomas424242.rades.project.generator.NewProjectReadmeFileGenerator;
+import com.github.funthomas424242.rades.project.generator.NewRadesProjectDescriptionFileGenerator;
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.Resource;
 import org.jboss.forge.addon.resource.ResourceFactory;
@@ -43,10 +43,10 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     protected NewLibraryProjectGenerator newLibProjectGenerator;
 
     @Inject
-    protected NewRadesProjectDescriptionFile newRadesProjectDescriptionFileGenerator;
+    protected NewRadesProjectDescriptionFileGenerator newRadesProjectDescriptionFileGeneratorGenerator;
 
     @Inject
-    protected NewProjectReadmeFile newProjectReadmeFileGenerator;
+    protected NewProjectReadmeFileGenerator newProjectReadmeFileGeneratorGenerator;
 
 
     // /////////////////////////////////////////////////////////////////////////
@@ -167,11 +167,11 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
 
         // Actions
         log.info(log.out(), "Generiere RadesDescriptionfile: rades.json in "+projectDir.getName());
-        newRadesProjectDescriptionFileGenerator.generateProjectDescriptionFile(prompt, log, projectDir, radesProject);
+        newRadesProjectDescriptionFileGeneratorGenerator.generateProjectDescriptionFile(prompt, log, projectDir, radesProject);
         log.info(log.out(), "Generiere project facets such as pom.xml etc. in "+projectDir.getName());
         newLibProjectGenerator.generate(prompt, log, projectDir, radesProject);
         log.info(log.out(), "Generiere project README.md in "+projectDir.getName());
-        newProjectReadmeFileGenerator.generate(prompt, log, projectDir, radesProject);
+        newProjectReadmeFileGeneratorGenerator.generate(prompt, log, projectDir, radesProject);
 
         return Results
                 .success("Command 'rades-new-libproject' successfully executed!");
