@@ -3,7 +3,7 @@ package com.github.funthomas424242.rades;
 import org.junit.Test;
 
 
-public  class AbstractTestCase {
+public  abstract class AbstractTestCase {
 
     @Test
     public void testNurUmCoveragefileZuErzeugen(){
