@@ -3,6 +3,7 @@ package com.github.funthomas424242.rades.project.generators;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.funthomas424242.rades.core.resources.NewFileResourceFactory;
 import com.github.funthomas424242.rades.project.RadesProject;
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.FileResource;
@@ -15,24 +16,15 @@ import java.io.PipedOutputStream;
 
 public class NewRadesProjectDescriptionFileGenerator {
 
+    public static final String RADES_JSON = "rades.json";
+
     public void generateProjectDescriptionFile(final UIPrompt prompt, final UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws IOException {
 
-        final FileResource<?> radesProjectFile = projectDir.getChild("rades.json").reify(FileResource.class);
-
-        if (radesProjectFile.exists()) {
-
-            final boolean shouldOverride = prompt.promptBoolean("Override the rades.json?", true);
-            if (!shouldOverride) {
-                log.info(log.out(), "Warning: Creating of project canceled!");
-                return;
-            } else {
-                radesProjectFile.delete();
-            }
+        final FileResource<?> radesProjectFile
+                = new NewFileResourceFactory(prompt, log).newFileResource(projectDir, RADES_JSON);
+        if (!radesProjectFile.exists()) {
+            return;
         }
-
-        radesProjectFile.refresh();
-        boolean isCreated = radesProjectFile.createNewFile();
-
 
         final PipedOutputStream pipeOut = new PipedOutputStream();
         final PipedInputStream pipeIn = new PipedInputStream(pipeOut);

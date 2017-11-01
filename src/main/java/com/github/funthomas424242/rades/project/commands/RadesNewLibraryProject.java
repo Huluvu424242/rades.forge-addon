@@ -191,18 +191,18 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
 
 
         // Actions
-        log.info(log.out(), "Generiere RadesDescriptionfile: rades.json in "+projectDir.getName());
+        log.info(log.out(), "Generiere RadesDescriptionfile rades.json im Ordner "+projectDir.getName());
         newRadesProjectDescriptionFileGeneratorGenerator.generateProjectDescriptionFile(prompt, log, projectDir, radesProject);
-        log.info(log.out(), "Generiere project facets such as pom.xml etc. in "+projectDir.getName());
+        log.info(log.out(), "Generiere Projektfacetten wie pom.xml und ähnliches im Ordner "+projectDir.getName());
         newLibProjectGenerator.generate(prompt, log, projectDir, radesProject);
-        log.info(log.out(), "Generiere project README.md in "+projectDir.getName());
+        log.info(log.out(), "Generiere Datei README.md im Ordner "+projectDir.getName());
         newProjectReadmeFileGeneratorGenerator.generate(prompt, log, projectDir, radesProject);
-        log.info(log.out(), "Generiere project .travis.yml in "+projectDir.getName());
+        log.info(log.out(), "Generiere Travis-CI Steuerdatei .travis.yml im Ordner "+projectDir.getName());
         newTravisFileGenerator.generate(prompt, log, projectDir, radesProject);
 
 
         return Results
-                .success("Command 'rades-new-libproject' successfully executed!");
+                .success("Kommando 'rades-new-libproject' wurde erfolgreich ausgeführt.");
     }
 
 

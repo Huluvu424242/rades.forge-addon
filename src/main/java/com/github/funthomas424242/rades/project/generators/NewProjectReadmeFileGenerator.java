@@ -1,52 +1,47 @@
 package com.github.funthomas424242.rades.project.generators;
 
+import com.github.funthomas424242.rades.core.resources.NewFileResourceFactory;
 import com.github.funthomas424242.rades.project.RadesProject;
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.ui.input.UIPrompt;
 import org.jboss.forge.addon.ui.output.UIOutput;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 
 public class NewProjectReadmeFileGenerator {
 
+    public static final String README_MD = "README.md";
+
     public void generate(final UIPrompt prompt, final UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws IOException {
 
-        final FileResource<?> projectReadmeFile = projectDir.getChild("README.md").reify(FileResource.class);
-
-        if (projectReadmeFile.exists()) {
-
-            final boolean shouldOverride = prompt.promptBoolean("Override the README.md?", true);
-            if (!shouldOverride) {
-                log.info(log.out(), "Warning: Creating of project canceled!");
-                return;
-            } else {
-                projectReadmeFile.delete();
-            }
+        final FileResource<?> readmeFile
+                = new NewFileResourceFactory(prompt, log).newFileResource(projectDir, README_MD);
+        if (!readmeFile.exists()) {
+            return;
         }
-
-        projectReadmeFile.refresh();
-        boolean isCreated = projectReadmeFile.createNewFile();
 
         final String githubUsername = radesProject.getGithubUsername();
         final String githubRepositoryname = radesProject.getGithubRepositoryname();
-        final String githubProjectDescription="Kurze Beschreibung des Projektes in einem Satz.";
+        final String githubProjectDescription = "Kurze Beschreibung des Projektes in einem Satz.";
         final String bintrayUsername = radesProject.getBintrayUsername();
         final String bintrayRepositoryname = radesProject.getBintrayRepositoryname();
         final String bintrayPackagename = radesProject.getBintrayPackagename();
         final String projectDirname = radesProject.getProjectDirName();
 
 
-        final OutputStream outStream = projectReadmeFile.getResourceOutputStream(false);
+        final OutputStream outStream = readmeFile.getResourceOutputStream(false);
         final PrintWriter writer = new PrintWriter(outStream);
 
         // Bintray Download
-        writer.println("[![Download](https://api.bintray.com/packages/" +bintrayUsername+
-                "/" +bintrayRepositoryname+
-                "/" +bintrayPackagename+
-                "/images/download.svg) ](https://bintray.com/" +bintrayUsername+
-                "/" +bintrayRepositoryname+
-                "/" +bintrayPackagename+
+        writer.println("[![Download](https://api.bintray.com/packages/" + bintrayUsername +
+                "/" + bintrayRepositoryname +
+                "/" + bintrayPackagename +
+                "/images/download.svg) ](https://bintray.com/" + bintrayUsername +
+                "/" + bintrayRepositoryname +
+                "/" + bintrayPackagename +
                 "/_latestVersion)");
         // Travis CI Badged
         writer.println("[![Build Status](https://travis-ci.org/" + githubUsername +
@@ -67,7 +62,7 @@ public class NewProjectReadmeFileGenerator {
                 "/" + githubRepositoryname +
                 ")");
 
-        writer.println("# "+githubRepositoryname);
+        writer.println("# " + githubRepositoryname);
         writer.println(githubProjectDescription);
 
         writer.flush();

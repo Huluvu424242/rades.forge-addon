@@ -1,5 +1,6 @@
 package com.github.funthomas424242.rades.project.generators;
 
+import com.github.funthomas424242.rades.core.resources.NewFileResourceFactory;
 import com.github.funthomas424242.rades.project.RadesProject;
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.FileResource;
@@ -12,30 +13,17 @@ import java.io.PrintWriter;
 
 public class NewTravisFileGenerator {
 
-    final public static String TRAVIS_FILE_NAME=".travis.yml";
-    final public static String CANCEL_PROJECT_GENERATION= "Warning: Creating of project canceled!";
+    final public static String TRAVIS_FILE_NAME = ".travis.yml";
 
     public void generate(final UIPrompt prompt, final UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws IOException {
 
-        final FileResource<?> projectReadmeFile = projectDir.getChild(TRAVIS_FILE_NAME).reify(FileResource.class);
-
-        if (projectReadmeFile.exists()) {
-
-            final boolean shouldOverride = prompt.promptBoolean("Override the "+TRAVIS_FILE_NAME+"?", true);
-            if (!shouldOverride) {
-
-                log.info(log.out(), CANCEL_PROJECT_GENERATION);
-                return;
-            } else {
-                projectReadmeFile.delete();
-            }
+        final FileResource<?> travisFile
+                = new NewFileResourceFactory(prompt, log).newFileResource(projectDir, TRAVIS_FILE_NAME);
+        if (!travisFile.exists()) {
+            return;
         }
 
-        projectReadmeFile.refresh();
-        boolean isCreated = projectReadmeFile.createNewFile();
-
-
-        final OutputStream outStream = projectReadmeFile.getResourceOutputStream(false);
+        final OutputStream outStream = travisFile.getResourceOutputStream(false);
         final PrintWriter writer = new PrintWriter(outStream);
 
         // Java Language
