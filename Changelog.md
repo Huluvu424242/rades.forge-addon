@@ -15,6 +15,7 @@ Die Versionierung erfolgt nach [Semantic Versioning](http://semver.org/lang/de/)
 - [issue #8](https://github.com/FunThomas424242/rades.forge-addon/issues/8) Testphase für Ermittlung der Codecoverage aufgenommen
 - [issue #10](https://github.com/FunThomas424242/rades.forge-addon/issues/10) Changelog aufgenommen
 - [issue #11](https://github.com/FunThomas424242/rades.forge-addon/issues/11) Issues im Changelog verlinken
+- [issue #7](https://github.com/FunThomas424242/rades.forge-addon/issues/7) GithubRepositoryname abfragen
 
 ### Changed
 - n/a

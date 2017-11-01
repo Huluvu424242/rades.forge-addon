@@ -38,6 +38,9 @@ public abstract class RadesProject implements RadesProjectAccessor{
     protected String githubUsername;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    protected String githubRepositoryname;
+
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     protected String bintrayUsername;
 
 

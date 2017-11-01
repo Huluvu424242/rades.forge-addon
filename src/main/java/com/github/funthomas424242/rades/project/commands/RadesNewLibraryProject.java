@@ -62,7 +62,7 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     protected UIInput<String> groupId;
 
     @Inject
-    @WithAttributes(label = "Artifact ID:", required = true, defaultValue = "myArtifactID")
+    @WithAttributes(label = "Artifact ID:", required = true, defaultValue = "testProject")
     protected UIInput<String> artifactId;
 
     @Inject
@@ -77,6 +77,11 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     @Inject
     @WithAttributes(label = "Github Username:", required = true, defaultValue = "myGithubUsername")
     protected UIInput<String> githubUsername;
+
+    @Inject
+    @WithAttributes(label = "Github Repositoryname:", required = true)
+    protected UIInput<String> githubRepositoryname;
+
 
 
     @Inject
@@ -111,12 +116,24 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
                     }
                 });
 
+        githubRepositoryname.setDefaultValue(
+                new Callable<String>() {
+                    @Override
+                    public String call() {
+                        if (projectDirName.getValue() == null) {
+                            return "myGithubReponame";
+                        }
+                        return projectDirName.getValue();
+                    }
+                });
+
         // add the inputs
         builder.add(groupId);
         builder.add(artifactId);
         builder.add(version);
         builder.add(projectDirName);
         builder.add(githubUsername);
+        builder.add(githubRepositoryname);
         builder.add(bintrayUsername);
         builder.add(repositories);
     }
@@ -144,6 +161,7 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
                 .withVersion(version.getValue())
                 .withProjectDirName(projectDirName.getValue())
                 .withGithubUsername(githubUsername.getValue())
+                .withGithubRepositoryname(githubRepositoryname.getValue())
                 .build();
 
 
