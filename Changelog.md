@@ -11,14 +11,15 @@ Die Versionierung erfolgt nach [Semantic Versioning](http://semver.org/lang/de/)
 ### Added
 - Projekt Setup aufgesetzt.
 - Interaktive Abfrage der Rades Projektmerkmale
+- [issue #1](https://github.com/FunThomas424242/rades.forge-addon/issues/1) Travis Support aufgenommen
 - [issue #2](https://github.com/FunThomas424242/rades.forge-addon/issues/2) Generierung eines Readmefiles
+- [issue #6](https://github.com/FunThomas424242/rades.forge-addon/issues/6) Globale Validierungen eingeführt
+- [issue #7](https://github.com/FunThomas424242/rades.forge-addon/issues/7) GithubRepositoryname abfragen
 - [issue #8](https://github.com/FunThomas424242/rades.forge-addon/issues/8) Testphase für Ermittlung der Codecoverage aufgenommen
 - [issue #10](https://github.com/FunThomas424242/rades.forge-addon/issues/10) Changelog aufgenommen
 - [issue #11](https://github.com/FunThomas424242/rades.forge-addon/issues/11) Issues im Changelog verlinken
-- [issue #7](https://github.com/FunThomas424242/rades.forge-addon/issues/7) GithubRepositoryname abfragen
-- [issue #6](https://github.com/FunThomas424242/rades.forge-addon/issues/6) Globale Validierungen einführen
-- [issue #13](https://github.com/FunThomas424242/rades.forge-addon/issues/13) Bintray Badge in die Readme aufgenommen
 - [issue #12](https://github.com/FunThomas424242/rades.forge-addon/issues/12) Bintray Support aufgenommen
+- [issue #13](https://github.com/FunThomas424242/rades.forge-addon/issues/13) Bintray Badge in die Readme aufgenommen
 
 ### Changed
 - n/a

@@ -1,5 +1,6 @@
 package com.github.funthomas424242.rades.project.commands;
 
+import com.github.funthomas424242.rades.project.generator.NewTravisFileGenerator;
 import com.github.funthomas424242.rades.validationrules.*;
 import com.github.funthomas424242.rades.project.domain.RadesProject;
 import com.github.funthomas424242.rades.project.domain.RadesProjectBuilder;
@@ -48,6 +49,9 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
 
     @Inject
     protected NewProjectReadmeFileGenerator newProjectReadmeFileGeneratorGenerator;
+
+    @Inject
+    protected NewTravisFileGenerator newTravisFileGenerator;
 
 
     // /////////////////////////////////////////////////////////////////////////
@@ -193,6 +197,9 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
         newLibProjectGenerator.generate(prompt, log, projectDir, radesProject);
         log.info(log.out(), "Generiere project README.md in "+projectDir.getName());
         newProjectReadmeFileGeneratorGenerator.generate(prompt, log, projectDir, radesProject);
+        log.info(log.out(), "Generiere project .travis.yml in "+projectDir.getName());
+        newTravisFileGenerator.generate(prompt, log, projectDir, radesProject);
+
 
         return Results
                 .success("Command 'rades-new-libproject' successfully executed!");
