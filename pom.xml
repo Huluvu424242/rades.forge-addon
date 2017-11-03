@@ -72,6 +72,17 @@
             </dependency>
             <dependency>
                 <groupId>org.jboss.forge.addon</groupId>
+                <artifactId>shell</artifactId>
+                <classifier>forge-addon</classifier>
+                <version>${version.forge}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.forge.addon</groupId>
+                <artifactId>shell-api</artifactId>
+                <version>${version.forge}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.forge.addon</groupId>
                 <artifactId>facets</artifactId>
                 <version>${version.forge}</version>
             </dependency>
@@ -159,6 +170,16 @@
         <dependency>
             <groupId>org.jboss.forge.addon</groupId>
             <artifactId>resources</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.forge.addon</groupId>
+            <artifactId>shell</artifactId>
+            <classifier>forge-addon</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.forge.addon</groupId>
+            <artifactId>shell-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>

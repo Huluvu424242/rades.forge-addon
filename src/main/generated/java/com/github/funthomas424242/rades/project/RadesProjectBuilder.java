@@ -10,57 +10,6 @@ import javax.validation.ValidatorFactory;
 import java.util.HashSet;
 import java.util.Set;
 
-@Generated("com.github.funthomas424242.rades.builder.annotation.RadesAbstractDomainobject")
-class RadesProjectImpl extends RadesProject {
-
-    @Override
-    public String getGroupID() {
-        return groupID;
-    }
-
-    @Override
-    public String getArtifactID() {
-        return artifactID;
-    }
-
-    @Override
-    public String getClassifier() {
-        return classifier;
-    }
-
-    @Override
-    public String getVersion() {
-        return version;
-    }
-
-    @Override
-    public String getProjectDirName() {
-        return projectDirName;
-    }
-
-    @Override
-    public String getGithubUsername() {
-        return githubUsername;
-    }
-
-    @Override
-    public String getGithubRepositoryname() {
-        return githubRepositoryname;
-    }
-
-    public String getBintrayUsername() {
-        return bintrayUsername;
-    }
-
-    public String getBintrayRepositoryname() {
-        return bintrayRepositoryname;
-    }
-
-    public String getBintrayPackagename() {
-        return bintrayPackagename;
-    }
-
-}
 
 @Generated("com.github.funthomas424242.rades.builder.annotation.RadesAbstractDomainobject")
 public class RadesProjectBuilder {
@@ -162,5 +111,59 @@ public class RadesProjectBuilder {
 
 
         return radesProject;
+    }
+
+
+
+    @Generated("com.github.funthomas424242.rades.builder.annotation.RadesAbstractDomainobject")
+    static public class  RadesProjectImpl extends RadesProject {
+
+        @Override
+        public String getGroupID() {
+            return groupID;
+        }
+
+        @Override
+        public String getArtifactID() {
+            return artifactID;
+        }
+
+        @Override
+        public String getClassifier() {
+            return classifier;
+        }
+
+        @Override
+        public String getVersion() {
+            return version;
+        }
+
+        @Override
+        public String getProjectDirName() {
+            return projectDirName;
+        }
+
+        @Override
+        public String getGithubUsername() {
+            return githubUsername;
+        }
+
+        @Override
+        public String getGithubRepositoryname() {
+            return githubRepositoryname;
+        }
+
+        public String getBintrayUsername() {
+            return bintrayUsername;
+        }
+
+        public String getBintrayRepositoryname() {
+            return bintrayRepositoryname;
+        }
+
+        public String getBintrayPackagename() {
+            return bintrayPackagename;
+        }
+
     }
 }

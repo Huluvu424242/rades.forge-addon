@@ -13,6 +13,8 @@ Die Versionierung erfolgt nach [Semantic Versioning](http://semver.org/lang/de/)
 - Interaktive Abfrage der Rades Projektmerkmale
 - [issue #1](https://github.com/FunThomas424242/rades.forge-addon/issues/1) Travis Support aufgenommen.
 - [issue #2](https://github.com/FunThomas424242/rades.forge-addon/issues/2) Generierung eines Readmefiles.
+- [issue #4](https://github.com/FunThomas424242/rades.forge-addon/issues/4) Kommando zum Ändern der Projektbeschreibung aufgenommen.
+- [issue #5](https://github.com/FunThomas424242/rades.forge-addon/issues/5) Aktuelles Directory korrekt bestimmt.
 - [issue #6](https://github.com/FunThomas424242/rades.forge-addon/issues/6) Globale Validierungen eingeführt.
 - [issue #7](https://github.com/FunThomas424242/rades.forge-addon/issues/7) GithubRepositoryname abfragen.
 - [issue #8](https://github.com/FunThomas424242/rades.forge-addon/issues/8) Testphase für Ermittlung der Codecoverage aufgenommen.
