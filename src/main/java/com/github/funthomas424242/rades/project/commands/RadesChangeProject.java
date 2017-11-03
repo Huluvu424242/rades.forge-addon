@@ -2,6 +2,7 @@ package com.github.funthomas424242.rades.project.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.*;
+import com.github.funthomas424242.rades.flowdesign.Integration;
 import com.github.funthomas424242.rades.project.RadesProject;
 import com.github.funthomas424242.rades.project.RadesProjectBuilder;
 import com.github.funthomas424242.rades.validationrules.ProjectDescription;
@@ -73,6 +74,7 @@ public class RadesChangeProject extends AbstractUICommand implements UICommand {
 
 
     @Override
+    @Integration
     public Result execute(UIExecutionContext context) throws Exception {
 
         final UIOutput log = context.getUIContext().getProvider().getOutput();
