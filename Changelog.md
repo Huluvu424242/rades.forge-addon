@@ -28,6 +28,7 @@ Die Versionierung erfolgt nach [Semantic Versioning](http://semver.org/lang/de/)
 - [issue #17](https://github.com/FunThomas424242/rades.forge-addon/issues/17) IODA Architektur Annotationen @Integration, @Logik eingeführt
 - [issue #18](https://github.com/FunThomas424242/rades.forge-addon/issues/18) CommandResourceHelper eingeführt.
 - [issue #19](https://github.com/FunThomas424242/rades.forge-addon/issues/19) Asciidoc Support added
+- [issue #20](https://github.com/FunThomas424242/rades.forge-addon/issues/20) Readme Generator auf Asciidoc umgestellt.
 
 
 ### Changed

@@ -14,7 +14,7 @@ import java.io.PrintWriter;
 
 public class NewProjectReadmeFileGenerator {
 
-    public static final String README_MD = "README.md";
+    public static final String README_MD = "README.asciidoc";
 
     public void generate(final UIPrompt prompt, final UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws IOException {
 
@@ -43,31 +43,31 @@ public class NewProjectReadmeFileGenerator {
         final PrintWriter writer = new PrintWriter(outStream);
 
         // Bintray Download
-        writer.println("[![Download](https://api.bintray.com/packages/" + bintrayUsername +
+        writer.println("image:https://api.bintray.com/packages/" + bintrayUsername +
                 "/" + bintrayRepositoryname +
                 "/" + bintrayPackagename +
-                "/images/download.svg) ](https://bintray.com/" + bintrayUsername +
+                "/images/download.svg[link=\"https://bintray.com/" + bintrayUsername +
                 "/" + bintrayRepositoryname +
                 "/" + bintrayPackagename +
-                "/_latestVersion)");
+                "/_latestVersion\"]");
         // Travis CI Badged
-        writer.println("[![Build Status](https://travis-ci.org/" + githubUsername +
+        writer.println("image:https://travis-ci.org/" + githubUsername +
                 "/" + githubRepositoryname +
-                ".svg?branch=master)](https://travis-ci.org/" + githubUsername +
+                ".svg?branch=master[link=\"https://travis-ci.org/" + githubUsername +
                 "/" + githubRepositoryname +
-                ")");
+                "\"]");
         // Codedev Badged
-        writer.println("[![codecov](https://codecov.io/gh/" + githubUsername +
+        writer.println("image:https://codecov.io/gh/" + githubUsername +
                 "/" + githubRepositoryname +
-                "/branch/master/graph/badge.svg)](https://codecov.io/gh/" + githubUsername +
+                "/branch/master/graph/badge.svg[link=\"https://codecov.io/gh/" + githubUsername +
                 "/" + githubRepositoryname +
-                ")");
+                "\"]");
         // Waffle Badged
-        writer.println("[![Waffle.io - Columns and their card count](https://badge.waffle.io/" + githubUsername +
+        writer.println("image:https://badge.waffle.io/" + githubUsername +
                 "/" + githubRepositoryname +
-                ".svg?columns=all)](https://waffle.io/" + githubUsername +
+                ".svg?columns=all[\"Waffle.io - Columns and their card count\", link=\"https://waffle.io/" + githubUsername +
                 "/" + githubRepositoryname +
-                ")");
+                "\"]");
 
         writer.println("# " + githubRepositoryname);
         writer.println(githubProjectDescription);
