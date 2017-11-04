@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.funthomas424242.rades.core.resources.NewFileResourceFactory;
+import com.github.funthomas424242.rades.core.resources.UserVetoException;
 import com.github.funthomas424242.rades.project.RadesProject;
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.FileResource;
@@ -20,10 +21,15 @@ public class NewRadesProjectDescriptionFileGenerator {
 
     public void generateProjectDescriptionFile(final UIPrompt prompt, final UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws IOException {
 
-        final FileResource<?> radesProjectFile
-                = new NewFileResourceFactory(prompt, log).newFileResource(projectDir, RADES_JSON);
-        if (!radesProjectFile.exists()) {
+        FileResource<?> radesProjectFile= null;
+        try {
+            radesProjectFile = new NewFileResourceFactory(prompt, log).tryCreateFileResourceInteractive(projectDir, RADES_JSON);
+        } catch (UserVetoException e) {
             return;
+        }finally {
+            if (radesProjectFile == null || !radesProjectFile.exists()) {
+                return;
+            }
         }
 
         final PipedOutputStream pipeOut = new PipedOutputStream();

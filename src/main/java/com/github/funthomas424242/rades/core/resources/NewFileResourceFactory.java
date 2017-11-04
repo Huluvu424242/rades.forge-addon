@@ -15,7 +15,7 @@ public class NewFileResourceFactory {
         this.log = log;
     }
 
-    public FileResource<?> newFileResource(final DirectoryResource parentDirectory, final String fileName) {
+    public FileResource<?> tryCreateFileResourceInteractive(final DirectoryResource parentDirectory, final String fileName) throws UserVetoException {
 
         final FileResource<?> fileResource = parentDirectory.getChild(fileName).reify(FileResource.class);
 
@@ -25,7 +25,7 @@ public class NewFileResourceFactory {
             if (!shouldOverride) {
                 log.warn(log.out(), "Erstellung der Datei " + fileName + " auf Nutzerwunsch abgebrochen.");
                 log.warn(log.out(), "Datei " + fileName + " im Ordner " + parentDirectory.getName() + " muss manuell angepasst werden!");
-                return fileResource;
+                throw new UserVetoException("Erstellung der Datei " + fileName + " auf Nutzerwunsch abgebrochen.");
             } else {
                 fileResource.delete();
                 fileResource.refresh();

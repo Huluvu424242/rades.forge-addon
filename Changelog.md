@@ -23,6 +23,7 @@ Die Versionierung erfolgt nach [Semantic Versioning](http://semver.org/lang/de/)
 - [issue #12](https://github.com/FunThomas424242/rades.forge-addon/issues/12) Bintray Support aufgenommen.
 - [issue #13](https://github.com/FunThomas424242/rades.forge-addon/issues/13) Bintray Badge in die Readme aufgenommen.
 - [issue #14](https://github.com/FunThomas424242/rades.forge-addon/issues/14) NewFileResourceFactory erstellt.
+- [issue #16](https://github.com/FunThomas424242/rades.forge-addon/issues/16) Vor dem Überschreiben der pom.xml fragen.
 - [issue #17](https://github.com/FunThomas424242/rades.forge-addon/issues/17) IODA Architektur Annotationen @Integration, @Logik eingeführt
 - [issue #18](https://github.com/FunThomas424242/rades.forge-addon/issues/18) CommandResourceHelper eingeführt.
 

@@ -1,6 +1,7 @@
 package com.github.funthomas424242.rades.project.generators;
 
 import com.github.funthomas424242.rades.core.resources.NewFileResourceFactory;
+import com.github.funthomas424242.rades.core.resources.UserVetoException;
 import com.github.funthomas424242.rades.project.RadesProject;
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.FileResource;
@@ -17,10 +18,15 @@ public class NewTravisFileGenerator {
 
     public void generate(final UIPrompt prompt, final UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws IOException {
 
-        final FileResource<?> travisFile
-                = new NewFileResourceFactory(prompt, log).newFileResource(projectDir, TRAVIS_FILE_NAME);
-        if (!travisFile.exists()) {
+        FileResource<?> travisFile=null;
+        try {
+            travisFile = new NewFileResourceFactory(prompt, log).tryCreateFileResourceInteractive(projectDir, TRAVIS_FILE_NAME);
+        } catch (UserVetoException e) {
             return;
+        }finally {
+            if (travisFile == null || !travisFile.exists()) {
+                return;
+            }
         }
 
         final OutputStream outStream = travisFile.getResourceOutputStream(false);
