@@ -2,6 +2,7 @@ package com.github.funthomas424242.rades.project.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.*;
+import com.github.funthomas424242.rades.core.resources.CommandResourceHelper;
 import com.github.funthomas424242.rades.flowdesign.Integration;
 import com.github.funthomas424242.rades.project.RadesProject;
 import com.github.funthomas424242.rades.project.RadesProjectBuilder;
@@ -50,7 +51,7 @@ public class RadesChangeProject extends AbstractUICommand implements UICommand {
     protected MavenBuildSystem buildSystem;
 
     @Inject
-    protected Environment environment;
+    protected CommandResourceHelper commandHelper;
 
 
     @Inject
@@ -66,6 +67,12 @@ public class RadesChangeProject extends AbstractUICommand implements UICommand {
                 .category(Categories.create("Project/Generation"));
     }
 
+    @Override
+    public boolean isEnabled(UIContext context) {
+        final boolean isEnabled= super.isEnabled(context);
+        final FileResource radesProjectDescription=commandHelper.getRadesProjectDescription(context);
+        return isEnabled && radesProjectDescription.exists();
+    }
 
     @Override
     public void initializeUI(UIBuilder builder) throws Exception {
