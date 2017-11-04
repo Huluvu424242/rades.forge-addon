@@ -84,44 +84,16 @@ public class RadesChangeProject extends AbstractUICommand implements UICommand {
     @Integration
     public Result execute(UIExecutionContext context) throws Exception {
 
-        final UIOutput log = context.getUIContext().getProvider().getOutput();
+        final UIContext uiContext = context.getUIContext();
+        final UIOutput log = uiContext.getProvider().getOutput();
         final UIPrompt prompt = context.getPrompt();
 
-        final Shell myShell= (Shell) context.getUIContext().getProvider();
-        final org.jboss.aesh.io.Resource resource=myShell.getConsole().getAeshContext().getCurrentWorkingDirectory();
-        final String currentDir = resource.getAbsolutePath();
-        log.info(log.out(),"###curDir:"+currentDir);
-
-
-        final FileResource radesProjectDescriptionFile;
-         /* create projectFileResource reference */
-        {
-            final File curDirFile = new File(currentDir);
-//            final File parentFile = curDirFile.getParentFile();
-            final Resource<File> parentDirResource = resourceFactory.create(curDirFile);
-            final DirectoryResource currentDirectory = parentDirResource.reify(DirectoryResource.class);
-            final Resource<?> radesProjectDescriptionFileResource = currentDirectory.getChild("rades.json");
-            radesProjectDescriptionFile = radesProjectDescriptionFileResource.reify(FileResource.class);
-        }
-
+        final FileResource radesProjectDescriptionFile=commandHelper.getRadesProjectDescription(uiContext);
         final String jsonTxt = radesProjectDescriptionFile.getContents(Charset.forName("UTF-8"));
         final RadesProject radesProject = new ObjectMapper().readValue(jsonTxt, RadesProjectBuilder.RadesProjectImpl.class);
         log.info(log.out(),"JSON:"+radesProject.toString());
 
 
-//        // radesProject befüllen
-//        final RadesProject radesProject = new RadesProjectBuilder()
-//                .withGroupID(groupId.getValue())
-//                .withArtifactID(artifactId.getValue())
-//                .withVersion(version.getValue())
-//                .withProjectDirName(projectDirName.getValue())
-//                .withGithubUsername(githubUsername.getValue())
-//                .withGithubRepositoryname(githubRepositoryname.getValue())
-//                .withBintrayUsername(bintrayUsername.getValue())
-//                .withBintrayRepositoryname(bintrayRepositoryname.getValue())
-//                .withBintrayPackagename(bintrayPackagename.getValue())
-//                .build();
-//
 //
 //
 //

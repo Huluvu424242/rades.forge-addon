@@ -1,5 +1,6 @@
 package com.github.funthomas424242.rades.project.commands;
 
+import com.github.funthomas424242.rades.core.resources.CommandResourceHelper;
 import com.github.funthomas424242.rades.project.generators.NewTravisFileGenerator;
 import com.github.funthomas424242.rades.validationrules.*;
 import com.github.funthomas424242.rades.project.RadesProject;
@@ -8,6 +9,7 @@ import com.github.funthomas424242.rades.project.generators.NewLibraryProjectGene
 import com.github.funthomas424242.rades.project.generators.NewProjectReadmeFileGenerator;
 import com.github.funthomas424242.rades.project.generators.NewRadesProjectDescriptionFileGenerator;
 import org.jboss.forge.addon.resource.DirectoryResource;
+import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.resource.Resource;
 import org.jboss.forge.addon.resource.ResourceFactory;
 import org.jboss.forge.addon.ui.command.AbstractUICommand;
@@ -49,6 +51,9 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
 
     @Inject
     protected NewProjectReadmeFileGenerator newProjectReadmeFileGeneratorGenerator;
+
+    @Inject
+    protected CommandResourceHelper commandHelper;
 
     @Inject
     protected NewTravisFileGenerator newTravisFileGenerator;
@@ -121,6 +126,13 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     }
 
     @Override
+    public boolean isEnabled(UIContext context) {
+        final boolean isEnabled= super.isEnabled(context);
+        final FileResource radesProjectDescription=commandHelper.getRadesProjectDescription(context);
+        return isEnabled && !radesProjectDescription.exists();
+    }
+
+    @Override
     public void initializeUI(UIBuilder builder) throws Exception {
 
         // Auswahlen initialisieren
@@ -163,14 +175,15 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     @Override
     public Result execute(UIExecutionContext context) throws Exception {
 
-        final UIOutput log = context.getUIContext().getProvider().getOutput();
+
+        final UIContext uiContext = context.getUIContext();
+        final UIOutput log = uiContext.getProvider().getOutput();
         final UIPrompt prompt = context.getPrompt();
 
         final DirectoryResource projectDir;
          /* create projectFileResource reference */
         {
-            final File curDirFile = Paths.get(".").toAbsolutePath().toFile();
-            File parentFile = curDirFile.getParentFile();
+            final File parentFile=commandHelper.getCurrentDirectory(uiContext);
             final Resource<File> parentDirResource = resourceFactory.create(parentFile);
             final DirectoryResource location = parentDirResource.reify(DirectoryResource.class);
             projectDir = location.getOrCreateChildDirectory(projectDirName.getValue());
