@@ -13,6 +13,8 @@ public interface RadesProjectAccessor {
 
     String getVersion();
 
+    String getProjectDescription();
+
     String getProjectDirName();
 
     String getGithubUsername();

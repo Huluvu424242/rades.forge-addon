@@ -27,6 +27,9 @@ public abstract class RadesProject implements RadesProjectAccessor {
     @ProjectDirname
     protected String projectDirName;
 
+    @ProjectDescription
+    protected String projectDescription;
+
     // Repositories
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @NotNull
