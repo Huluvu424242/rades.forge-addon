@@ -7,4 +7,6 @@ public interface RadesUICommand extends UICommand{
     static final String ENCODING_UTF8 = "UTF-8";
     static final String CATEGORY_RADES_PROJECT = "RADeS/Project";
 
+    static final String RADES_JSON = "rades.json";
+
 }

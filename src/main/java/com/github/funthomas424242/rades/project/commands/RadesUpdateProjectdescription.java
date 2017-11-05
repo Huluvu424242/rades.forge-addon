@@ -2,19 +2,23 @@ package com.github.funthomas424242.rades.project.commands;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import com.github.funthomas424242.rades.core.resources.CommandResourceHelper;
 import com.github.funthomas424242.rades.flowdesign.Integration;
 import com.github.funthomas424242.rades.project.RadesProject;
 import com.github.funthomas424242.rades.project.RadesProjectBuilder;
 import com.github.funthomas424242.rades.validationrules.ProjectDescription;
+import org.apache.maven.pom._4_0.Model;
 import org.jboss.forge.addon.maven.projects.MavenBuildSystem;
 import org.jboss.forge.addon.projects.ProjectFactory;
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.resource.ResourceFactory;
 import org.jboss.forge.addon.ui.command.AbstractUICommand;
-import org.jboss.forge.addon.ui.command.UICommand;
-import org.jboss.forge.addon.ui.context.UIBuilder;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UIExecutionContext;
 import org.jboss.forge.addon.ui.input.UIInput;
@@ -28,9 +32,12 @@ import org.jboss.forge.addon.ui.util.Categories;
 import org.jboss.forge.addon.ui.util.Metadata;
 
 import javax.inject.Inject;
+import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.nio.charset.Charset;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class RadesUpdateProjectdescription extends AbstractUICommand implements RadesUICommand {
 
@@ -65,15 +72,9 @@ public class RadesUpdateProjectdescription extends AbstractUICommand implements 
     @Override
     public boolean isEnabled(UIContext context) {
         final boolean isEnabled = super.isEnabled(context);
-        final FileResource radesProjectDescription = commandHelper.getRadesProjectDescription(context);
+        final FileResource radesProjectDescription = commandHelper.getFileResourceFromCurrentDir(context, RADES_JSON);
         return isEnabled && radesProjectDescription.exists();
     }
-
-    @Override
-    public void initializeUI(UIBuilder builder) throws Exception {
-
-    }
-
 
     @Override
     @Integration
@@ -83,7 +84,7 @@ public class RadesUpdateProjectdescription extends AbstractUICommand implements 
         final UIOutput log = uiContext.getProvider().getOutput();
         final UIPrompt prompt = context.getPrompt();
 
-        final FileResource radesProjectDescriptionFile = commandHelper.getRadesProjectDescription(uiContext);
+        final FileResource radesProjectDescriptionFile = commandHelper.getFileResourceFromCurrentDir(uiContext, RADES_JSON);
         final String jsonTxt = radesProjectDescriptionFile.getContents(Charset.forName(ENCODING_UTF8));
         final RadesProject oldRadesProject = new ObjectMapper().readValue(jsonTxt, RadesProjectBuilder.RadesProjectImpl.class);
 
@@ -91,10 +92,11 @@ public class RadesUpdateProjectdescription extends AbstractUICommand implements 
         final boolean shouldOverride = prompt.promptBoolean("Soll die aktuelle Projektbeschreibung: " + projectDescription + " ersetzt werden?", false);
         if (shouldOverride) {
             final String newProjectDescription = prompt.prompt("Bitte neue Projektbeschreibung eingeben:");
+
+            // Replace in rades.json
             final RadesProject radesProject = new RadesProjectBuilder(oldRadesProject)
                     .withProjectDescription(newProjectDescription)
                     .build();
-
             final PipedOutputStream pipeOut = new PipedOutputStream();
             final PipedInputStream pipeIn = new PipedInputStream(pipeOut);
             final ObjectMapper objMapper = new ObjectMapper();
@@ -104,42 +106,22 @@ public class RadesUpdateProjectdescription extends AbstractUICommand implements 
             pipeOut.flush();
             pipeOut.close();
             pipeIn.close();
+
+            // Replace in pom.xml
+            final FileResource pomXML = commandHelper.getFileResourceFromCurrentDir(uiContext, "pom.xml");
+
+            final JacksonXmlModule module = new JacksonXmlModule();
+            module.setDefaultUseWrapper(true);
+            XmlMapper xmlMapper = new XmlMapper(module);
+            xmlMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            xmlMapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true);
+//            xmlMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
+            final String xml = pomXML.getContents(UTF_8);
+            final Model pomModel = xmlMapper.readValue(xml, Model.class);
+            pomModel.setDescription(newProjectDescription);
+            final OutputStream ostream = pomXML.getResourceOutputStream();
+            xmlMapper.writeValue(ostream, pomModel);
         }
-
-        log.info(log.out(), "JSON:" + oldRadesProject.toString());
-
-
-//
-//
-//
-//
-//        final List<Class<? extends ProjectFacet>> facets = new ArrayList<>();
-//        facets.add(ResourcesFacet.class);
-//        facets.add(MetadataFacet.class);
-//        facets.add(JavaSourceFacet.class);
-//        facets.add(JavaCompilerFacet.class);
-//        facets.add(MavenPluginFacet.class);
-//        facets.add(DependencyFacet.class);
-//        final Project project = projectFactory.createProject(projectDir,
-//                buildSystem, facets);
-
-//        final MetadataFacet facet = project.getFacet(MetadataFacet.class);
-//        facet.setProjectGroupName(radesProject.getGroupID());
-//        facet.setProjectName(radesProject.getArtifactID());
-//        facet.setProjectVersion(radesProject.getVersion());
-
-
-//        final boolean shouldOverride = prompt.promptBoolean("Soll ich bestehende Datei " + fileName + " überschreiben?", true);
-//        if (!shouldOverride) {
-//            log.warn(log.out(), "Erstellung der Datei " + fileName + " auf Nutzerwunsch abgebrochen.");
-//            log.warn(log.out(), "Datei " + fileName + " im Ordner " + parentDirectory.getName() + " muss manuell angepasst werden!");
-//            return fileResource;
-//        } else {
-//            fileResource.delete();
-//            fileResource.refresh();
-//        }
-
-
         return Results
                 .success("Kommando '" + COMMANDLINE_COMMAND + "' wurde erfolgreich ausgeführt.");
     }

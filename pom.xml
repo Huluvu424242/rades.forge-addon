@@ -40,6 +40,11 @@
                 <artifactId>jackson-databind</artifactId>
                 <version>2.9.2</version>
             </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-xml</artifactId>
+                <version>2.9.2</version>
+            </dependency>
             <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
@@ -98,6 +103,12 @@
             </dependency>
             <dependency>
                 <groupId>org.jboss.forge.addon</groupId>
+                <artifactId>maven</artifactId>
+                <classifier>forge-addon</classifier>
+                <version>${version.forge}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.forge.addon</groupId>
                 <artifactId>maven-api</artifactId>
                 <version>${version.forge}</version>
             </dependency>
@@ -148,6 +159,10 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
         <dependency>
@@ -204,6 +219,11 @@
         </dependency>
         <dependency>
             <groupId>org.jboss.forge.addon</groupId>
+            <artifactId>maven</artifactId>
+            <classifier>forge-addon</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.forge.addon</groupId>
             <artifactId>maven-api</artifactId>
             <scope>provided</scope>
         </dependency>
@@ -248,6 +268,28 @@
         <finalName>rades</finalName>
         <plugins>
             <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>a</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <schemaDirectory>src/main/resources/schema/pom</schemaDirectory>
+                            <schemaIncludes>
+                                <include>*.xsd</include>
+                            </schemaIncludes>
+                            <generateDirectory>${basedir}/src/main/generated/jaxb</generateDirectory>
+                            <schemaLanguage>XMLSCHEMA</schemaLanguage>
+                            <strict>true</strict>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <executions>
@@ -258,7 +300,8 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>src/main/generated</source>
+                                <source>src/main/generated/java</source>
+                                <source>src/main/generated/jaxb</source>
                             </sources>
                         </configuration>
                     </execution>
@@ -301,6 +344,11 @@
         </plugins>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.jvnet.jaxb2.maven2</groupId>
+                    <artifactId>maven-jaxb2-plugin</artifactId>
+                    <version>0.13.2</version>
+                </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>

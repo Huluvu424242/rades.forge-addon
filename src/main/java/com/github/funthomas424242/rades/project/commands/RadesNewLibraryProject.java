@@ -13,7 +13,6 @@ import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.resource.ResourceFactory;
 import org.jboss.forge.addon.ui.command.AbstractUICommand;
-import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIBuilder;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UIExecutionContext;
@@ -128,7 +127,7 @@ public class RadesNewLibraryProject extends AbstractUICommand implements RadesUI
     @Override
     public boolean isEnabled(UIContext context) {
         final boolean isEnabled = super.isEnabled(context);
-        final FileResource radesProjectDescription = commandResourceHelper.getRadesProjectDescription(context);
+        final FileResource radesProjectDescription = commandResourceHelper.getFileResourceFromCurrentDir(context,RADES_JSON);
         return isEnabled && !radesProjectDescription.exists();
     }
 

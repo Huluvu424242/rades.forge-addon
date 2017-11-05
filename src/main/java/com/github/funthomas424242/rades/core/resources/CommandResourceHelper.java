@@ -12,19 +12,17 @@ import java.io.File;
 
 public class CommandResourceHelper {
 
-    public static final String RADES_JSON = "rades.json";
-
     @Inject
     protected ResourceFactory resourceFactory;
 
     public CommandResourceHelper(){}
 
-    public FileResource getRadesProjectDescription(final UIContext uiContext) {
+    public FileResource getFileResourceFromCurrentDir(final UIContext uiContext, final String fileName) {
         final File curDirFile = getCurrentDirectory(uiContext);
-        final Resource<File> parentDirResource = resourceFactory.create(curDirFile);
-        final DirectoryResource currentDirectory = parentDirResource.reify(DirectoryResource.class);
-        final Resource<?> radesProjectDescriptionFileResource = currentDirectory.getChild(RADES_JSON);
-        return radesProjectDescriptionFileResource.reify(FileResource.class);
+        final Resource<File> currentDirectoryFileResource = resourceFactory.create(curDirFile);
+        final DirectoryResource currentDirectory = currentDirectoryFileResource.reify(DirectoryResource.class);
+        final Resource<?> fileResource = currentDirectory.getChild(fileName);
+        return fileResource.reify(FileResource.class);
     }
 
     public DirectoryResource getCurrentDirectoryResource(final UIContext uiContext){
