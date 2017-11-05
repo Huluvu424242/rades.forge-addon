@@ -2,6 +2,8 @@ package com.github.funthomas424242.rades.project.generators;
 
 import com.github.funthomas424242.rades.core.resources.NewFileResourceFactory;
 import com.github.funthomas424242.rades.core.resources.UserVetoException;
+import com.github.funthomas424242.rades.flowdesign.Integration;
+import com.github.funthomas424242.rades.flowdesign.Operation;
 import com.github.funthomas424242.rades.project.RadesProject;
 import org.jboss.forge.addon.maven.projects.MavenBuildSystem;
 import org.jboss.forge.addon.maven.projects.MavenPluginFacet;
@@ -38,24 +40,23 @@ public class NewLibraryProjectGenerator {
     @Inject
     protected MavenBuildSystem buildSystem;
 
-
+    @Integration
     public void generate(final UIPrompt prompt, UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws IOException {
 
-        log.info(log.out(), "Generiere Projektfacetten wie pom.xml und ähnliches im Ordner "+projectDir.getName());
+        log.info(log.out(), "Generiere Projektfacetten wie pom.xml und ähnliches im Ordner " + projectDir.getName());
 
-        FileResource<?> pomXML=null;
+        FileResource<?> pomXML = null;
         try {
             pomXML = new NewFileResourceFactory(prompt, log).tryCreateFileResourceInteractive(projectDir, POM_XML);
         } catch (UserVetoException e) {
             return;
-        }finally {
+        } finally {
             if (pomXML == null || !pomXML.exists()) {
                 return;
             }
         }
 
-        pomXML.setContents("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
-                "xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n</project>", Charset.forName("UTF-8"));
+        initializeIfEmpty(pomXML);
 
         final List<Class<? extends ProjectFacet>> facets = new ArrayList<>();
         facets.add(ResourcesFacet.class);
@@ -72,6 +73,14 @@ public class NewLibraryProjectGenerator {
         facet.setProjectName(radesProject.getArtifactID());
         facet.setProjectVersion(radesProject.getVersion());
 
+    }
+
+    @Operation
+    protected void initializeIfEmpty(FileResource<?> pomXML) {
+        if (pomXML.getContents(Charset.forName("UTF-8")).isEmpty()) {
+            pomXML.setContents("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
+                    "xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n</project>", Charset.forName("UTF-8"));
+        }
     }
 
 }
