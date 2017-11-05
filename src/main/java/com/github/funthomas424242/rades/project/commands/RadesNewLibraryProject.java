@@ -2,12 +2,11 @@ package com.github.funthomas424242.rades.project.commands;
 
 import com.github.funthomas424242.rades.core.resources.CommandResourceHelper;
 import com.github.funthomas424242.rades.flowdesign.Integration;
-import com.github.funthomas424242.rades.flowdesign.Operation;
 import com.github.funthomas424242.rades.project.generators.NewTravisFileGenerator;
 import com.github.funthomas424242.rades.validationrules.*;
 import com.github.funthomas424242.rades.project.RadesProject;
 import com.github.funthomas424242.rades.project.RadesProjectBuilder;
-import com.github.funthomas424242.rades.project.generators.NewLibraryProjectGenerator;
+import com.github.funthomas424242.rades.project.generators.NewLibraryProjectFacetsGenerator;
 import com.github.funthomas424242.rades.project.generators.NewProjectReadmeFileGenerator;
 import com.github.funthomas424242.rades.project.generators.NewRadesProjectDescriptionFileGenerator;
 import org.jboss.forge.addon.resource.DirectoryResource;
@@ -43,7 +42,7 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     protected ResourceFactory resourceFactory;
 
     @Inject
-    protected NewLibraryProjectGenerator newLibProjectGenerator;
+    protected NewLibraryProjectFacetsGenerator newLibProjectGenerator;
 
     @Inject
     protected NewRadesProjectDescriptionFileGenerator newRadesProjectDescriptionFileGeneratorGenerator;

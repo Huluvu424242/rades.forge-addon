@@ -27,7 +27,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewLibraryProjectGenerator {
+public class NewLibraryProjectFacetsGenerator {
 
     public static final String POM_XML = "pom.xml";
 
