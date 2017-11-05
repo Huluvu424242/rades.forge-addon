@@ -1,5 +1,7 @@
 package com.github.funthomas424242.rades.project.commands;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.funthomas424242.rades.core.resources.CommandResourceHelper;
 import com.github.funthomas424242.rades.flowdesign.Integration;
@@ -26,6 +28,8 @@ import org.jboss.forge.addon.ui.util.Categories;
 import org.jboss.forge.addon.ui.util.Metadata;
 
 import javax.inject.Inject;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.nio.charset.Charset;
 
 public class RadesUpdateProjectdescription extends AbstractUICommand implements RadesUICommand {
@@ -60,8 +64,8 @@ public class RadesUpdateProjectdescription extends AbstractUICommand implements 
 
     @Override
     public boolean isEnabled(UIContext context) {
-        final boolean isEnabled= super.isEnabled(context);
-        final FileResource radesProjectDescription=commandHelper.getRadesProjectDescription(context);
+        final boolean isEnabled = super.isEnabled(context);
+        final FileResource radesProjectDescription = commandHelper.getRadesProjectDescription(context);
         return isEnabled && radesProjectDescription.exists();
     }
 
@@ -79,10 +83,30 @@ public class RadesUpdateProjectdescription extends AbstractUICommand implements 
         final UIOutput log = uiContext.getProvider().getOutput();
         final UIPrompt prompt = context.getPrompt();
 
-        final FileResource radesProjectDescriptionFile=commandHelper.getRadesProjectDescription(uiContext);
+        final FileResource radesProjectDescriptionFile = commandHelper.getRadesProjectDescription(uiContext);
         final String jsonTxt = radesProjectDescriptionFile.getContents(Charset.forName(ENCODING_UTF8));
-        final RadesProject radesProject = new ObjectMapper().readValue(jsonTxt, RadesProjectBuilder.RadesProjectImpl.class);
-        log.info(log.out(),"JSON:"+radesProject.toString());
+        final RadesProject oldRadesProject = new ObjectMapper().readValue(jsonTxt, RadesProjectBuilder.RadesProjectImpl.class);
+
+        final String projectDescription = oldRadesProject.getProjectDescription();
+        final boolean shouldOverride = prompt.promptBoolean("Soll die aktuelle Projektbeschreibung: " + projectDescription + " ersetzt werden?", false);
+        if (shouldOverride) {
+            final String newProjectDescription = prompt.prompt("Bitte neue Projektbeschreibung eingeben:");
+            final RadesProject radesProject = new RadesProjectBuilder(oldRadesProject)
+                    .withProjectDescription(newProjectDescription)
+                    .build();
+
+            final PipedOutputStream pipeOut = new PipedOutputStream();
+            final PipedInputStream pipeIn = new PipedInputStream(pipeOut);
+            final ObjectMapper objMapper = new ObjectMapper();
+            objMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+            objMapper.writer().writeValue(pipeOut, radesProject);
+            radesProjectDescriptionFile.setContents(pipeIn);
+            pipeOut.flush();
+            pipeOut.close();
+            pipeIn.close();
+        }
+
+        log.info(log.out(), "JSON:" + oldRadesProject.toString());
 
 
 //

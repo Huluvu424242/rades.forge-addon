@@ -188,6 +188,7 @@ public class RadesNewLibraryProject extends AbstractUICommand implements RadesUI
                 .withGroupID(groupId.getValue())
                 .withArtifactID(artifactId.getValue())
                 .withVersion(version.getValue())
+                .withProjectDescription("TODO: Kurze Beschreibung zum Projekt eintragen.")
                 .withProjectDirName(projectDirName.getValue())
                 .withGithubUsername(githubUsername.getValue())
                 .withGithubRepositoryname(githubRepositoryname.getValue())
