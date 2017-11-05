@@ -2,18 +2,15 @@ package com.github.funthomas424242.rades.project.commands;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import com.github.funthomas424242.rades.core.resources.CommandResourceHelper;
 import com.github.funthomas424242.rades.flowdesign.Integration;
 import com.github.funthomas424242.rades.project.RadesProject;
 import com.github.funthomas424242.rades.project.RadesProjectBuilder;
 import com.github.funthomas424242.rades.validationrules.ProjectDescription;
-import org.apache.maven.pom._4_0.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
+import org.apache.maven.model.Model;
 import org.jboss.forge.addon.maven.projects.MavenBuildSystem;
 import org.jboss.forge.addon.projects.ProjectFactory;
 import org.jboss.forge.addon.resource.FileResource;
@@ -36,8 +33,6 @@ import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.nio.charset.Charset;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class RadesUpdateProjectdescription extends AbstractUICommand implements RadesUICommand {
 
@@ -110,17 +105,12 @@ public class RadesUpdateProjectdescription extends AbstractUICommand implements 
             // Replace in pom.xml
             final FileResource pomXML = commandHelper.getFileResourceFromCurrentDir(uiContext, "pom.xml");
 
-            final JacksonXmlModule module = new JacksonXmlModule();
-            module.setDefaultUseWrapper(true);
-            XmlMapper xmlMapper = new XmlMapper(module);
-            xmlMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            xmlMapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true);
-//            xmlMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
-            final String xml = pomXML.getContents(UTF_8);
-            final Model pomModel = xmlMapper.readValue(xml, Model.class);
+            final MavenXpp3Reader pomReader = new MavenXpp3Reader();
+            final Model pomModel = pomReader.read(pomXML.getResourceInputStream());
             pomModel.setDescription(newProjectDescription);
+            final MavenXpp3Writer writer=new MavenXpp3Writer();
             final OutputStream ostream = pomXML.getResourceOutputStream();
-            xmlMapper.writeValue(ostream, pomModel);
+            writer.write(ostream,pomModel);
         }
         return Results
                 .success("Kommando '" + COMMANDLINE_COMMAND + "' wurde erfolgreich ausgeführt.");
