@@ -1,6 +1,8 @@
 package com.github.funthomas424242.rades.project.commands;
 
 import com.github.funthomas424242.rades.core.resources.CommandResourceHelper;
+import com.github.funthomas424242.rades.flowdesign.Integration;
+import com.github.funthomas424242.rades.flowdesign.Operation;
 import com.github.funthomas424242.rades.project.generators.NewTravisFileGenerator;
 import com.github.funthomas424242.rades.validationrules.*;
 import com.github.funthomas424242.rades.project.RadesProject;
@@ -10,7 +12,6 @@ import com.github.funthomas424242.rades.project.generators.NewProjectReadmeFileG
 import com.github.funthomas424242.rades.project.generators.NewRadesProjectDescriptionFileGenerator;
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.FileResource;
-import org.jboss.forge.addon.resource.Resource;
 import org.jboss.forge.addon.resource.ResourceFactory;
 import org.jboss.forge.addon.ui.command.AbstractUICommand;
 import org.jboss.forge.addon.ui.command.UICommand;
@@ -29,8 +30,6 @@ import org.jboss.forge.addon.ui.util.Categories;
 import org.jboss.forge.addon.ui.util.Metadata;
 
 import javax.inject.Inject;
-import java.io.File;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -53,7 +52,7 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     protected NewProjectReadmeFileGenerator newProjectReadmeFileGeneratorGenerator;
 
     @Inject
-    protected CommandResourceHelper commandHelper;
+    protected CommandResourceHelper commandResourceHelper;
 
     @Inject
     protected NewTravisFileGenerator newTravisFileGenerator;
@@ -127,8 +126,8 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
 
     @Override
     public boolean isEnabled(UIContext context) {
-        final boolean isEnabled= super.isEnabled(context);
-        final FileResource radesProjectDescription=commandHelper.getRadesProjectDescription(context);
+        final boolean isEnabled = super.isEnabled(context);
+        final FileResource radesProjectDescription = commandResourceHelper.getRadesProjectDescription(context);
         return isEnabled && !radesProjectDescription.exists();
     }
 
@@ -173,6 +172,7 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
     }
 
     @Override
+    @Integration
     public Result execute(UIExecutionContext context) throws Exception {
 
 
@@ -180,16 +180,9 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
         final UIOutput log = uiContext.getProvider().getOutput();
         final UIPrompt prompt = context.getPrompt();
 
-        final DirectoryResource projectDir;
-         /* create projectFileResource reference */
-        {
-            final File parentFile=commandHelper.getCurrentDirectory(uiContext);
-            final Resource<File> parentDirResource = resourceFactory.create(parentFile);
-            final DirectoryResource location = parentDirResource.reify(DirectoryResource.class);
-            projectDir = location.getOrCreateChildDirectory(projectDirName.getValue());
-        }
+        final DirectoryResource projectDir = getProjectDirectory(uiContext);
 
-        // radesProject befüllen
+        // Create RadesProjectDescription
         final RadesProject radesProject = new RadesProjectBuilder()
                 .withGroupID(groupId.getValue())
                 .withArtifactID(artifactId.getValue())
@@ -202,20 +195,20 @@ public class RadesNewLibraryProject extends AbstractUICommand implements UIComma
                 .withBintrayPackagename(bintrayPackagename.getValue())
                 .build();
 
-
-        // Actions
-        log.info(log.out(), "Generiere RadesDescriptionfile rades.json im Ordner "+projectDir.getName());
+        // Apply Generators
         newRadesProjectDescriptionFileGeneratorGenerator.generateProjectDescriptionFile(prompt, log, projectDir, radesProject);
-        log.info(log.out(), "Generiere Projektfacetten wie pom.xml und ähnliches im Ordner "+projectDir.getName());
         newLibProjectGenerator.generate(prompt, log, projectDir, radesProject);
-        log.info(log.out(), "Generiere Datei README.md im Ordner "+projectDir.getName());
         newProjectReadmeFileGeneratorGenerator.generate(prompt, log, projectDir, radesProject);
-        log.info(log.out(), "Generiere Travis-CI Steuerdatei .travis.yml im Ordner "+projectDir.getName());
         newTravisFileGenerator.generate(prompt, log, projectDir, radesProject);
-
 
         return Results
                 .success("Kommando 'rades-new-libproject' wurde erfolgreich ausgeführt.");
+    }
+
+    @Integration
+    protected DirectoryResource getProjectDirectory(UIContext uiContext) {
+        final DirectoryResource currentDirectoryResource = commandResourceHelper.getCurrentDirectoryResource(uiContext);
+        return currentDirectoryResource.getOrCreateChildDirectory(projectDirName.getValue());
     }
 
 

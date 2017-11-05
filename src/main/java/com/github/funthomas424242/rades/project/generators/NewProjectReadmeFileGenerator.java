@@ -14,16 +14,19 @@ import java.io.PrintWriter;
 
 public class NewProjectReadmeFileGenerator {
 
-    public static final String README_MD = "README.asciidoc";
+    public static final String README_FILENAME = "README.asciidoc";
 
     public void generate(final UIPrompt prompt, final UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws IOException {
+        log.info(log.out(), "Generiere Datei " +
+                README_FILENAME +
+                " im Ordner " + projectDir.getName());
 
-        FileResource<?> readmeFile=null;
+        FileResource<?> readmeFile = null;
         try {
-            readmeFile = new NewFileResourceFactory(prompt, log).tryCreateFileResourceInteractive(projectDir, README_MD);
+            readmeFile = new NewFileResourceFactory(prompt, log).tryCreateFileResourceInteractive(projectDir, README_FILENAME);
         } catch (UserVetoException e) {
             return;
-        }finally {
+        } finally {
             if (readmeFile == null || !readmeFile.exists()) {
                 return;
             }

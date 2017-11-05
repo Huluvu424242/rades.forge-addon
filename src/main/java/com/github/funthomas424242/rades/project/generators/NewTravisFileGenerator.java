@@ -18,12 +18,16 @@ public class NewTravisFileGenerator {
 
     public void generate(final UIPrompt prompt, final UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws IOException {
 
-        FileResource<?> travisFile=null;
+        log.info(log.out(), "Generiere Travis-CI Steuerdatei " +
+                TRAVIS_FILE_NAME +
+                " im Ordner " + projectDir.getName());
+
+        FileResource<?> travisFile = null;
         try {
             travisFile = new NewFileResourceFactory(prompt, log).tryCreateFileResourceInteractive(projectDir, TRAVIS_FILE_NAME);
         } catch (UserVetoException e) {
             return;
-        }finally {
+        } finally {
             if (travisFile == null || !travisFile.exists()) {
                 return;
             }

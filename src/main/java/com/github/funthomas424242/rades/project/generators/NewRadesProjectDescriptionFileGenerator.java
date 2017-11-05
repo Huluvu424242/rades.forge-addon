@@ -21,12 +21,16 @@ public class NewRadesProjectDescriptionFileGenerator {
 
     public void generateProjectDescriptionFile(final UIPrompt prompt, final UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws IOException {
 
-        FileResource<?> radesProjectFile= null;
+        log.info(log.out(), "Generiere RadesDescriptionfile " +
+                RADES_JSON +
+                " im Ordner " + projectDir.getName());
+
+        FileResource<?> radesProjectFile = null;
         try {
             radesProjectFile = new NewFileResourceFactory(prompt, log).tryCreateFileResourceInteractive(projectDir, RADES_JSON);
         } catch (UserVetoException e) {
             return;
-        }finally {
+        } finally {
             if (radesProjectFile == null || !radesProjectFile.exists()) {
                 return;
             }

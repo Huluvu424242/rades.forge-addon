@@ -41,6 +41,8 @@ public class NewLibraryProjectGenerator {
 
     public void generate(final UIPrompt prompt, UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws IOException {
 
+        log.info(log.out(), "Generiere Projektfacetten wie pom.xml und ähnliches im Ordner "+projectDir.getName());
+
         FileResource<?> pomXML=null;
         try {
             pomXML = new NewFileResourceFactory(prompt, log).tryCreateFileResourceInteractive(projectDir, POM_XML);

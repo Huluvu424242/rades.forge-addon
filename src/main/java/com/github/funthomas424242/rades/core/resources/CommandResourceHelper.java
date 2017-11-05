@@ -26,6 +26,13 @@ public class CommandResourceHelper {
         final Resource<?> radesProjectDescriptionFileResource = currentDirectory.getChild(RADES_JSON);
         return radesProjectDescriptionFileResource.reify(FileResource.class);
     }
+
+    public DirectoryResource getCurrentDirectoryResource(final UIContext uiContext){
+        final File currentDirectory=this.getCurrentDirectory(uiContext);
+        final Resource<File> currentDirectoryResource = resourceFactory.create(currentDirectory);
+        return currentDirectoryResource.reify(DirectoryResource.class);
+    }
+
     public File getCurrentDirectory(final UIContext uiContext){
         final String currentDir = getCurrentDirectoryPath(uiContext);
         final File curDirFile = new File(currentDir);
