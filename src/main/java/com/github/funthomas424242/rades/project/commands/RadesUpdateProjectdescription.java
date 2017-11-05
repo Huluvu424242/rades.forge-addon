@@ -1,22 +1,15 @@
 package com.github.funthomas424242.rades.project.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.*;
 import com.github.funthomas424242.rades.core.resources.CommandResourceHelper;
 import com.github.funthomas424242.rades.flowdesign.Integration;
 import com.github.funthomas424242.rades.project.RadesProject;
 import com.github.funthomas424242.rades.project.RadesProjectBuilder;
 import com.github.funthomas424242.rades.validationrules.ProjectDescription;
-import org.jboss.forge.addon.environment.Environment;
-import org.jboss.forge.addon.shell.*;
 import org.jboss.forge.addon.maven.projects.MavenBuildSystem;
 import org.jboss.forge.addon.projects.ProjectFactory;
-import org.jboss.forge.addon.projects.facets.MetadataFacet;
-import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.FileResource;
-import org.jboss.forge.addon.resource.Resource;
 import org.jboss.forge.addon.resource.ResourceFactory;
-import org.jboss.forge.addon.shell.command.PwdCommand;
 import org.jboss.forge.addon.ui.command.AbstractUICommand;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIBuilder;
@@ -33,13 +26,11 @@ import org.jboss.forge.addon.ui.util.Categories;
 import org.jboss.forge.addon.ui.util.Metadata;
 
 import javax.inject.Inject;
-import java.io.File;
 import java.nio.charset.Charset;
-import java.nio.file.Paths;
 
-public class RadesChangeProject extends AbstractUICommand implements UICommand {
+public class RadesUpdateProjectdescription extends AbstractUICommand implements RadesUICommand {
 
-    public static final String COMMANDLINE_COMMAND = "rades-change-project";
+    public static final String COMMANDLINE_COMMAND = "rades-update-projectdescription";
 
     @Inject
     protected ResourceFactory resourceFactory;
@@ -64,7 +55,7 @@ public class RadesChangeProject extends AbstractUICommand implements UICommand {
         return Metadata.forCommand(RadesNewLibraryProject.class)
                 .name(COMMANDLINE_COMMAND)
                 .description("Change a RADES project.")
-                .category(Categories.create("Project/Generation"));
+                .category(Categories.create(CATEGORY_RADES_PROJECT));
     }
 
     @Override
@@ -89,7 +80,7 @@ public class RadesChangeProject extends AbstractUICommand implements UICommand {
         final UIPrompt prompt = context.getPrompt();
 
         final FileResource radesProjectDescriptionFile=commandHelper.getRadesProjectDescription(uiContext);
-        final String jsonTxt = radesProjectDescriptionFile.getContents(Charset.forName("UTF-8"));
+        final String jsonTxt = radesProjectDescriptionFile.getContents(Charset.forName(ENCODING_UTF8));
         final RadesProject radesProject = new ObjectMapper().readValue(jsonTxt, RadesProjectBuilder.RadesProjectImpl.class);
         log.info(log.out(),"JSON:"+radesProject.toString());
 
