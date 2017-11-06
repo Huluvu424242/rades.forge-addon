@@ -1,0 +1,41 @@
+# Changelog
+Alle wichtigen Änderungen am Projekt sind in dieser Datei dokumentiert.
+
+Das Format basiert auf [Keep a Changelog](http://keepachangelog.com/de/).
+Die Versionierung erfolgt nach [Semantic Versioning](http://semver.org/lang/de/).
+
+
+# [Unreleased]
+
+## [1.0.0] - XX.XX.XXXX
+### Added
+- Projekt Setup aufgesetzt.
+- Interaktive Abfrage der Rades Projektmerkmale
+- https://github.com/FunThomas424242/rades.forge-addon/issues/1[issue #1] Travis Support aufgenommen.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/2[issue #2] Generierung eines Readmefiles.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/2[issue #3] Feld Projectbeschreibung aufgenommen.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/4[issue #4] Kommando zum Ändern der Projektbeschreibung aufgenommen.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/5[issue #5] Aktuelles Directory korrekt bestimmt.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/6[issue #6] Globale Validierungen eingeführt.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/7[issue #7] GithubRepositoryname abfragen.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/8[issue #8] Testphase für Ermittlung der Codecoverage aufgenommen.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/10[issue #10] Changelog aufgenommen.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/11[issue #11] Issues im Changelog verlinken.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/12[issue #12] Bintray Support aufgenommen.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/13[issue #13] Bintray Badge in die Readme aufgenommen.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/14[issue #14] NewFileResourceFactory erstellt.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/15[issue #15] Kein Abbruch wenn eine Datei nicht überschrieben werden soll.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/16[issue #16] Vor dem Überschreiben der pom.xml fragen.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/17[issue #17] IODA Architektur Annotationen @Integration, @Logik eingeführt.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/18[issue #18] CommandResourceHelper eingeführt.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/19[issue #19] Asciidoc Support hinzugefügt.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/20[issue #20] Readme Generator auf Asciidoc umgestellt.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/22[issue #22] Initialisiere pom.xml mit modelversion.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/25[issue #25] Changelog ins asciidoc format konvertiert.
+
+
+### Changed
+- n/a
+
+### Removed
+- n/a
