@@ -97,10 +97,11 @@ public class RadesUpdateProjectCommand extends AbstractUICommand implements Rade
                     .withProjectDescription(newProjectDescription)
                     .build();
 
+            // Replace info im rades.json
             this.radesProjectInfoGenerator.saveRadesProjectInfo(radesProjectDescriptionFile,radesProject);
 
 
-            // Replace in pom.xml
+            // Replace info in pom.xml
             final FileResource pomXML = commandHelper.getFileResourceFromCurrentDir(uiContext, "pom.xml");
 
             final MavenXpp3Reader pomReader = new MavenXpp3Reader();
