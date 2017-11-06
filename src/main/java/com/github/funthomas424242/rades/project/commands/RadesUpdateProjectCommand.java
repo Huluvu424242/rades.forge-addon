@@ -34,9 +34,9 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.nio.charset.Charset;
 
-public class RadesUpdateProjectdescription extends AbstractUICommand implements RadesUICommand {
+public class RadesUpdateProjectCommand extends AbstractUICommand implements RadesUICommand {
 
-    public static final String COMMANDLINE_COMMAND = "rades-update-projectdescription";
+    public static final String COMMANDLINE_COMMAND = "rades-project-update";
 
     @Inject
     protected ResourceFactory resourceFactory;
@@ -58,7 +58,7 @@ public class RadesUpdateProjectdescription extends AbstractUICommand implements 
 
     @Override
     public UICommandMetadata getMetadata(UIContext context) {
-        return Metadata.forCommand(RadesNewLibraryProject.class)
+        return Metadata.forCommand(RadesNewProjectCommand.class)
                 .name(COMMANDLINE_COMMAND)
                 .description("Change a RADES project.")
                 .category(Categories.create(CATEGORY_RADES_PROJECT));

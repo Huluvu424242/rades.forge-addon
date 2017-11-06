@@ -32,9 +32,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public class RadesNewLibraryProject extends AbstractUICommand implements RadesUICommand {
+public class RadesNewProjectCommand extends AbstractUICommand implements RadesUICommand {
 
-    public static final String COMMANDLINE_COMMAND = "rades-new-libproject";
+    public static final String COMMANDLINE_COMMAND = "rades-project-new";
 
     protected static final List<String> MAVEN_REPO_LIST = Arrays.asList(
             "https://mvnrepository.com/artifact", "https://jcenter.bintray.com/");
@@ -118,7 +118,7 @@ public class RadesNewLibraryProject extends AbstractUICommand implements RadesUI
 
     @Override
     public UICommandMetadata getMetadata(UIContext context) {
-        return Metadata.forCommand(RadesNewLibraryProject.class)
+        return Metadata.forCommand(RadesNewProjectCommand.class)
                 .name(COMMANDLINE_COMMAND)
                 .description("Creates a RADES lib project.")
                 .category(Categories.create(CATEGORY_RADES_PROJECT));
