@@ -5,16 +5,10 @@ import com.github.funthomas424242.rades.core.resources.UserVetoException;
 import com.github.funthomas424242.rades.flowdesign.Integration;
 import com.github.funthomas424242.rades.flowdesign.Operation;
 import com.github.funthomas424242.rades.project.RadesProject;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.jboss.forge.addon.maven.projects.MavenBuildSystem;
-import org.jboss.forge.addon.maven.projects.MavenPluginFacet;
-import org.jboss.forge.addon.parser.java.facets.JavaCompilerFacet;
-import org.jboss.forge.addon.parser.java.facets.JavaSourceFacet;
-import org.jboss.forge.addon.projects.Project;
-import org.jboss.forge.addon.projects.ProjectFacet;
 import org.jboss.forge.addon.projects.ProjectFactory;
-import org.jboss.forge.addon.projects.facets.DependencyFacet;
-import org.jboss.forge.addon.projects.facets.MetadataFacet;
-import org.jboss.forge.addon.projects.facets.ResourcesFacet;
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.resource.ResourceFactory;
@@ -22,10 +16,9 @@ import org.jboss.forge.addon.ui.input.UIPrompt;
 import org.jboss.forge.addon.ui.output.UIOutput;
 
 import javax.inject.Inject;
-import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
 
 public class NewLibraryProjectFacetsGenerator {
 
@@ -41,7 +34,7 @@ public class NewLibraryProjectFacetsGenerator {
     protected MavenBuildSystem buildSystem;
 
     @Integration
-    public void generate(final UIPrompt prompt, UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws IOException {
+    public void generate(final UIPrompt prompt, UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws Exception {
 
         log.info(log.out(), "Generiere Projektfacetten wie pom.xml und ähnliches im Ordner " + projectDir.getName());
 
@@ -55,31 +48,22 @@ public class NewLibraryProjectFacetsGenerator {
                 return;
             }
         }
-
-        initializeIfEmpty(pomXML);
-
-        final List<Class<? extends ProjectFacet>> facets = new ArrayList<>();
-        facets.add(ResourcesFacet.class);
-        facets.add(MetadataFacet.class);
-        facets.add(JavaSourceFacet.class);
-        facets.add(JavaCompilerFacet.class);
-        facets.add(MavenPluginFacet.class);
-        facets.add(DependencyFacet.class);
-        final Project project = projectFactory.createProject(projectDir,
-                buildSystem, facets);
-
-        final MetadataFacet facet = project.getFacet(MetadataFacet.class);
-        facet.setProjectGroupName(radesProject.getGroupID());
-        facet.setProjectName(radesProject.getArtifactID());
-        facet.setProjectVersion(radesProject.getVersion());
-
+        initializeIfEmpty(pomXML, radesProject);
     }
 
     @Operation
-    protected void initializeIfEmpty(FileResource<?> pomXML) {
-        if (pomXML.getContents(Charset.forName("UTF-8")).isEmpty()) {
-            pomXML.setContents("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
-                    "xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n<modelVersion>4.0.0</modelVersion>\n</project>", Charset.forName("UTF-8"));
+    protected void initializeIfEmpty(FileResource<?> pomXML
+            , final RadesProject radesProject) throws Exception {
+
+        if (pomXML.getContents(StandardCharsets.UTF_8).isEmpty()) {
+            final Model pomModel = new Model();
+            pomModel.setGroupId(radesProject.getGroupID());
+            pomModel.setArtifactId(radesProject.getArtifactID());
+            pomModel.setVersion(radesProject.getVersion());
+            pomModel.setDescription(radesProject.getProjectDescription());
+            final MavenXpp3Writer writer = new MavenXpp3Writer();
+            final OutputStream ostream = pomXML.getResourceOutputStream();
+            writer.write(ostream, pomModel);
         }
     }
 

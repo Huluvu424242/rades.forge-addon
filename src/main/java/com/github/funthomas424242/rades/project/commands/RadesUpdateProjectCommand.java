@@ -1,7 +1,5 @@
 package com.github.funthomas424242.rades.project.commands;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.funthomas424242.rades.core.resources.CommandResourceHelper;
 import com.github.funthomas424242.rades.flowdesign.Integration;
@@ -31,9 +29,6 @@ import org.jboss.forge.addon.ui.util.Metadata;
 
 import javax.inject.Inject;
 import java.io.OutputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.nio.charset.Charset;
 
 public class RadesUpdateProjectCommand extends AbstractUICommand implements RadesUICommand {
 
@@ -84,7 +79,7 @@ public class RadesUpdateProjectCommand extends AbstractUICommand implements Rade
         final UIPrompt prompt = context.getPrompt();
 
         final FileResource radesProjectDescriptionFile = commandHelper.getFileResourceFromCurrentDir(uiContext, RADES_JSON);
-        final String jsonTxt = radesProjectDescriptionFile.getContents(Charset.forName(ENCODING_UTF8));
+        final String jsonTxt = radesProjectDescriptionFile.getContents(CHARSET_UTF_8);
         final RadesProject oldRadesProject = new ObjectMapper().readValue(jsonTxt, RadesProjectBuilder.RadesProjectImpl.class);
 
         final String projectDescription = oldRadesProject.getProjectDescription();

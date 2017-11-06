@@ -31,6 +31,7 @@ Die Versionierung erfolgt nach [Semantic Versioning](http://semver.org/lang/de/)
 - https://github.com/FunThomas424242/rades.forge-addon/issues/19[issue #19] Asciidoc Support hinzugefügt.
 - https://github.com/FunThomas424242/rades.forge-addon/issues/20[issue #20] Readme Generator auf Asciidoc umgestellt.
 - https://github.com/FunThomas424242/rades.forge-addon/issues/22[issue #22] Initialisiere pom.xml mit modelversion.
+- https://github.com/FunThomas424242/rades.forge-addon/issues/23[issue #23] Initialisiere pom.xml mit maven eigenen Writer.
 - https://github.com/FunThomas424242/rades.forge-addon/issues/25[issue #25] Changelog ins asciidoc format konvertiert.
 
 
