@@ -36,6 +36,10 @@ public class NewRadesProjectDescriptionFileGenerator {
             }
         }
 
+        saveRadesProjectInfo(radesProjectFile, radesProject);
+    }
+
+    public void saveRadesProjectInfo(FileResource<?> radesProjectFile, RadesProject radesProject) throws IOException {
         final PipedOutputStream pipeOut = new PipedOutputStream();
         final PipedInputStream pipeIn = new PipedInputStream(pipeOut);
         final ObjectMapper objMapper = new ObjectMapper();

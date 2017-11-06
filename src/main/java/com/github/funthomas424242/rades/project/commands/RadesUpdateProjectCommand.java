@@ -7,6 +7,7 @@ import com.github.funthomas424242.rades.core.resources.CommandResourceHelper;
 import com.github.funthomas424242.rades.flowdesign.Integration;
 import com.github.funthomas424242.rades.project.RadesProject;
 import com.github.funthomas424242.rades.project.RadesProjectBuilder;
+import com.github.funthomas424242.rades.project.generators.NewRadesProjectDescriptionFileGenerator;
 import com.github.funthomas424242.rades.validationrules.ProjectDescription;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
@@ -50,6 +51,9 @@ public class RadesUpdateProjectCommand extends AbstractUICommand implements Rade
     @Inject
     protected CommandResourceHelper commandHelper;
 
+    @Inject
+    protected NewRadesProjectDescriptionFileGenerator radesProjectInfoGenerator;
+
 
     @Inject
     @WithAttributes(label = "Projektverzeichnis:", required = true)
@@ -92,15 +96,9 @@ public class RadesUpdateProjectCommand extends AbstractUICommand implements Rade
             final RadesProject radesProject = new RadesProjectBuilder(oldRadesProject)
                     .withProjectDescription(newProjectDescription)
                     .build();
-            final PipedOutputStream pipeOut = new PipedOutputStream();
-            final PipedInputStream pipeIn = new PipedInputStream(pipeOut);
-            final ObjectMapper objMapper = new ObjectMapper();
-            objMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-            objMapper.writer().writeValue(pipeOut, radesProject);
-            radesProjectDescriptionFile.setContents(pipeIn);
-            pipeOut.flush();
-            pipeOut.close();
-            pipeIn.close();
+
+            this.radesProjectInfoGenerator.saveRadesProjectInfo(radesProjectDescriptionFile,radesProject);
+
 
             // Replace in pom.xml
             final FileResource pomXML = commandHelper.getFileResourceFromCurrentDir(uiContext, "pom.xml");
