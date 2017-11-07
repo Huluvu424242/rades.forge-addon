@@ -1,8 +1,8 @@
 # Changelog
 Alle wichtigen Änderungen am Projekt sind in dieser Datei dokumentiert.
 
-Das Format basiert auf [Keep a Changelog](http://keepachangelog.com/de/).
-Die Versionierung erfolgt nach [Semantic Versioning](http://semver.org/lang/de/).
+Das Format basiert auf http://keepachangelog.com/de/[Keep a Changelog].
+Die Versionierung erfolgt nach http://semver.org/lang/de/[Semantic Versioning].
 
 
 # [Unreleased]
