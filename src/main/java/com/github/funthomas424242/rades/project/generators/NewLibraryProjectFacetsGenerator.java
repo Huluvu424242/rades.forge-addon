@@ -17,7 +17,6 @@ import org.jboss.forge.addon.ui.output.UIOutput;
 
 import javax.inject.Inject;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 public class NewLibraryProjectFacetsGenerator {

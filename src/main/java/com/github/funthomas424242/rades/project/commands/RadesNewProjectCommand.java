@@ -12,16 +12,23 @@ import com.github.funthomas424242.rades.project.generators.NewRadesProjectDescri
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.resource.ResourceFactory;
+import org.jboss.forge.addon.ui.UIRuntime;
 import org.jboss.forge.addon.ui.command.AbstractUICommand;
+import org.jboss.forge.addon.ui.command.CommandFactory;
+import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIBuilder;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UIExecutionContext;
+import org.jboss.forge.addon.ui.controller.CommandController;
+import org.jboss.forge.addon.ui.controller.CommandControllerFactory;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.input.UIPrompt;
 import org.jboss.forge.addon.ui.input.UISelectMany;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.metadata.WithAttributes;
 import org.jboss.forge.addon.ui.output.UIOutput;
+import org.jboss.forge.addon.ui.progress.DefaultUIProgressMonitor;
+import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.forge.addon.ui.result.Results;
 import org.jboss.forge.addon.ui.util.Categories;
@@ -38,6 +45,13 @@ public class RadesNewProjectCommand extends AbstractUICommand implements RadesUI
 
     protected static final List<String> MAVEN_REPO_LIST = Arrays.asList(
             "https://mvnrepository.com/artifact", "https://jcenter.bintray.com/");
+
+
+    @Inject
+    CommandFactory commandFactory;
+
+    @Inject
+    CommandControllerFactory commandControllerFactory;
 
     @Inject
     protected ResourceFactory resourceFactory;
@@ -127,7 +141,7 @@ public class RadesNewProjectCommand extends AbstractUICommand implements RadesUI
     @Override
     public boolean isEnabled(UIContext context) {
         final boolean isEnabled = super.isEnabled(context);
-        final FileResource radesProjectDescription = commandResourceHelper.getFileResourceFromCurrentDir(context,RADES_JSON);
+        final FileResource radesProjectDescription = commandResourceHelper.getFileResourceFromCurrentDir(context, RADES_JSON);
         return isEnabled && !radesProjectDescription.exists();
     }
 
@@ -201,6 +215,36 @@ public class RadesNewProjectCommand extends AbstractUICommand implements RadesUI
         newLibProjectGenerator.generate(prompt, log, projectDir, radesProject);
         newProjectReadmeFileGeneratorGenerator.generate(prompt, log, projectDir, radesProject);
         newTravisFileGenerator.generate(prompt, log, projectDir, radesProject);
+
+//        final UICommand cdCommand = commandFactory.getCommandByName(uiContext, "cd");
+//        if (cdCommand.isEnabled(uiContext)) {
+//            log.info(log.out(), "CD:" + cdCommand.getMetadata(uiContext));
+//            ForgeCorePreferences.getDefaultRuntime();
+//            final ForgeUIRuntime runtime = new ForgeUIRuntime();
+//            final CommandController controller = commandControllerFactory.createController(uiContext, new UIRuntime() {
+//                @Override
+//                public UIProgressMonitor
+//                createProgressMonitor(UIContext context) {
+//                    return new DefaultUIProgressMonitor();
+//                }
+//                @Override
+//                public UIPrompt createPrompt(UIContext context) {
+//                    return null;
+//                }
+//            }, cdCommand);
+//            final Iterable<String> arguments= Collections.addAll("")
+//            controller.setValueFor("Arguments",)
+//
+//            cdCommand.execute(context);
+//        }
+
+
+        commandResourceHelper.setCurrentDirectoryTo(uiContext,projectDir);
+
+        final UICommand updateProjectCommand = commandFactory.getCommandByName(uiContext, RadesUpdateProjectCommand.COMMANDLINE_COMMAND);
+        if (updateProjectCommand.isEnabled(uiContext)) {
+            updateProjectCommand.execute(context);
+        }
 
         return Results
                 .success("Kommando 'rades-new-libproject' wurde erfolgreich ausgeführt.");
