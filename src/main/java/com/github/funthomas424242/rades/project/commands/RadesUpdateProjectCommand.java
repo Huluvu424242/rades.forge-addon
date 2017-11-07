@@ -32,7 +32,7 @@ import java.io.OutputStream;
 
 public class RadesUpdateProjectCommand extends AbstractUICommand implements RadesUICommand {
 
-    public static final String COMMANDLINE_COMMAND = "rades-project-update";
+    public static final String COMMAND_NAME = "rades-project-update";
 
     @Inject
     protected ResourceFactory resourceFactory;
@@ -58,7 +58,7 @@ public class RadesUpdateProjectCommand extends AbstractUICommand implements Rade
     @Override
     public UICommandMetadata getMetadata(UIContext context) {
         return Metadata.forCommand(RadesNewProjectCommand.class)
-                .name(COMMANDLINE_COMMAND)
+                .name(COMMAND_NAME)
                 .description("Change a RADES project.")
                 .category(Categories.create(CATEGORY_RADES_PROJECT));
     }
@@ -107,6 +107,6 @@ public class RadesUpdateProjectCommand extends AbstractUICommand implements Rade
             writer.write(ostream,pomModel);
         }
         return Results
-                .success("Kommando '" + COMMANDLINE_COMMAND + "' wurde erfolgreich ausgeführt.");
+                .success("Kommando '" + COMMAND_NAME + "' wurde erfolgreich ausgeführt.");
     }
 }

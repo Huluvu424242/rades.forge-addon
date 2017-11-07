@@ -12,14 +12,12 @@ import com.github.funthomas424242.rades.project.generators.NewRadesProjectDescri
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.resource.ResourceFactory;
-import org.jboss.forge.addon.ui.UIRuntime;
 import org.jboss.forge.addon.ui.command.AbstractUICommand;
 import org.jboss.forge.addon.ui.command.CommandFactory;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIBuilder;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UIExecutionContext;
-import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.controller.CommandControllerFactory;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.input.UIPrompt;
@@ -27,8 +25,6 @@ import org.jboss.forge.addon.ui.input.UISelectMany;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.metadata.WithAttributes;
 import org.jboss.forge.addon.ui.output.UIOutput;
-import org.jboss.forge.addon.ui.progress.DefaultUIProgressMonitor;
-import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.forge.addon.ui.result.Results;
 import org.jboss.forge.addon.ui.util.Categories;
@@ -41,7 +37,7 @@ import java.util.concurrent.Callable;
 
 public class RadesNewProjectCommand extends AbstractUICommand implements RadesUICommand {
 
-    public static final String COMMANDLINE_COMMAND = "rades-project-new";
+    public static final String COMMAND_NAME = "rades-project-new";
 
     protected static final List<String> MAVEN_REPO_LIST = Arrays.asList(
             "https://mvnrepository.com/artifact", "https://jcenter.bintray.com/");
@@ -133,7 +129,7 @@ public class RadesNewProjectCommand extends AbstractUICommand implements RadesUI
     @Override
     public UICommandMetadata getMetadata(UIContext context) {
         return Metadata.forCommand(RadesNewProjectCommand.class)
-                .name(COMMANDLINE_COMMAND)
+                .name(COMMAND_NAME)
                 .description("Creates a RADES lib project.")
                 .category(Categories.create(CATEGORY_RADES_PROJECT));
     }
@@ -216,32 +212,10 @@ public class RadesNewProjectCommand extends AbstractUICommand implements RadesUI
         newProjectReadmeFileGeneratorGenerator.generate(prompt, log, projectDir, radesProject);
         newTravisFileGenerator.generate(prompt, log, projectDir, radesProject);
 
-//        final UICommand cdCommand = commandFactory.getCommandByName(uiContext, "cd");
-//        if (cdCommand.isEnabled(uiContext)) {
-//            log.info(log.out(), "CD:" + cdCommand.getMetadata(uiContext));
-//            ForgeCorePreferences.getDefaultRuntime();
-//            final ForgeUIRuntime runtime = new ForgeUIRuntime();
-//            final CommandController controller = commandControllerFactory.createController(uiContext, new UIRuntime() {
-//                @Override
-//                public UIProgressMonitor
-//                createProgressMonitor(UIContext context) {
-//                    return new DefaultUIProgressMonitor();
-//                }
-//                @Override
-//                public UIPrompt createPrompt(UIContext context) {
-//                    return null;
-//                }
-//            }, cdCommand);
-//            final Iterable<String> arguments= Collections.addAll("")
-//            controller.setValueFor("Arguments",)
-//
-//            cdCommand.execute(context);
-//        }
-
 
         commandResourceHelper.setCurrentDirectoryTo(uiContext,projectDir);
 
-        final UICommand updateProjectCommand = commandFactory.getCommandByName(uiContext, RadesUpdateProjectCommand.COMMANDLINE_COMMAND);
+        final UICommand updateProjectCommand = commandFactory.getCommandByName(uiContext, RadesUpdateProjectCommand.COMMAND_NAME);
         if (updateProjectCommand.isEnabled(uiContext)) {
             updateProjectCommand.execute(context);
         }
