@@ -1,10 +1,9 @@
-package com.github.funthomas424242.rades.validationrules;
+package com.github.funthomas424242.rades.project.validationrules;
 
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.lang.annotation.*;
 
 @Target({ElementType.METHOD, ElementType.FIELD})
@@ -13,6 +12,6 @@ import java.lang.annotation.*;
 @NotNull
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JacksonAnnotationsInside
-public @interface ProjectDirname {
+public @interface ProjectArtifactId {
 
 }

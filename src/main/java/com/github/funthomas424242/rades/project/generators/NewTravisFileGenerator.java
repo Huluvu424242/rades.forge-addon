@@ -1,6 +1,6 @@
 package com.github.funthomas424242.rades.project.generators;
 
-import com.github.funthomas424242.rades.core.resources.NewFileResourceFactory;
+import com.github.funthomas424242.rades.core.resources.FileResourceFactory;
 import com.github.funthomas424242.rades.core.resources.UserVetoException;
 import com.github.funthomas424242.rades.project.RadesProject;
 import org.jboss.forge.addon.resource.DirectoryResource;
@@ -24,7 +24,7 @@ public class NewTravisFileGenerator {
 
         FileResource<?> travisFile = null;
         try {
-            travisFile = new NewFileResourceFactory(prompt, log).tryCreateFileResourceInteractive(projectDir, TRAVIS_FILE_NAME);
+            travisFile = new FileResourceFactory(prompt, log).createFileResourceInteractive(projectDir, TRAVIS_FILE_NAME);
         } catch (UserVetoException e) {
             return;
         } finally {

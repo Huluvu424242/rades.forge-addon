@@ -1,9 +1,9 @@
 package com.github.funthomas424242.rades.project.commands;
 
-import com.github.funthomas424242.rades.core.resources.CommandResourceHelper;
+import com.github.funthomas424242.rades.core.resources.UIResourceHelper;
 import com.github.funthomas424242.rades.flowdesign.Integration;
 import com.github.funthomas424242.rades.project.generators.NewTravisFileGenerator;
-import com.github.funthomas424242.rades.validationrules.*;
+import com.github.funthomas424242.rades.project.validationrules.*;
 import com.github.funthomas424242.rades.project.RadesProject;
 import com.github.funthomas424242.rades.project.RadesProjectBuilder;
 import com.github.funthomas424242.rades.project.generators.NewLibraryProjectFacetsGenerator;
@@ -35,7 +35,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public class RadesNewProjectCommand extends AbstractUICommand implements RadesUICommand {
+public class RadesProjectNewCommand extends AbstractUICommand implements RadesUICommand {
 
     public static final String COMMAND_NAME = "rades-project-new";
 
@@ -62,7 +62,7 @@ public class RadesNewProjectCommand extends AbstractUICommand implements RadesUI
     protected NewProjectReadmeFileGenerator newProjectReadmeFileGeneratorGenerator;
 
     @Inject
-    protected CommandResourceHelper commandResourceHelper;
+    protected UIResourceHelper UIResourceHelper;
 
     @Inject
     protected NewTravisFileGenerator newTravisFileGenerator;
@@ -128,7 +128,7 @@ public class RadesNewProjectCommand extends AbstractUICommand implements RadesUI
 
     @Override
     public UICommandMetadata getMetadata(UIContext context) {
-        return Metadata.forCommand(RadesNewProjectCommand.class)
+        return Metadata.forCommand(RadesProjectNewCommand.class)
                 .name(COMMAND_NAME)
                 .description("Creates a RADES lib project.")
                 .category(Categories.create(CATEGORY_RADES_PROJECT));
@@ -137,7 +137,7 @@ public class RadesNewProjectCommand extends AbstractUICommand implements RadesUI
     @Override
     public boolean isEnabled(UIContext context) {
         final boolean isEnabled = super.isEnabled(context);
-        final FileResource radesProjectDescription = commandResourceHelper.getFileResourceFromCurrentDir(context, RADES_JSON);
+        final FileResource radesProjectDescription = UIResourceHelper.getFileResourceFromCurrentDir(context, RADES_JSON);
         return isEnabled && !radesProjectDescription.exists();
     }
 
@@ -213,9 +213,9 @@ public class RadesNewProjectCommand extends AbstractUICommand implements RadesUI
         newTravisFileGenerator.generate(prompt, log, projectDir, radesProject);
 
 
-        commandResourceHelper.setCurrentDirectoryTo(uiContext,projectDir);
+        UIResourceHelper.setCurrentDirectoryTo(uiContext,projectDir);
 
-        final UICommand updateProjectCommand = commandFactory.getCommandByName(uiContext, RadesUpdateProjectCommand.COMMAND_NAME);
+        final UICommand updateProjectCommand = commandFactory.getCommandByName(uiContext, RadesProjectUpdateCommand.COMMAND_NAME);
         if (updateProjectCommand.isEnabled(uiContext)) {
             updateProjectCommand.execute(context);
         }
@@ -226,7 +226,7 @@ public class RadesNewProjectCommand extends AbstractUICommand implements RadesUI
 
     @Integration
     protected DirectoryResource getProjectDirectory(UIContext uiContext) {
-        final DirectoryResource currentDirectoryResource = commandResourceHelper.getCurrentDirectoryResource(uiContext);
+        final DirectoryResource currentDirectoryResource = UIResourceHelper.getCurrentDirectoryResource(uiContext);
         return currentDirectoryResource.getOrCreateChildDirectory(projectDirName.getValue());
     }
 

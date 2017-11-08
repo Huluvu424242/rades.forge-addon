@@ -1,6 +1,6 @@
 package com.github.funthomas424242.rades.project.generators;
 
-import com.github.funthomas424242.rades.core.resources.NewFileResourceFactory;
+import com.github.funthomas424242.rades.core.resources.FileResourceFactory;
 import com.github.funthomas424242.rades.core.resources.UserVetoException;
 import com.github.funthomas424242.rades.flowdesign.Integration;
 import com.github.funthomas424242.rades.flowdesign.Operation;
@@ -39,7 +39,7 @@ public class NewLibraryProjectFacetsGenerator {
 
         FileResource<?> pomXML = null;
         try {
-            pomXML = new NewFileResourceFactory(prompt, log).tryCreateFileResourceInteractive(projectDir, POM_XML);
+            pomXML = new FileResourceFactory(prompt, log).createFileResourceInteractive(projectDir, POM_XML);
         } catch (UserVetoException e) {
             return;
         } finally {

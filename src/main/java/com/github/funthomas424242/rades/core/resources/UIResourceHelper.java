@@ -10,12 +10,12 @@ import org.jboss.forge.addon.ui.context.UIContext;
 import javax.inject.Inject;
 import java.io.File;
 
-public class CommandResourceHelper {
+public class UIResourceHelper {
 
     @Inject
     protected ResourceFactory resourceFactory;
 
-    public CommandResourceHelper(){}
+    public UIResourceHelper(){}
 
     public FileResource getFileResourceFromCurrentDir(final UIContext uiContext, final String fileName) {
         final File curDirFile = getCurrentDirectory(uiContext);

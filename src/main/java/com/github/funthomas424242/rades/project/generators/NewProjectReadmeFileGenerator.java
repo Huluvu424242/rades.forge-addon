@@ -1,6 +1,6 @@
 package com.github.funthomas424242.rades.project.generators;
 
-import com.github.funthomas424242.rades.core.resources.NewFileResourceFactory;
+import com.github.funthomas424242.rades.core.resources.FileResourceFactory;
 import com.github.funthomas424242.rades.core.resources.UserVetoException;
 import com.github.funthomas424242.rades.project.RadesProject;
 import org.jboss.forge.addon.resource.DirectoryResource;
@@ -23,7 +23,7 @@ public class NewProjectReadmeFileGenerator {
 
         FileResource<?> readmeFile = null;
         try {
-            readmeFile = new NewFileResourceFactory(prompt, log).tryCreateFileResourceInteractive(projectDir, README_FILENAME);
+            readmeFile = new FileResourceFactory(prompt, log).createFileResourceInteractive(projectDir, README_FILENAME);
         } catch (UserVetoException e) {
             return;
         } finally {

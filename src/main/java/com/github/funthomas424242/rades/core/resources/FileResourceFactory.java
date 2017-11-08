@@ -5,17 +5,17 @@ import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.ui.input.UIPrompt;
 import org.jboss.forge.addon.ui.output.UIOutput;
 
-public class NewFileResourceFactory {
+public class FileResourceFactory {
 
     final UIPrompt prompt;
     final UIOutput log;
 
-    public NewFileResourceFactory(final UIPrompt prompt, final UIOutput log) {
+    public FileResourceFactory(final UIPrompt prompt, final UIOutput log) {
         this.prompt = prompt;
         this.log = log;
     }
 
-    public FileResource<?> tryCreateFileResourceInteractive(final DirectoryResource parentDirectory, final String fileName) throws UserVetoException {
+    public FileResource<?> createFileResourceInteractive(final DirectoryResource parentDirectory, final String fileName) throws UserVetoException {
 
         final FileResource<?> fileResource = parentDirectory.getChild(fileName).reify(FileResource.class);
 

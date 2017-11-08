@@ -1,12 +1,12 @@
 package com.github.funthomas424242.rades.project.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.funthomas424242.rades.core.resources.CommandResourceHelper;
+import com.github.funthomas424242.rades.core.resources.UIResourceHelper;
 import com.github.funthomas424242.rades.flowdesign.Integration;
 import com.github.funthomas424242.rades.project.RadesProject;
 import com.github.funthomas424242.rades.project.RadesProjectBuilder;
 import com.github.funthomas424242.rades.project.generators.NewRadesProjectDescriptionFileGenerator;
-import com.github.funthomas424242.rades.validationrules.ProjectDescription;
+import com.github.funthomas424242.rades.project.validationrules.ProjectDescription;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.apache.maven.model.Model;
@@ -30,7 +30,7 @@ import org.jboss.forge.addon.ui.util.Metadata;
 import javax.inject.Inject;
 import java.io.OutputStream;
 
-public class RadesUpdateProjectCommand extends AbstractUICommand implements RadesUICommand {
+public class RadesProjectUpdateCommand extends AbstractUICommand implements RadesUICommand {
 
     public static final String COMMAND_NAME = "rades-project-update";
 
@@ -44,7 +44,7 @@ public class RadesUpdateProjectCommand extends AbstractUICommand implements Rade
     protected MavenBuildSystem buildSystem;
 
     @Inject
-    protected CommandResourceHelper commandHelper;
+    protected UIResourceHelper commandHelper;
 
     @Inject
     protected NewRadesProjectDescriptionFileGenerator radesProjectInfoGenerator;
@@ -57,7 +57,7 @@ public class RadesUpdateProjectCommand extends AbstractUICommand implements Rade
 
     @Override
     public UICommandMetadata getMetadata(UIContext context) {
-        return Metadata.forCommand(RadesNewProjectCommand.class)
+        return Metadata.forCommand(RadesProjectNewCommand.class)
                 .name(COMMAND_NAME)
                 .description("Change a RADES project.")
                 .category(Categories.create(CATEGORY_RADES_PROJECT));

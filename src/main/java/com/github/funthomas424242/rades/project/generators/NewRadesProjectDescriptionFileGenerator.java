@@ -3,7 +3,7 @@ package com.github.funthomas424242.rades.project.generators;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.funthomas424242.rades.core.resources.NewFileResourceFactory;
+import com.github.funthomas424242.rades.core.resources.FileResourceFactory;
 import com.github.funthomas424242.rades.core.resources.UserVetoException;
 import com.github.funthomas424242.rades.project.RadesProject;
 import org.jboss.forge.addon.resource.DirectoryResource;
@@ -27,7 +27,7 @@ public class NewRadesProjectDescriptionFileGenerator {
 
         FileResource<?> radesProjectFile = null;
         try {
-            radesProjectFile = new NewFileResourceFactory(prompt, log).tryCreateFileResourceInteractive(projectDir, RADES_JSON);
+            radesProjectFile = new FileResourceFactory(prompt, log).createFileResourceInteractive(projectDir, RADES_JSON);
         } catch (UserVetoException e) {
             return;
         } finally {
