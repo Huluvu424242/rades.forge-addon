@@ -221,7 +221,7 @@ public class RadesProjectNewCommand extends AbstractUICommand implements RadesUI
         }
 
         return Results
-                .success("Kommando 'rades-new-libproject' wurde erfolgreich ausgeführt.");
+                .success("Kommando "+COMMAND_NAME+" wurde erfolgreich ausgeführt.");
     }
 
     @Integration
