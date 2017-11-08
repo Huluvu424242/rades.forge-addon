@@ -2,7 +2,7 @@ package com.github.funthomas424242.rades.project.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.funthomas424242.rades.core.resources.UIResourceHelper;
-import com.github.funthomas424242.rades.flowdesign.Integration;
+import com.github.funthomas424242.flowdesign.Integration;
 import com.github.funthomas424242.rades.project.RadesProject;
 import com.github.funthomas424242.rades.project.RadesProjectBuilder;
 import com.github.funthomas424242.rades.project.generators.NewRadesProjectDescriptionFileGenerator;

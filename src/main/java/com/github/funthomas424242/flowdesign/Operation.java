@@ -1,19 +1,19 @@
-package com.github.funthomas424242.rades.flowdesign;
+package com.github.funthomas424242.flowdesign;
 
 
 import java.lang.annotation.*;
 
-
 /**
- * Definition von Integrationen nach javamagazin 7/2017 S.95 IOSP bzw. IODA:
+ * Definition einer Operation nach javamagazin 7/2017 S.95 IOSP bzw. IODA:
  *
- * Integrationen = API Aufrufe in der eigenen Kodebasis
+ * Operation=Logik auf Domänobjekten:
  * <ul>
- *     <li>API Aufrufe der eigenen Kodebasis</li>
- *     <li>keine Logik</li>
- *     <li>keine Domänenausdrücke</li>
+ *     <li>Transformationen</li>
+ *     <li>Domänenausdrücke</li>
+ *     <li>Kontrollstrukturen mit Domänenausdrücken</li>
+ *     <li>Aufrufe von APIs in 3th party libraries, nicht zum eigenen Kode</li>
  * </ul>
- *
+
  * IODA Architektur entspricht einem Baum:
  * <ul>
  *     <li>Wurzel: Programmeinstiegspunkt</li>
@@ -27,5 +27,5 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.SOURCE)
 @Documented
-public @interface Integration {
+public @interface Operation {
 }

@@ -2,8 +2,8 @@ package com.github.funthomas424242.rades.project.generators;
 
 import com.github.funthomas424242.rades.core.resources.FileResourceFactory;
 import com.github.funthomas424242.rades.core.resources.UserVetoException;
-import com.github.funthomas424242.rades.flowdesign.Integration;
-import com.github.funthomas424242.rades.flowdesign.Operation;
+import com.github.funthomas424242.flowdesign.Integration;
+import com.github.funthomas424242.flowdesign.Operation;
 import com.github.funthomas424242.rades.project.RadesProject;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;

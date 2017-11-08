@@ -1,7 +1,7 @@
 package com.github.funthomas424242.rades.project.commands;
 
 import com.github.funthomas424242.rades.core.resources.UIResourceHelper;
-import com.github.funthomas424242.rades.flowdesign.Integration;
+import com.github.funthomas424242.flowdesign.Integration;
 import com.github.funthomas424242.rades.project.generators.NewTravisFileGenerator;
 import com.github.funthomas424242.rades.project.validationrules.*;
 import com.github.funthomas424242.rades.project.RadesProject;
