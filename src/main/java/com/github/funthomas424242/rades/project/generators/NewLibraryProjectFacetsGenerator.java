@@ -56,6 +56,7 @@ public class NewLibraryProjectFacetsGenerator {
 
         if (pomXML.getContents(StandardCharsets.UTF_8).isEmpty()) {
             final Model pomModel = new Model();
+            pomModel.setModelVersion("4.0.0");
             pomModel.setGroupId(radesProject.getGroupID());
             pomModel.setArtifactId(radesProject.getArtifactID());
             pomModel.setVersion(radesProject.getVersion());
