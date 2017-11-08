@@ -46,7 +46,6 @@ public class CommandResourceHelper {
     public void setCurrentDirectoryTo(UIContext uiContext, final DirectoryResource directory) {
         final Shell myShell= (Shell) uiContext.getProvider();
         myShell.setCurrentResource(directory);
-                //getConsole().getAeshContext().setCurrentWorkingDirectory(directory);
     }
 
 }
