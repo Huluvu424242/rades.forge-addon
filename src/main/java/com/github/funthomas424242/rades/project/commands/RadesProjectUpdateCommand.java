@@ -66,7 +66,7 @@ public class RadesProjectUpdateCommand extends AbstractUICommand implements Rade
     @Override
     public boolean isEnabled(UIContext context) {
         final boolean isEnabled = super.isEnabled(context);
-        final FileResource radesProjectDescription = commandHelper.getFileResourceFromCurrentDir(context, RADES_JSON);
+        final FileResource radesProjectDescription = commandHelper.getFileResourceFromCurrentDir(context, RADES_PROJECTDESCRIPTION_FILE);
         return isEnabled && radesProjectDescription.exists();
     }
 
@@ -78,7 +78,7 @@ public class RadesProjectUpdateCommand extends AbstractUICommand implements Rade
         final UIOutput log = uiContext.getProvider().getOutput();
         final UIPrompt prompt = context.getPrompt();
 
-        final FileResource radesProjectDescriptionFile = commandHelper.getFileResourceFromCurrentDir(uiContext, RADES_JSON);
+        final FileResource radesProjectDescriptionFile = commandHelper.getFileResourceFromCurrentDir(uiContext, RADES_PROJECTDESCRIPTION_FILE);
         final String jsonTxt = radesProjectDescriptionFile.getContents(CHARSET_UTF_8);
         final RadesProject oldRadesProject = new ObjectMapper().readValue(jsonTxt, RadesProjectBuilder.RadesProjectImpl.class);
 

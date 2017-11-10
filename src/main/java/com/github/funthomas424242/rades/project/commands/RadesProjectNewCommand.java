@@ -1,14 +1,11 @@
 package com.github.funthomas424242.rades.project.commands;
 
-import com.github.funthomas424242.rades.core.resources.UIResourceHelper;
 import com.github.funthomas424242.flowdesign.Integration;
-import com.github.funthomas424242.rades.project.generators.NewTravisFileGenerator;
-import com.github.funthomas424242.rades.project.validationrules.*;
-import com.github.funthomas424242.rades.project.RadesProject;
-import com.github.funthomas424242.rades.project.RadesProjectBuilder;
+import com.github.funthomas424242.rades.core.resources.UIResourceHelper;
 import com.github.funthomas424242.rades.project.generators.NewLibraryProjectFacetsGenerator;
 import com.github.funthomas424242.rades.project.generators.NewProjectReadmeFileGenerator;
-import com.github.funthomas424242.rades.project.generators.NewRadesProjectDescriptionFileGenerator;
+import com.github.funthomas424242.rades.project.generators.NewTravisFileGenerator;
+import com.github.funthomas424242.rades.project.validationrules.*;
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.resource.ResourceFactory;
@@ -18,7 +15,6 @@ import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIBuilder;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UIExecutionContext;
-import org.jboss.forge.addon.ui.controller.CommandControllerFactory;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.input.UIPrompt;
 import org.jboss.forge.addon.ui.input.UISelectMany;
@@ -46,8 +42,8 @@ public class RadesProjectNewCommand extends AbstractUICommand implements RadesUI
     @Inject
     CommandFactory commandFactory;
 
-    @Inject
-    CommandControllerFactory commandControllerFactory;
+//    @Inject
+//    CommandControllerFactory commandControllerFactory;
 
     @Inject
     protected ResourceFactory resourceFactory;
@@ -55,17 +51,17 @@ public class RadesProjectNewCommand extends AbstractUICommand implements RadesUI
     @Inject
     protected NewLibraryProjectFacetsGenerator newLibProjectGenerator;
 
-    @Inject
-    protected NewRadesProjectDescriptionFileGenerator newRadesProjectDescriptionFileGeneratorGenerator;
 
     @Inject
     protected NewProjectReadmeFileGenerator newProjectReadmeFileGeneratorGenerator;
 
     @Inject
-    protected UIResourceHelper UIResourceHelper;
+    protected UIResourceHelper uiResourceHelper;
 
     @Inject
     protected NewTravisFileGenerator newTravisFileGenerator;
+
+
 
 
     // /////////////////////////////////////////////////////////////////////////
@@ -76,21 +72,6 @@ public class RadesProjectNewCommand extends AbstractUICommand implements RadesUI
 
 
     // Eine Pflichteingabe ohne Default ist notwendig um in den interaktiven Modus zu kommen
-    @Inject
-    @WithAttributes(label = "Group ID:", required = true, defaultValue = "com.github.myUsername")
-    @ProjectGroupId
-    protected UIInput<String> groupId;
-
-    @Inject
-    @WithAttributes(label = "Artifact ID:", required = true, defaultValue = "testProject")
-    @ProjectArtifactId
-    protected UIInput<String> artifactId;
-
-    @Inject
-    @WithAttributes(label = "Version:", required = true, defaultValue = "1.0.0-SNAPSHOT")
-    @ProjectVersion
-    protected UIInput<String> version;
-
     @Inject
     @WithAttributes(label = "Projektverzeichnis:", required = true)
     @ProjectDirname
@@ -137,25 +118,33 @@ public class RadesProjectNewCommand extends AbstractUICommand implements RadesUI
     @Override
     public boolean isEnabled(UIContext context) {
         final boolean isEnabled = super.isEnabled(context);
-        final FileResource radesProjectDescription = UIResourceHelper.getFileResourceFromCurrentDir(context, RADES_JSON);
+        final FileResource radesProjectDescription = uiResourceHelper.getFileResourceFromCurrentDir(context, RADES_PROJECTDESCRIPTION_FILE);
         return isEnabled && !radesProjectDescription.exists();
     }
 
     @Override
     public void initializeUI(UIBuilder builder) throws Exception {
 
+        builder.add(projectDirName);
+
+        final UIContext uiContext = builder.getUIContext();
+
+        final UICommand newProjectDescriptionfileCommand = commandFactory.getCommandByName(uiContext, RadesProjectNewDescriptionFileCommand.COMMAND_NAME);
+        if (newProjectDescriptionfileCommand.isEnabled(uiContext)) {
+            newProjectDescriptionfileCommand.initializeUI(builder);
+        }
         // Auswahlen initialisieren
         repositories.setValueChoices(MAVEN_REPO_LIST);
-        projectDirName.setDefaultValue(
-                new Callable<String>() {
-                    @Override
-                    public String call() {
-                        if (artifactId.getValue() == null) {
-                            return "myproject";
-                        }
-                        return artifactId.getValue();
-                    }
-                });
+//        projectDirName.setDefaultValue(
+//                new Callable<String>() {
+//                    @Override
+//                    public String call() {
+//                        if (artifactId.getValue() == null) {
+//                            return "myproject";
+//                        }
+//                        return artifactId.getValue();
+//                    }
+//                });
 
         githubRepositoryname.setDefaultValue(
                 new Callable<String>() {
@@ -169,10 +158,6 @@ public class RadesProjectNewCommand extends AbstractUICommand implements RadesUI
                 });
 
         // add the inputs
-        builder.add(groupId);
-        builder.add(artifactId);
-        builder.add(version);
-        builder.add(projectDirName);
         builder.add(githubUsername);
         builder.add(githubRepositoryname);
         builder.add(bintrayUsername);
@@ -185,35 +170,40 @@ public class RadesProjectNewCommand extends AbstractUICommand implements RadesUI
     @Integration
     public Result execute(UIExecutionContext context) throws Exception {
 
-
         final UIContext uiContext = context.getUIContext();
         final UIOutput log = uiContext.getProvider().getOutput();
         final UIPrompt prompt = context.getPrompt();
 
         final DirectoryResource projectDir = getProjectDirectory(uiContext);
+        log.info(log.out(),"Projektdirectory:"+projectDir.getFullyQualifiedName());
+        // Current Dir is project dir
+        uiResourceHelper.setCurrentDirectoryTo(uiContext, projectDir);
 
-        // Create RadesProjectDescription
-        final RadesProject radesProject = new RadesProjectBuilder()
-                .withGroupID(groupId.getValue())
-                .withArtifactID(artifactId.getValue())
-                .withVersion(version.getValue())
-                .withProjectDescription("TODO: Kurze Beschreibung zum Projekt eintragen.")
-                .withProjectDirName(projectDirName.getValue())
-                .withGithubUsername(githubUsername.getValue())
-                .withGithubRepositoryname(githubRepositoryname.getValue())
-                .withBintrayUsername(bintrayUsername.getValue())
-                .withBintrayRepositoryname(bintrayRepositoryname.getValue())
-                .withBintrayPackagename(bintrayPackagename.getValue())
-                .build();
+//        // Create RadesProjectDescription
+//        final RadesProject radesProject = new RadesProjectBuilder()
+//                .withGroupID(groupId.getValue())
+//                .withArtifactID(artifactId.getValue())
+//                .withVersion(version.getValue())
+//                .withProjectDescription("TODO: Kurze Beschreibung zum Projekt eintragen.")
+//                .withProjectDirName(projectDirName.getValue())
+//                .withGithubUsername(githubUsername.getValue())
+//                .withGithubRepositoryname(githubRepositoryname.getValue())
+//                .withBintrayUsername(bintrayUsername.getValue())
+//                .withBintrayRepositoryname(bintrayRepositoryname.getValue())
+//                .withBintrayPackagename(bintrayPackagename.getValue())
+//                .build();
+//
+//        // Apply Generators
+//        newLibProjectGenerator.generate(prompt, log, projectDir, radesProject);
+//        newProjectReadmeFileGeneratorGenerator.generate(prompt, log, projectDir, radesProject);
+//        newTravisFileGenerator.generate(prompt, log, projectDir, radesProject);
 
-        // Apply Generators
-        newRadesProjectDescriptionFileGeneratorGenerator.generateProjectDescriptionFile(prompt, log, projectDir, radesProject);
-        newLibProjectGenerator.generate(prompt, log, projectDir, radesProject);
-        newProjectReadmeFileGeneratorGenerator.generate(prompt, log, projectDir, radesProject);
-        newTravisFileGenerator.generate(prompt, log, projectDir, radesProject);
+        final UICommand newProjectDescriptionfileCommand = commandFactory.getCommandByName(uiContext, RadesProjectNewDescriptionFileCommand.COMMAND_NAME);
+        log.info(log.out(),"newProjectDescriptionfileCommand: "+newProjectDescriptionfileCommand);
+        if (newProjectDescriptionfileCommand.isEnabled(uiContext)) {
+            newProjectDescriptionfileCommand.execute(context);
+        }
 
-
-        UIResourceHelper.setCurrentDirectoryTo(uiContext,projectDir);
 
         final UICommand updateProjectCommand = commandFactory.getCommandByName(uiContext, RadesProjectUpdateCommand.COMMAND_NAME);
         if (updateProjectCommand.isEnabled(uiContext)) {
@@ -221,12 +211,12 @@ public class RadesProjectNewCommand extends AbstractUICommand implements RadesUI
         }
 
         return Results
-                .success("Kommando "+COMMAND_NAME+" wurde erfolgreich ausgeführt.");
+                .success("Kommando " + COMMAND_NAME + " wurde erfolgreich ausgeführt.");
     }
 
     @Integration
     protected DirectoryResource getProjectDirectory(UIContext uiContext) {
-        final DirectoryResource currentDirectoryResource = UIResourceHelper.getCurrentDirectoryResource(uiContext);
+        final DirectoryResource currentDirectoryResource = uiResourceHelper.getCurrentDirectoryResource(uiContext);
         return currentDirectoryResource.getOrCreateChildDirectory(projectDirName.getValue());
     }
 
