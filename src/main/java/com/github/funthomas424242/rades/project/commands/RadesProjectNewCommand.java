@@ -5,11 +5,10 @@ import com.github.funthomas424242.rades.core.resources.UIResourceHelper;
 import com.github.funthomas424242.rades.project.generators.NewLibraryProjectFacetsGenerator;
 import com.github.funthomas424242.rades.project.generators.NewProjectReadmeFileGenerator;
 import com.github.funthomas424242.rades.project.generators.NewTravisFileGenerator;
-import com.github.funthomas424242.rades.project.validationrules.*;
+import com.github.funthomas424242.rades.project.validationrules.ProjectDirname;
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.resource.ResourceFactory;
-import org.jboss.forge.addon.ui.command.AbstractUICommand;
 import org.jboss.forge.addon.ui.command.CommandFactory;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIBuilder;
@@ -17,7 +16,6 @@ import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UIExecutionContext;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.input.UIPrompt;
-import org.jboss.forge.addon.ui.input.UISelectMany;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.metadata.WithAttributes;
 import org.jboss.forge.addon.ui.output.UIOutput;
@@ -29,9 +27,8 @@ import org.jboss.forge.addon.ui.util.Metadata;
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Callable;
 
-public class RadesProjectNewCommand extends AbstractUICommand implements RadesUICommand {
+public class RadesProjectNewCommand extends RadesAbstractProjectUICommand {
 
     public static final String COMMAND_NAME = "rades-project-new";
 
@@ -44,9 +41,6 @@ public class RadesProjectNewCommand extends AbstractUICommand implements RadesUI
 
 //    @Inject
 //    CommandControllerFactory commandControllerFactory;
-
-    @Inject
-    protected ResourceFactory resourceFactory;
 
     @Inject
     protected NewLibraryProjectFacetsGenerator newLibProjectGenerator;
@@ -62,8 +56,6 @@ public class RadesProjectNewCommand extends AbstractUICommand implements RadesUI
     protected NewTravisFileGenerator newTravisFileGenerator;
 
 
-
-
     // /////////////////////////////////////////////////////////////////////////
     //
     // Definition of interactive inputs (parameters)
@@ -77,35 +69,35 @@ public class RadesProjectNewCommand extends AbstractUICommand implements RadesUI
     @ProjectDirname
     protected UIInput<String> projectDirName;
 
-
-    @Inject
-    @WithAttributes(label = "Github Username:", required = true, defaultValue = "myGithubUsername")
-    @GithubUsername
-    protected UIInput<String> githubUsername;
-
-    @Inject
-    @WithAttributes(label = "Github Repositoryname:", required = true)
-    @GithubRepositoryname
-    protected UIInput<String> githubRepositoryname;
-
-    @Inject
-    @WithAttributes(label = "Bintray Username:", defaultValue = "myBintrayUsername")
-    @BintrayUsername
-    protected UIInput<String> bintrayUsername;
-
-    @Inject
-    @WithAttributes(label = "Bintray Repositoryname:", defaultValue = "myBintrayRepositoryname")
-    @BintrayRepositoryname
-    protected UIInput<String> bintrayRepositoryname;
-
-    @Inject
-    @WithAttributes(label = "Bintray Packagename:", defaultValue = "myBintrayPackagename")
-    @BintrayPackagename
-    protected UIInput<String> bintrayPackagename;
-
-    @Inject
-    @WithAttributes(label = "Maven Repos", required = true, description = "Auswahl der zu verwendenden Maven Repositories")
-    protected UISelectMany<String> repositories;
+//
+//    @Inject
+//    @WithAttributes(label = "Github Username:", required = true, defaultValue = "myGithubUsername")
+//    @GithubUsername
+//    protected UIInput<String> githubUsername;
+//
+//    @Inject
+//    @WithAttributes(label = "Github Repositoryname:", required = true)
+//    @GithubRepositoryname
+//    protected UIInput<String> githubRepositoryname;
+//
+//    @Inject
+//    @WithAttributes(label = "Bintray Username:", defaultValue = "myBintrayUsername")
+//    @BintrayUsername
+//    protected UIInput<String> bintrayUsername;
+//
+//    @Inject
+//    @WithAttributes(label = "Bintray Repositoryname:", defaultValue = "myBintrayRepositoryname")
+//    @BintrayRepositoryname
+//    protected UIInput<String> bintrayRepositoryname;
+//
+//    @Inject
+//    @WithAttributes(label = "Bintray Packagename:", defaultValue = "myBintrayPackagename")
+//    @BintrayPackagename
+//    protected UIInput<String> bintrayPackagename;
+//
+//    @Inject
+//    @WithAttributes(label = "Maven Repos", required = true, description = "Auswahl der zu verwendenden Maven Repositories")
+//    protected UISelectMany<String> repositories;
 
     @Override
     public UICommandMetadata getMetadata(UIContext context) {
@@ -129,41 +121,31 @@ public class RadesProjectNewCommand extends AbstractUICommand implements RadesUI
 
         final UIContext uiContext = builder.getUIContext();
 
-        final UICommand newProjectDescriptionfileCommand = commandFactory.getCommandByName(uiContext, RadesProjectNewDescriptionFileCommand.COMMAND_NAME);
+        final UICommand newProjectDescriptionfileCommand = commandFactory.getCommandByName(uiContext, RadesProjectAddRadesCommand.COMMAND_NAME);
         if (newProjectDescriptionfileCommand.isEnabled(uiContext)) {
             newProjectDescriptionfileCommand.initializeUI(builder);
         }
         // Auswahlen initialisieren
-        repositories.setValueChoices(MAVEN_REPO_LIST);
-//        projectDirName.setDefaultValue(
+//        repositories.setValueChoices(MAVEN_REPO_LIST);
+
+//        githubRepositoryname.setDefaultValue(
 //                new Callable<String>() {
 //                    @Override
 //                    public String call() {
-//                        if (artifactId.getValue() == null) {
-//                            return "myproject";
+//                        if (projectDirName.getValue() == null) {
+//                            return "myGithubReponame";
 //                        }
-//                        return artifactId.getValue();
+//                        return projectDirName.getValue();
 //                    }
 //                });
 
-        githubRepositoryname.setDefaultValue(
-                new Callable<String>() {
-                    @Override
-                    public String call() {
-                        if (projectDirName.getValue() == null) {
-                            return "myGithubReponame";
-                        }
-                        return projectDirName.getValue();
-                    }
-                });
-
         // add the inputs
-        builder.add(githubUsername);
-        builder.add(githubRepositoryname);
-        builder.add(bintrayUsername);
-        builder.add(bintrayRepositoryname);
-        builder.add(bintrayPackagename);
-        builder.add(repositories);
+//        builder.add(githubUsername);
+//        builder.add(githubRepositoryname);
+//        builder.add(bintrayUsername);
+//        builder.add(bintrayRepositoryname);
+//        builder.add(bintrayPackagename);
+//        builder.add(repositories);
     }
 
     @Override
@@ -175,7 +157,7 @@ public class RadesProjectNewCommand extends AbstractUICommand implements RadesUI
         final UIPrompt prompt = context.getPrompt();
 
         final DirectoryResource projectDir = getProjectDirectory(uiContext);
-        log.info(log.out(),"Projektdirectory:"+projectDir.getFullyQualifiedName());
+        log.info(log.out(), "Projektdirectory:" + projectDir.getFullyQualifiedName());
         // Current Dir is project dir
         uiResourceHelper.setCurrentDirectoryTo(uiContext, projectDir);
 
@@ -198,8 +180,8 @@ public class RadesProjectNewCommand extends AbstractUICommand implements RadesUI
 //        newProjectReadmeFileGeneratorGenerator.generate(prompt, log, projectDir, radesProject);
 //        newTravisFileGenerator.generate(prompt, log, projectDir, radesProject);
 
-        final UICommand newProjectDescriptionfileCommand = commandFactory.getCommandByName(uiContext, RadesProjectNewDescriptionFileCommand.COMMAND_NAME);
-        log.info(log.out(),"newProjectDescriptionfileCommand: "+newProjectDescriptionfileCommand);
+        final UICommand newProjectDescriptionfileCommand = commandFactory.getCommandByName(uiContext, RadesProjectAddRadesCommand.COMMAND_NAME);
+        log.info(log.out(), "newProjectDescriptionfileCommand: " + newProjectDescriptionfileCommand);
         if (newProjectDescriptionfileCommand.isEnabled(uiContext)) {
             newProjectDescriptionfileCommand.execute(context);
         }

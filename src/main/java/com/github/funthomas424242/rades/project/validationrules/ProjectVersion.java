@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @NotNull
-@Pattern(regexp=".+(\\..+){1,3}", message="Invalid version format!")
+@Pattern(regexp = ".+(\\..+){1,3}", message = "Invalid version format!")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JacksonAnnotationsInside
 public @interface ProjectVersion {

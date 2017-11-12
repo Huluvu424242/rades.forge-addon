@@ -1,7 +1,5 @@
 package com.github.funthomas424242.rades.project.commands;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.funthomas424242.rades.core.resources.UIResourceHelper;
 import com.github.funthomas424242.rades.project.RadesProject;
 import com.github.funthomas424242.rades.project.RadesProjectBuilder;
 import com.github.funthomas424242.rades.project.generators.NewRadesProjectDescriptionFileGenerator;
@@ -9,8 +7,6 @@ import com.github.funthomas424242.rades.project.validationrules.ProjectArtifactI
 import com.github.funthomas424242.rades.project.validationrules.ProjectGroupId;
 import com.github.funthomas424242.rades.project.validationrules.ProjectVersion;
 import org.jboss.forge.addon.resource.DirectoryResource;
-import org.jboss.forge.addon.resource.FileResource;
-import org.jboss.forge.addon.ui.command.AbstractUICommand;
 import org.jboss.forge.addon.ui.context.UIBuilder;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UIExecutionContext;
@@ -25,25 +21,23 @@ import org.jboss.forge.addon.ui.util.Categories;
 import org.jboss.forge.addon.ui.util.Metadata;
 
 import javax.inject.Inject;
+import java.util.concurrent.Callable;
 
-public class RadesProjectNewDescriptionFileCommand extends AbstractUICommand implements RadesUICommand {
+public class RadesProjectAddRadesCommand extends RadesAbstractProjectUICommand {
 
     public static final String COMMAND_NAME = "rades-project-addrades";
-
-    @Inject
-    protected UIResourceHelper uiResourceHelper;
 
     @Inject
     protected NewRadesProjectDescriptionFileGenerator newRadesProjectDescriptionFileGeneratorGenerator;
 
 
     @Inject
-    @WithAttributes(label = "Group ID:", required = true, defaultValue = "com.github.myUsername")
+    @WithAttributes(label = "Group ID:", required = true, defaultValue = "com.github.myGithubUsername")
     @ProjectGroupId
     protected UIInput<String> groupId;
 
     @Inject
-    @WithAttributes(label = "Artifact ID:", required = true, defaultValue = "testProject")
+    @WithAttributes(label = "Artifact ID:", required = true)
     @ProjectArtifactId
     protected UIInput<String> artifactId;
 
@@ -55,21 +49,37 @@ public class RadesProjectNewDescriptionFileCommand extends AbstractUICommand imp
 
     @Override
     public UICommandMetadata getMetadata(UIContext context) {
-        return Metadata.forCommand(RadesProjectNewCommand.class)
+        return Metadata.forCommand(RadesProjectAddRadesCommand.class)
                 .name(COMMAND_NAME)
                 .description("Add maven Koordinaten zur RADeS Projektbeschreibung")
                 .category(Categories.create(CATEGORY_RADES_PROJECT));
     }
 
 
-
     @Override
     public void initializeUI(UIBuilder builder) throws Exception {
         super.initializeUI(builder);
+//        final UIOutput log = getLogger(builder.getUIContext());
+//        final RadesProject radesProject = getRadesProjectBuilderFromFile(builder.getUIContext()).build();
+
+        // init handler
+
+//        artifactId.setDefaultValue(
+//                new Callable<String>() {
+//                    @Override
+//                    public String call() {
+//                        if (artifactId.getValue() == null) {
+//                            return "Wert aus rades.json";
+//                        }
+//                        return artifactId.getValue();
+//                    }
+//                });
+
         // add the inputs
         builder.add(groupId);
         builder.add(artifactId);
         builder.add(version);
+
     }
 
 
@@ -77,29 +87,18 @@ public class RadesProjectNewDescriptionFileCommand extends AbstractUICommand imp
     public Result execute(UIExecutionContext context) throws Exception {
 
         final UIContext uiContext = context.getUIContext();
-        final UIOutput log = uiContext.getProvider().getOutput();
+        final UIOutput log = getLogger(uiContext);
         final UIPrompt prompt = context.getPrompt();
 
-
-        final FileResource radesProjectDescriptionFile = uiResourceHelper.getFileResourceFromCurrentDir(uiContext, RADES_PROJECTDESCRIPTION_FILE);
-        final RadesProjectBuilder builder;
-        if( radesProjectDescriptionFile.exists()){
-            final String jsonContent = radesProjectDescriptionFile.getContents(CHARSET_UTF_8);
-            final RadesProject oldRadesProject = new ObjectMapper().readValue(jsonContent, RadesProjectBuilder.RadesProjectImpl.class);
-            builder=new RadesProjectBuilder(oldRadesProject);
-        }else{
-            builder=new RadesProjectBuilder();
-        }
-
+        final RadesProjectBuilder builder = getRadesProjectBuilderFromFile(uiContext);
         // Create RadesProjectDescription
         final RadesProject radesProject = builder
                 .withGroupID(groupId.getValue())
                 .withArtifactID(artifactId.getValue())
                 .withVersion(version.getValue())
-                .withProjectDescription("TODO: Kurze Beschreibung zum Projekt eintragen.")
                 .build();
 
-        final DirectoryResource projectDirectoryResource = uiResourceHelper.getCurrentDirectoryResource(uiContext);
+        final DirectoryResource projectDirectoryResource = getCurrentDirectoryAsResource(uiContext);
         newRadesProjectDescriptionFileGeneratorGenerator.generateProjectDescriptionFile(prompt, log, projectDirectoryResource, radesProject);
 
         return Results

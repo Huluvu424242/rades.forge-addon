@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@NotNull
+//@NotNull
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JacksonAnnotationsInside
 public @interface GithubUsername {
