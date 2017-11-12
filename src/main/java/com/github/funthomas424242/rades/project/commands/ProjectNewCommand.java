@@ -68,32 +68,7 @@ public class ProjectNewCommand extends AbstractProjectUICommand {
     @ProjectDirname
     protected UIInput<String> projectDirName;
 
-//
-//    @Inject
-//    @WithAttributes(label = "Github Username:", required = true, defaultValue = "myGithubUsername")
-//    @GithubUsername
-//    protected UIInput<String> githubUsername;
-//
-//    @Inject
-//    @WithAttributes(label = "Github Repositoryname:", required = true)
-//    @GithubRepositoryname
-//    protected UIInput<String> githubRepositoryname;
-//
-//    @Inject
-//    @WithAttributes(label = "Bintray Username:", defaultValue = "myBintrayUsername")
-//    @BintrayUsername
-//    protected UIInput<String> bintrayUsername;
-//
-//    @Inject
-//    @WithAttributes(label = "Bintray Repositoryname:", defaultValue = "myBintrayRepositoryname")
-//    @BintrayRepositoryname
-//    protected UIInput<String> bintrayRepositoryname;
-//
-//    @Inject
-//    @WithAttributes(label = "Bintray Packagename:", defaultValue = "myBintrayPackagename")
-//    @BintrayPackagename
-//    protected UIInput<String> bintrayPackagename;
-//
+
 //    @Inject
 //    @WithAttributes(label = "Maven Repos", required = true, description = "Auswahl der zu verwendenden Maven Repositories")
 //    protected UISelectMany<String> repositories;
@@ -120,7 +95,7 @@ public class ProjectNewCommand extends AbstractProjectUICommand {
 
         final UIContext uiContext = builder.getUIContext();
 
-        final UICommand newProjectDescriptionfileCommand = commandFactory.getCommandByName(uiContext, ProjectAddRadesCommand.COMMAND_NAME);
+        final UICommand newProjectDescriptionfileCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateRadesCommand.COMMAND_NAME);
         if (newProjectDescriptionfileCommand.isEnabled(uiContext)) {
             newProjectDescriptionfileCommand.initializeUI(builder);
         }
@@ -179,7 +154,7 @@ public class ProjectNewCommand extends AbstractProjectUICommand {
 //        newProjectReadmeFileGeneratorGenerator.generate(prompt, log, projectDir, radesProject);
 //        newTravisFileGenerator.generate(prompt, log, projectDir, radesProject);
 
-        final UICommand newProjectDescriptionfileCommand = commandFactory.getCommandByName(uiContext, ProjectAddRadesCommand.COMMAND_NAME);
+        final UICommand newProjectDescriptionfileCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateRadesCommand.COMMAND_NAME);
         log.info(log.out(), "newProjectDescriptionfileCommand: " + newProjectDescriptionfileCommand);
         if (newProjectDescriptionfileCommand.isEnabled(uiContext)) {
             newProjectDescriptionfileCommand.execute(context);

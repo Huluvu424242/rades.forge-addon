@@ -21,7 +21,7 @@ public class FileResourceFactory {
 
         if (fileResource.exists()) {
 
-            final boolean shouldOverride = prompt.promptBoolean("Soll ich bestehende Datei " + fileName + " überschreiben?", true);
+            final boolean shouldOverride = prompt.promptBoolean("Soll ich bestehende Datei " + fileName + " anpassen?", true);
             if (!shouldOverride) {
                 log.warn(log.out(), "Erstellung der Datei " + fileName + " auf Nutzerwunsch abgebrochen.");
                 log.warn(log.out(), "Datei " + fileName + " im Ordner " + parentDirectory.getName() + " muss manuell angepasst werden!");

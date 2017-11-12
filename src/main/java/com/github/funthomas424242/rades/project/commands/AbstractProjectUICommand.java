@@ -46,4 +46,12 @@ public abstract class AbstractProjectUICommand extends RadesAbstractUICommand im
     public DirectoryResource getCurrentDirectoryAsResource(UIContext uiContext) {
         return uiResourceHelper.getCurrentDirectoryResource(uiContext);
     }
+
+    public FileResource getRadesProjectDescriptionfileAsResource(UIContext context) {
+        return uiResourceHelper.getFileResourceFromCurrentDir(context, RADES_PROJECTDESCRIPTION_FILE);
+    }
+
+    public boolean existRadesProjectDescriptionfileAtCurrentDirectory(final UIContext uiContext) {
+        return getRadesProjectDescriptionfileAsResource(uiContext).exists();
+    }
 }
