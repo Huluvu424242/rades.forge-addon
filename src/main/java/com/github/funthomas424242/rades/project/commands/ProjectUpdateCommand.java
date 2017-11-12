@@ -10,17 +10,13 @@ import com.github.funthomas424242.rades.project.validationrules.ProjectDescripti
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
-import org.jboss.forge.addon.maven.projects.MavenBuildSystem;
-import org.jboss.forge.addon.projects.ProjectFactory;
 import org.jboss.forge.addon.resource.FileResource;
-import org.jboss.forge.addon.resource.ResourceFactory;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UIExecutionContext;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.input.UIPrompt;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.metadata.WithAttributes;
-import org.jboss.forge.addon.ui.output.UIOutput;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.forge.addon.ui.result.Results;
 import org.jboss.forge.addon.ui.util.Categories;
@@ -29,7 +25,7 @@ import org.jboss.forge.addon.ui.util.Metadata;
 import javax.inject.Inject;
 import java.io.OutputStream;
 
-public class RadesProjectUpdateCommand extends RadesAbstractProjectUICommand {
+public class ProjectUpdateCommand extends AbstractProjectUICommand {
 
     public static final String COMMAND_NAME = "rades-project-update";
 
@@ -47,7 +43,7 @@ public class RadesProjectUpdateCommand extends RadesAbstractProjectUICommand {
 
     @Override
     public UICommandMetadata getMetadata(UIContext context) {
-        return Metadata.forCommand(RadesProjectUpdateCommand.class)
+        return Metadata.forCommand(ProjectUpdateCommand.class)
                 .name(COMMAND_NAME)
                 .description("Change a RADES project.")
                 .category(Categories.create(CATEGORY_RADES_PROJECT));

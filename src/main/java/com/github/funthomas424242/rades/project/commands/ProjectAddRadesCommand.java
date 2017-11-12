@@ -21,9 +21,8 @@ import org.jboss.forge.addon.ui.util.Categories;
 import org.jboss.forge.addon.ui.util.Metadata;
 
 import javax.inject.Inject;
-import java.util.concurrent.Callable;
 
-public class RadesProjectAddRadesCommand extends RadesAbstractProjectUICommand {
+public class ProjectAddRadesCommand extends AbstractProjectUICommand {
 
     public static final String COMMAND_NAME = "rades-project-addrades";
 
@@ -49,7 +48,7 @@ public class RadesProjectAddRadesCommand extends RadesAbstractProjectUICommand {
 
     @Override
     public UICommandMetadata getMetadata(UIContext context) {
-        return Metadata.forCommand(RadesProjectAddRadesCommand.class)
+        return Metadata.forCommand(ProjectAddRadesCommand.class)
                 .name(COMMAND_NAME)
                 .description("Add maven Koordinaten zur RADeS Projektbeschreibung")
                 .category(Categories.create(CATEGORY_RADES_PROJECT));

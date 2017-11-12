@@ -8,7 +8,6 @@ import com.github.funthomas424242.rades.project.generators.NewTravisFileGenerato
 import com.github.funthomas424242.rades.project.validationrules.ProjectDirname;
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.FileResource;
-import org.jboss.forge.addon.resource.ResourceFactory;
 import org.jboss.forge.addon.ui.command.CommandFactory;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIBuilder;
@@ -28,7 +27,7 @@ import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
 
-public class RadesProjectNewCommand extends RadesAbstractProjectUICommand {
+public class ProjectNewCommand extends AbstractProjectUICommand {
 
     public static final String COMMAND_NAME = "rades-project-new";
 
@@ -101,7 +100,7 @@ public class RadesProjectNewCommand extends RadesAbstractProjectUICommand {
 
     @Override
     public UICommandMetadata getMetadata(UIContext context) {
-        return Metadata.forCommand(RadesProjectNewCommand.class)
+        return Metadata.forCommand(ProjectNewCommand.class)
                 .name(COMMAND_NAME)
                 .description("Creates a RADES lib project.")
                 .category(Categories.create(CATEGORY_RADES_PROJECT));
@@ -121,7 +120,7 @@ public class RadesProjectNewCommand extends RadesAbstractProjectUICommand {
 
         final UIContext uiContext = builder.getUIContext();
 
-        final UICommand newProjectDescriptionfileCommand = commandFactory.getCommandByName(uiContext, RadesProjectAddRadesCommand.COMMAND_NAME);
+        final UICommand newProjectDescriptionfileCommand = commandFactory.getCommandByName(uiContext, ProjectAddRadesCommand.COMMAND_NAME);
         if (newProjectDescriptionfileCommand.isEnabled(uiContext)) {
             newProjectDescriptionfileCommand.initializeUI(builder);
         }
@@ -180,14 +179,14 @@ public class RadesProjectNewCommand extends RadesAbstractProjectUICommand {
 //        newProjectReadmeFileGeneratorGenerator.generate(prompt, log, projectDir, radesProject);
 //        newTravisFileGenerator.generate(prompt, log, projectDir, radesProject);
 
-        final UICommand newProjectDescriptionfileCommand = commandFactory.getCommandByName(uiContext, RadesProjectAddRadesCommand.COMMAND_NAME);
+        final UICommand newProjectDescriptionfileCommand = commandFactory.getCommandByName(uiContext, ProjectAddRadesCommand.COMMAND_NAME);
         log.info(log.out(), "newProjectDescriptionfileCommand: " + newProjectDescriptionfileCommand);
         if (newProjectDescriptionfileCommand.isEnabled(uiContext)) {
             newProjectDescriptionfileCommand.execute(context);
         }
 
 
-        final UICommand updateProjectCommand = commandFactory.getCommandByName(uiContext, RadesProjectUpdateCommand.COMMAND_NAME);
+        final UICommand updateProjectCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateCommand.COMMAND_NAME);
         if (updateProjectCommand.isEnabled(uiContext)) {
             updateProjectCommand.execute(context);
         }

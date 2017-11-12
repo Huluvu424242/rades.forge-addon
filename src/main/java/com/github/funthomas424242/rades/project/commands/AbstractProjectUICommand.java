@@ -13,7 +13,7 @@ import org.jboss.forge.addon.ui.output.UIOutput;
 
 import javax.inject.Inject;
 
-public abstract class RadesAbstractProjectUICommand extends RadesAbstractUICommand implements UICommand {
+public abstract class AbstractProjectUICommand extends RadesAbstractUICommand implements UICommand {
 
     public static final String CATEGORY_RADES_PROJECT = "RADeS/Project";
     public static final String RADES_PROJECTDESCRIPTION_FILE = "rades.json";
