@@ -25,7 +25,7 @@ import org.jboss.forge.addon.ui.util.Metadata;
 import javax.inject.Inject;
 import java.io.OutputStream;
 
-public class ProjectUpdateCommand extends AbstractProjectUICommand {
+public class UpdateMavenCommand extends AbstractProjectUICommand {
 
     public static final String COMMAND_NAME = "rades-project-update";
 
@@ -43,7 +43,7 @@ public class ProjectUpdateCommand extends AbstractProjectUICommand {
 
     @Override
     public UICommandMetadata getMetadata(UIContext context) {
-        return Metadata.forCommand(ProjectUpdateCommand.class)
+        return Metadata.forCommand(UpdateMavenCommand.class)
                 .name(COMMAND_NAME)
                 .description("Change a RADES project.")
                 .category(Categories.create(CATEGORY_RADES_PROJECT));

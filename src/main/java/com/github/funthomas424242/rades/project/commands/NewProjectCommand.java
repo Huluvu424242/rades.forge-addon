@@ -1,12 +1,9 @@
 package com.github.funthomas424242.rades.project.commands;
 
 import com.github.funthomas424242.flowdesign.Integration;
-import com.github.funthomas424242.rades.core.resources.UIResourceHelper;
 import com.github.funthomas424242.rades.project.generators.NewLibraryProjectFacetsGenerator;
-import com.github.funthomas424242.rades.project.generators.NewProjectReadmeFileGenerator;
 import com.github.funthomas424242.rades.project.generators.NewTravisFileGenerator;
 import com.github.funthomas424242.rades.project.validationrules.ProjectDirname;
-import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.ui.command.CommandFactory;
 import org.jboss.forge.addon.ui.command.UICommand;
@@ -24,10 +21,8 @@ import org.jboss.forge.addon.ui.util.Categories;
 import org.jboss.forge.addon.ui.util.Metadata;
 
 import javax.inject.Inject;
-import java.util.Arrays;
-import java.util.List;
 
-public class ProjectNewCommand extends AbstractProjectUICommand {
+public class NewProjectCommand extends AbstractProjectUICommand {
 
     public static final String COMMAND_NAME = "rades-project-new";
 
@@ -68,7 +63,7 @@ public class ProjectNewCommand extends AbstractProjectUICommand {
 
     @Override
     public UICommandMetadata getMetadata(UIContext context) {
-        return Metadata.forCommand(ProjectNewCommand.class)
+        return Metadata.forCommand(NewProjectCommand.class)
                 .name(COMMAND_NAME)
                 .description("Creates a RADES lib project.")
                 .category(Categories.create(CATEGORY_RADES_PROJECT));
@@ -88,18 +83,18 @@ public class ProjectNewCommand extends AbstractProjectUICommand {
 
         final UIContext uiContext = builder.getUIContext();
 
-        final UICommand updateRadesCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateRadesCommand.COMMAND_NAME);
+        final UICommand updateRadesCommand = commandFactory.getCommandByName(uiContext, UpdateMavenCoordsCommand.COMMAND_NAME);
         if (updateRadesCommand.isEnabled(uiContext)) {
             updateRadesCommand.initializeUI(builder);
         }
 
-        final UICommand updateGithubCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateGithubCommand.COMMAND_NAME);
+        final UICommand updateGithubCommand = commandFactory.getCommandByName(uiContext, UpdateGithubCommand.COMMAND_NAME);
 //        if (updateGithubCommand.isEnabled(uiContext)) {
         updateGithubCommand.initializeUI(builder);
 //        }
 
 
-        final UICommand updateBintrayCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateBintrayCommand.COMMAND_NAME);
+        final UICommand updateBintrayCommand = commandFactory.getCommandByName(uiContext, UpdateBintrayCommand.COMMAND_NAME);
 //        if (updateBintrayCommand.isEnabled(uiContext)) {
         updateBintrayCommand.initializeUI(builder);
 //        }
@@ -138,25 +133,25 @@ public class ProjectNewCommand extends AbstractProjectUICommand {
 
         setProjectDirToSubdirectory(uiContext, log, projectDirName.getValue());
 
-        final UICommand updateRadesCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateRadesCommand.COMMAND_NAME);
+        final UICommand updateRadesCommand = commandFactory.getCommandByName(uiContext, UpdateMavenCoordsCommand.COMMAND_NAME);
         log.info(log.out(), "updateRadesCommand: " + updateRadesCommand);
         if (updateRadesCommand.isEnabled(uiContext)) {
             updateRadesCommand.execute(context);
         }
 
-        final UICommand updateGithubCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateGithubCommand.COMMAND_NAME);
+        final UICommand updateGithubCommand = commandFactory.getCommandByName(uiContext, UpdateGithubCommand.COMMAND_NAME);
         log.info(log.out(), "updateGithubCommand: " + updateGithubCommand);
         if (updateGithubCommand.isEnabled(uiContext)) {
             updateGithubCommand.execute(context);
         }
 
-        final UICommand updateBintrayCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateBintrayCommand.COMMAND_NAME);
+        final UICommand updateBintrayCommand = commandFactory.getCommandByName(uiContext, UpdateBintrayCommand.COMMAND_NAME);
         log.info(log.out(), "updateBintrayCommand: " + updateBintrayCommand);
         if (updateBintrayCommand.isEnabled(uiContext)) {
             updateBintrayCommand.execute(context);
         }
 
-        final UICommand updateProjectCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateCommand.COMMAND_NAME);
+        final UICommand updateProjectCommand = commandFactory.getCommandByName(uiContext, UpdateMavenCommand.COMMAND_NAME);
         log.info(log.out(), "updateProjectCommand: " + updateProjectCommand);
         if (updateProjectCommand.isEnabled(uiContext)) {
             updateProjectCommand.execute(context);

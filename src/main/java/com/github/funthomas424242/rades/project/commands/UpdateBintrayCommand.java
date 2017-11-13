@@ -20,29 +20,35 @@ import org.jboss.forge.addon.ui.util.Metadata;
 
 import javax.inject.Inject;
 
-public class ProjectUpdateGithubCommand extends AbstractProjectUICommand {
+public class UpdateBintrayCommand extends AbstractProjectUICommand {
 
-    public static final String COMMAND_NAME = "rades-project-updategithub";
+    public static final String COMMAND_NAME = "rades-project-updatebintray";
 
     @Inject
     protected NewRadesProjectDescriptionFileGenerator newRadesProjectDescriptionFileGeneratorGenerator;
 
-    @Inject
-    @WithAttributes(label = "Github Username:", required = true, defaultValue = "myGithubUsername")
-    @GithubUsername
-    protected UIInput<String> githubUsername;
+
 
     @Inject
-    @WithAttributes(label = "Github Repositoryname:", required = true)
-    @GithubRepositoryname
-    protected UIInput<String> githubRepositoryname;
+    @WithAttributes(label = "Bintray Username:", defaultValue = "myBintrayUsername")
+    @BintrayUsername
+    protected UIInput<String> bintrayUsername;
 
+    @Inject
+    @WithAttributes(label = "Bintray Repositoryname:", required = true, description = "myBintrayRepositoryname")
+    @BintrayRepositoryname
+    protected UIInput<String> bintrayRepositoryname;
+
+    @Inject
+    @WithAttributes(label = "Bintray Packagename:", defaultValue = "myBintrayPackagename")
+    @BintrayPackagename
+    protected UIInput<String> bintrayPackagename;
 
     @Override
     public UICommandMetadata getMetadata(UIContext context) {
-        return Metadata.forCommand(ProjectUpdateGithubCommand.class)
+        return Metadata.forCommand(UpdateBintrayCommand.class)
                 .name(COMMAND_NAME)
-                .description("Add maven Koordinaten zur RADeS Projektbeschreibung")
+                .description("Add Bintray Infos to rades project")
                 .category(Categories.create(CATEGORY_RADES_PROJECT));
     }
 
@@ -57,8 +63,9 @@ public class ProjectUpdateGithubCommand extends AbstractProjectUICommand {
     public void initializeUI(UIBuilder builder) throws Exception {
         super.initializeUI(builder);
         // add the inputs
-        builder.add(githubUsername);
-        builder.add(githubRepositoryname);
+        builder.add(bintrayUsername);
+        builder.add(bintrayRepositoryname);
+        builder.add(bintrayPackagename);
     }
 
 
@@ -72,8 +79,9 @@ public class ProjectUpdateGithubCommand extends AbstractProjectUICommand {
         final RadesProjectBuilder builder = getRadesProjectBuilderFromFile(uiContext);
         // Create RadesProjectDescription
         final RadesProject radesProject = builder
-                .withGithubUsername(githubUsername.getValue())
-                .withGithubRepositoryname(githubRepositoryname.getValue())
+                .withBintrayUsername(bintrayUsername.getValue())
+                .withBintrayRepositoryname(bintrayRepositoryname.getValue())
+                .withBintrayPackagename(bintrayPackagename.getValue())
                 .build();
 
         final DirectoryResource projectDirectoryResource = getCurrentDirectoryAsResource(uiContext);
