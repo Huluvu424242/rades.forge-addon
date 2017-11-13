@@ -27,7 +27,7 @@ public class NewRadesProjectDescriptionFileGenerator {
 
         FileResource<?> radesProjectFile = null;
         try {
-            radesProjectFile = new FileResourceFactory(prompt, log).createFileResourceInteractive(projectDir, RADES_JSON);
+            radesProjectFile = new FileResourceFactory(prompt, log).createFileResourceInteractive(projectDir, RADES_JSON, "Projekt");
         } catch (UserVetoException e) {
             return;
         } finally {

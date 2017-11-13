@@ -31,8 +31,8 @@ public class ProjectNewCommand extends AbstractProjectUICommand {
 
     public static final String COMMAND_NAME = "rades-project-new";
 
-    protected static final List<String> MAVEN_REPO_LIST = Arrays.asList(
-            "https://mvnrepository.com/artifact", "https://jcenter.bintray.com/");
+//    protected static final List<String> MAVEN_REPO_LIST = Arrays.asList(
+//            "https://mvnrepository.com/artifact", "https://jcenter.bintray.com/");
 
 
     @Inject
@@ -45,11 +45,8 @@ public class ProjectNewCommand extends AbstractProjectUICommand {
     protected NewLibraryProjectFacetsGenerator newLibProjectGenerator;
 
 
-    @Inject
-    protected NewProjectReadmeFileGenerator newProjectReadmeFileGeneratorGenerator;
-
-    @Inject
-    protected UIResourceHelper uiResourceHelper;
+//    @Inject
+//    protected NewProjectReadmeFileGenerator newProjectReadmeFileGeneratorGenerator;
 
     @Inject
     protected NewTravisFileGenerator newTravisFileGenerator;
@@ -69,10 +66,6 @@ public class ProjectNewCommand extends AbstractProjectUICommand {
     protected UIInput<String> projectDirName;
 
 
-//    @Inject
-//    @WithAttributes(label = "Maven Repos", required = true, description = "Auswahl der zu verwendenden Maven Repositories")
-//    protected UISelectMany<String> repositories;
-
     @Override
     public UICommandMetadata getMetadata(UIContext context) {
         return Metadata.forCommand(ProjectNewCommand.class)
@@ -84,7 +77,7 @@ public class ProjectNewCommand extends AbstractProjectUICommand {
     @Override
     public boolean isEnabled(UIContext context) {
         final boolean isEnabled = super.isEnabled(context);
-        final FileResource radesProjectDescription = uiResourceHelper.getFileResourceFromCurrentDir(context, RADES_PROJECTDESCRIPTION_FILE);
+        final FileResource radesProjectDescription = getRadesProjectDescriptionfileAsResource(context);
         return isEnabled && !radesProjectDescription.exists();
     }
 
@@ -95,10 +88,23 @@ public class ProjectNewCommand extends AbstractProjectUICommand {
 
         final UIContext uiContext = builder.getUIContext();
 
-        final UICommand newProjectDescriptionfileCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateRadesCommand.COMMAND_NAME);
-        if (newProjectDescriptionfileCommand.isEnabled(uiContext)) {
-            newProjectDescriptionfileCommand.initializeUI(builder);
+        final UICommand updateRadesCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateRadesCommand.COMMAND_NAME);
+        if (updateRadesCommand.isEnabled(uiContext)) {
+            updateRadesCommand.initializeUI(builder);
         }
+
+        final UICommand updateGithubCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateGithubCommand.COMMAND_NAME);
+//        if (updateGithubCommand.isEnabled(uiContext)) {
+        updateGithubCommand.initializeUI(builder);
+//        }
+
+
+        final UICommand updateBintrayCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateBintrayCommand.COMMAND_NAME);
+//        if (updateBintrayCommand.isEnabled(uiContext)) {
+        updateBintrayCommand.initializeUI(builder);
+//        }
+
+
         // Auswahlen initialisieren
 //        repositories.setValueChoices(MAVEN_REPO_LIST);
 
@@ -130,10 +136,37 @@ public class ProjectNewCommand extends AbstractProjectUICommand {
         final UIOutput log = uiContext.getProvider().getOutput();
         final UIPrompt prompt = context.getPrompt();
 
-        final DirectoryResource projectDir = getProjectDirectory(uiContext);
-        log.info(log.out(), "Projektdirectory:" + projectDir.getFullyQualifiedName());
-        // Current Dir is project dir
-        uiResourceHelper.setCurrentDirectoryTo(uiContext, projectDir);
+        setProjectDirToSubdirectory(uiContext, log, projectDirName.getValue());
+
+        final UICommand updateRadesCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateRadesCommand.COMMAND_NAME);
+        log.info(log.out(), "updateRadesCommand: " + updateRadesCommand);
+        if (updateRadesCommand.isEnabled(uiContext)) {
+            updateRadesCommand.execute(context);
+        }
+
+        final UICommand updateGithubCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateGithubCommand.COMMAND_NAME);
+        log.info(log.out(), "updateGithubCommand: " + updateGithubCommand);
+        if (updateGithubCommand.isEnabled(uiContext)) {
+            updateGithubCommand.execute(context);
+        }
+
+        final UICommand updateBintrayCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateBintrayCommand.COMMAND_NAME);
+        log.info(log.out(), "updateBintrayCommand: " + updateBintrayCommand);
+        if (updateBintrayCommand.isEnabled(uiContext)) {
+            updateBintrayCommand.execute(context);
+        }
+
+        final UICommand updateProjectCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateCommand.COMMAND_NAME);
+        log.info(log.out(), "updateProjectCommand: " + updateProjectCommand);
+        if (updateProjectCommand.isEnabled(uiContext)) {
+            updateProjectCommand.execute(context);
+        }
+
+
+        return Results
+                .success("Kommando " + COMMAND_NAME + " wurde erfolgreich ausgeführt.");
+    }
+
 
 //        // Create RadesProjectDescription
 //        final RadesProject radesProject = new RadesProjectBuilder()
@@ -153,28 +186,6 @@ public class ProjectNewCommand extends AbstractProjectUICommand {
 //        newLibProjectGenerator.generate(prompt, log, projectDir, radesProject);
 //        newProjectReadmeFileGeneratorGenerator.generate(prompt, log, projectDir, radesProject);
 //        newTravisFileGenerator.generate(prompt, log, projectDir, radesProject);
-
-        final UICommand newProjectDescriptionfileCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateRadesCommand.COMMAND_NAME);
-        log.info(log.out(), "newProjectDescriptionfileCommand: " + newProjectDescriptionfileCommand);
-        if (newProjectDescriptionfileCommand.isEnabled(uiContext)) {
-            newProjectDescriptionfileCommand.execute(context);
-        }
-
-
-        final UICommand updateProjectCommand = commandFactory.getCommandByName(uiContext, ProjectUpdateCommand.COMMAND_NAME);
-        if (updateProjectCommand.isEnabled(uiContext)) {
-            updateProjectCommand.execute(context);
-        }
-
-        return Results
-                .success("Kommando " + COMMAND_NAME + " wurde erfolgreich ausgeführt.");
-    }
-
-    @Integration
-    protected DirectoryResource getProjectDirectory(UIContext uiContext) {
-        final DirectoryResource currentDirectoryResource = uiResourceHelper.getCurrentDirectoryResource(uiContext);
-        return currentDirectoryResource.getOrCreateChildDirectory(projectDirName.getValue());
-    }
 
 
 }

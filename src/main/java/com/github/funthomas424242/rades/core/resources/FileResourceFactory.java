@@ -15,13 +15,13 @@ public class FileResourceFactory {
         this.log = log;
     }
 
-    public FileResource<?> createFileResourceInteractive(final DirectoryResource parentDirectory, final String fileName) throws UserVetoException {
+    public FileResource<?> createFileResourceInteractive(final DirectoryResource parentDirectory, final String fileName, final String abschnittName) throws UserVetoException {
 
         final FileResource<?> fileResource = parentDirectory.getChild(fileName).reify(FileResource.class);
 
         if (fileResource.exists()) {
 
-            final boolean shouldOverride = prompt.promptBoolean("Soll ich bestehende Datei " + fileName + " anpassen?", true);
+            final boolean shouldOverride = prompt.promptBoolean("Soll ich bestehende Datei " + fileName + " im Abschnitt "+abschnittName+" anpassen?", true);
             if (!shouldOverride) {
                 log.warn(log.out(), "Erstellung der Datei " + fileName + " auf Nutzerwunsch abgebrochen.");
                 log.warn(log.out(), "Datei " + fileName + " im Ordner " + parentDirectory.getName() + " muss manuell angepasst werden!");

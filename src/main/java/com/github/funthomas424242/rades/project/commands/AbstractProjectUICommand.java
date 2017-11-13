@@ -1,6 +1,7 @@
 package com.github.funthomas424242.rades.project.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.funthomas424242.flowdesign.Integration;
 import com.github.funthomas424242.rades.core.commands.RadesAbstractUICommand;
 import com.github.funthomas424242.rades.core.resources.UIResourceHelper;
 import com.github.funthomas424242.rades.project.RadesProject;
@@ -53,5 +54,17 @@ public abstract class AbstractProjectUICommand extends RadesAbstractUICommand im
 
     public boolean existRadesProjectDescriptionfileAtCurrentDirectory(final UIContext uiContext) {
         return getRadesProjectDescriptionfileAsResource(uiContext).exists();
+    }
+
+    @Integration
+    protected DirectoryResource getOrCreateSubdirAsResource(final UIContext uiContext, final String subDirName) {
+        final DirectoryResource currentDirectoryResource = uiResourceHelper.getCurrentDirectoryResource(uiContext);
+        return currentDirectoryResource.getOrCreateChildDirectory(subDirName);
+    }
+
+    public void setProjectDirToSubdirectory(final UIContext uiContext, final UIOutput log, final String subdirName) {
+        final DirectoryResource projectDir = getOrCreateSubdirAsResource(uiContext, subdirName);
+        log.info(log.out(), "Projektdirectory:" + projectDir.getFullyQualifiedName());
+        uiResourceHelper.setCurrentDirectoryTo(uiContext, projectDir);
     }
 }

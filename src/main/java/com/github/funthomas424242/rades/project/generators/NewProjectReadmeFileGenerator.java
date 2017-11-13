@@ -23,7 +23,7 @@ public class NewProjectReadmeFileGenerator {
 
         FileResource<?> readmeFile = null;
         try {
-            readmeFile = new FileResourceFactory(prompt, log).createFileResourceInteractive(projectDir, README_FILENAME);
+            readmeFile = new FileResourceFactory(prompt, log).createFileResourceInteractive(projectDir, README_FILENAME, "Github & Bintray");
         } catch (UserVetoException e) {
             return;
         } finally {
