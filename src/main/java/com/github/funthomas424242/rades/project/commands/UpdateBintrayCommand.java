@@ -85,7 +85,7 @@ public class UpdateBintrayCommand extends AbstractProjectUICommand {
                 .build();
 
         final DirectoryResource projectDirectoryResource = getCurrentDirectoryAsResource(uiContext);
-        newRadesProjectDescriptionFileGeneratorGenerator.generateProjectDescriptionFile(prompt, log, projectDirectoryResource, radesProject);
+        newRadesProjectDescriptionFileGeneratorGenerator.generateProjectDescriptionFile(prompt, log, projectDirectoryResource, radesProject,COMMAND_NAME);
 
         return Results
                 .success("Kommando " + COMMAND_NAME + " wurde erfolgreich ausgeführt.");
