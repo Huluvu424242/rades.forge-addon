@@ -23,7 +23,7 @@ public class NewRadesProjectDescriptionFileGenerator {
             , final UIOutput log
             , final DirectoryResource projectDir
             , final RadesProject radesProject
-    , final String commandName) throws IOException {
+            , final boolean forceOverrideFile) throws IOException {
 
         log.info(log.out(), "Generiere RadesDescriptionfile " +
                 RADES_JSON +
@@ -31,7 +31,7 @@ public class NewRadesProjectDescriptionFileGenerator {
 
         FileResource<?> radesProjectFile = null;
         try {
-            radesProjectFile = new FileResourceFactory(prompt, log).createFileResourceInteractive(projectDir, RADES_JSON, commandName);
+            radesProjectFile = new FileResourceFactory(prompt, log).createFileResource(projectDir, RADES_JSON, !forceOverrideFile);
         } catch (UserVetoException e) {
             return;
         } finally {

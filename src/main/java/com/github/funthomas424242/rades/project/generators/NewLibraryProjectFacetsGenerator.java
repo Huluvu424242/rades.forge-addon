@@ -39,7 +39,7 @@ public class NewLibraryProjectFacetsGenerator {
 
         FileResource<?> pomXML = null;
         try {
-            pomXML = new FileResourceFactory(prompt, log).createFileResourceInteractive(projectDir, POM_XML, "Maven Koordinaten");
+            pomXML = new FileResourceFactory(prompt, log).createFileResourceInteractive(projectDir, POM_XML);
         } catch (UserVetoException e) {
             return;
         } finally {

@@ -97,8 +97,10 @@ public class UpdateMavenCoordsCommand extends AbstractProjectUICommand {
                 .withVersion(version.getValue())
                 .build();
 
+        final boolean permitInteractions = true;
         final DirectoryResource projectDirectoryResource = getCurrentDirectoryAsResource(uiContext);
-        newRadesProjectDescriptionFileGeneratorGenerator.generateProjectDescriptionFile(prompt, log, projectDirectoryResource, radesProject,COMMAND_NAME);
+        newRadesProjectDescriptionFileGeneratorGenerator.generateProjectDescriptionFile
+                (prompt, log, projectDirectoryResource, radesProject,permitInteractions);
 
         return Results
                 .success("Kommando " + COMMAND_NAME + " wurde erfolgreich ausgeführt.");

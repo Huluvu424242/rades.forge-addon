@@ -3,7 +3,9 @@ package com.github.funthomas424242.rades.project.commands;
 import com.github.funthomas424242.rades.project.RadesProject;
 import com.github.funthomas424242.rades.project.RadesProjectBuilder;
 import com.github.funthomas424242.rades.project.generators.NewRadesProjectDescriptionFileGenerator;
-import com.github.funthomas424242.rades.project.validationrules.*;
+import com.github.funthomas424242.rades.project.validationrules.BintrayPackagename;
+import com.github.funthomas424242.rades.project.validationrules.BintrayRepositoryname;
+import com.github.funthomas424242.rades.project.validationrules.BintrayUsername;
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.ui.context.UIBuilder;
 import org.jboss.forge.addon.ui.context.UIContext;
@@ -26,7 +28,6 @@ public class UpdateBintrayCommand extends AbstractProjectUICommand {
 
     @Inject
     protected NewRadesProjectDescriptionFileGenerator newRadesProjectDescriptionFileGeneratorGenerator;
-
 
 
     @Inject
@@ -84,8 +85,10 @@ public class UpdateBintrayCommand extends AbstractProjectUICommand {
                 .withBintrayPackagename(bintrayPackagename.getValue())
                 .build();
 
+        final boolean permitInteractions = true;
         final DirectoryResource projectDirectoryResource = getCurrentDirectoryAsResource(uiContext);
-        newRadesProjectDescriptionFileGeneratorGenerator.generateProjectDescriptionFile(prompt, log, projectDirectoryResource, radesProject,COMMAND_NAME);
+        newRadesProjectDescriptionFileGeneratorGenerator.generateProjectDescriptionFile
+                (prompt, log, projectDirectoryResource, radesProject, permitInteractions);
 
         return Results
                 .success("Kommando " + COMMAND_NAME + " wurde erfolgreich ausgeführt.");
