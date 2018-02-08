@@ -5,18 +5,14 @@ import com.github.funthomas424242.flowdesign.Integration;
 import com.github.funthomas424242.rades.core.resources.UIResourceHelper;
 import com.github.funthomas424242.rades.project.RadesProject;
 import com.github.funthomas424242.rades.project.RadesProjectBuilder;
-import com.github.funthomas424242.rades.project.generators.NewRadesProjectDescriptionFileGenerator;
-import com.github.funthomas424242.rades.project.validationrules.ProjectDescription;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UIExecutionContext;
-import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.input.UIPrompt;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
-import org.jboss.forge.addon.ui.metadata.WithAttributes;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.forge.addon.ui.result.Results;
 import org.jboss.forge.addon.ui.util.Categories;
@@ -24,6 +20,7 @@ import org.jboss.forge.addon.ui.util.Metadata;
 
 import javax.inject.Inject;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 public class UpdateMavenCommand extends AbstractProjectUICommand {
 
@@ -32,20 +29,11 @@ public class UpdateMavenCommand extends AbstractProjectUICommand {
     @Inject
     protected UIResourceHelper commandHelper;
 
-    @Inject
-    protected NewRadesProjectDescriptionFileGenerator radesProjectInfoGenerator;
-
-
-    @Inject
-    @WithAttributes(label = "Projektverzeichnis:", required = true)
-    @ProjectDescription
-    protected UIInput<String> projectDescription;
-
     @Override
     public UICommandMetadata getMetadata(UIContext context) {
         return Metadata.forCommand(UpdateMavenCommand.class)
                 .name(COMMAND_NAME)
-                .description("Change a RADES project.")
+                .description("Update assets of a RADES project.")
                 .category(Categories.create(CATEGORY_RADES_PROJECT));
     }
 
@@ -65,31 +53,36 @@ public class UpdateMavenCommand extends AbstractProjectUICommand {
 
         final FileResource radesProjectDescriptionFile = commandHelper.getFileResourceFromCurrentDir(uiContext, RADES_PROJECTDESCRIPTION_FILE);
         final String jsonTxt = radesProjectDescriptionFile.getContents(CHARSET_UTF_8);
-        final RadesProject oldRadesProject = new ObjectMapper().readValue(jsonTxt, RadesProjectBuilder.RadesProjectImpl.class);
+        final RadesProject radesProject = new ObjectMapper().readValue(jsonTxt, RadesProjectBuilder.RadesProjectImpl.class);
 
-        final String projectDescription = oldRadesProject.getProjectDescription();
-        final boolean shouldOverride = prompt.promptBoolean("Soll die aktuelle Projektbeschreibung: " + projectDescription + " ersetzt werden?", false);
-        if (shouldOverride) {
-            final String newProjectDescription = prompt.prompt("Bitte neue Projektbeschreibung eingeben:");
+        // Replace info in pom.xml
+        final FileResource pomXML = commandHelper.getFileResourceFromCurrentDir(uiContext, "pom.xml");
 
-            // Replace in rades.json
-            final RadesProject radesProject = new RadesProjectBuilder(oldRadesProject)
-                    .withProjectDescription(newProjectDescription)
-                    .build();
-
-            // Replace info im rades.json
-            this.radesProjectInfoGenerator.saveRadesProjectInfo(radesProjectDescriptionFile, radesProject);
-
-
-            // Replace info in pom.xml
-            final FileResource pomXML = commandHelper.getFileResourceFromCurrentDir(uiContext, "pom.xml");
-
-            final MavenXpp3Reader pomReader = new MavenXpp3Reader();
-            final Model pomModel = pomReader.read(pomXML.getResourceInputStream());
-            pomModel.setDescription(newProjectDescription);
+        if (!pomXML.exists() || pomXML.getContents(StandardCharsets.UTF_8).isEmpty()) {
+            // create new pom.xml
+            final Model pomModel = new Model();
+            pomModel.setModelVersion("4.0.0");
+            pomModel.setGroupId(radesProject.getGroupID());
+            pomModel.setArtifactId(radesProject.getArtifactID());
+            pomModel.setVersion(radesProject.getVersion());
+            pomModel.setDescription(radesProject.getProjectDescription());
             final MavenXpp3Writer writer = new MavenXpp3Writer();
             final OutputStream ostream = pomXML.getResourceOutputStream();
             writer.write(ostream, pomModel);
+        } else {
+            // Update existing pom.xml
+            final boolean shouldOverride = prompt.promptBoolean("Soll die aktuelle pom.xml ersetzt werden?", false);
+            if (shouldOverride) {
+                final MavenXpp3Reader pomReader = new MavenXpp3Reader();
+                final Model pomModel = pomReader.read(pomXML.getResourceInputStream());
+                pomModel.setGroupId(radesProject.getGroupID());
+                pomModel.setArtifactId(radesProject.getArtifactID());
+                pomModel.setVersion(radesProject.getVersion());
+                pomModel.setDescription(radesProject.getProjectDescription());
+                final MavenXpp3Writer writer = new MavenXpp3Writer();
+                final OutputStream ostream = pomXML.getResourceOutputStream();
+                writer.write(ostream, pomModel);
+            }
         }
         return Results
                 .success("Kommando '" + COMMAND_NAME + "' wurde erfolgreich ausgeführt.");
