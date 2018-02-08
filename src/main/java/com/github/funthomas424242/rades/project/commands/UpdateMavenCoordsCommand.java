@@ -12,6 +12,7 @@ import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UIExecutionContext;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.input.UIPrompt;
+import org.jboss.forge.addon.ui.input.UISelectOne;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.metadata.WithAttributes;
 import org.jboss.forge.addon.ui.output.UIOutput;
@@ -21,10 +22,17 @@ import org.jboss.forge.addon.ui.util.Categories;
 import org.jboss.forge.addon.ui.util.Metadata;
 
 import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.List;
 
 public class UpdateMavenCoordsCommand extends AbstractProjectUICommand {
 
     public static final String COMMAND_NAME = "rades-project-updaterades";
+
+    protected enum OVERRIDE_BEHAIVIOR {
+        FORCE_OVERRIDE, NOT_FORCE_OVERRIDE
+    }
 
     @Inject
     protected NewRadesProjectDescriptionFileGenerator newRadesProjectDescriptionFileGeneratorGenerator;
@@ -45,6 +53,10 @@ public class UpdateMavenCoordsCommand extends AbstractProjectUICommand {
     @ProjectVersion
     protected UIInput<String> version;
 
+
+    @Inject
+    @WithAttributes(label = "Force override of files?", required = true, description = "Bestehende Dateien überschreiben?")
+    protected UISelectOne<OVERRIDE_BEHAIVIOR> forceOverride;
 
     @Override
     public UICommandMetadata getMetadata(UIContext context) {
@@ -78,6 +90,7 @@ public class UpdateMavenCoordsCommand extends AbstractProjectUICommand {
         builder.add(groupId);
         builder.add(artifactId);
         builder.add(version);
+        builder.add(forceOverride);
 
     }
 
@@ -97,10 +110,10 @@ public class UpdateMavenCoordsCommand extends AbstractProjectUICommand {
                 .withVersion(version.getValue())
                 .build();
 
-        final boolean permitInteractions = true;
+        final boolean permitInteractions = forceOverride.equals( OVERRIDE_BEHAIVIOR.FORCE_OVERRIDE);
         final DirectoryResource projectDirectoryResource = getCurrentDirectoryAsResource(uiContext);
         newRadesProjectDescriptionFileGeneratorGenerator.generateProjectDescriptionFile
-                (prompt, log, projectDirectoryResource, radesProject,permitInteractions);
+                (prompt, log, projectDirectoryResource, radesProject, permitInteractions);
 
         return Results
                 .success("Kommando " + COMMAND_NAME + " wurde erfolgreich ausgeführt.");
