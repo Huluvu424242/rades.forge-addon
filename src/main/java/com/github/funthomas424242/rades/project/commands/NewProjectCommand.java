@@ -71,6 +71,9 @@ public class NewProjectCommand extends AbstractProjectUICommand {
 
     @Override
     public boolean isEnabled(UIContext context) {
+//        final UIOutput logger = getLogger(context);
+//        logger.info(logger.out(),"\nCONTAINER"+context);
+//        logger.info(logger.out(),"\nprojectDIR"+projectDirName);
         final boolean isEnabled = super.isEnabled(context);
         final FileResource radesProjectDescription = getRadesProjectDescriptionfileAsResource(context);
         return isEnabled && !radesProjectDescription.exists();
