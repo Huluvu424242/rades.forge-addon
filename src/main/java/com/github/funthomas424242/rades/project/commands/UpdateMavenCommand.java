@@ -5,10 +5,7 @@ import com.github.funthomas424242.flowdesign.Integration;
 import com.github.funthomas424242.rades.core.resources.UIResourceHelper;
 import com.github.funthomas424242.rades.project.RadesProject;
 import com.github.funthomas424242.rades.project.RadesProjectBuilder;
-import org.apache.maven.model.DeploymentRepository;
-import org.apache.maven.model.DistributionManagement;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.Scm;
+import org.apache.maven.model.*;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.jboss.forge.addon.resource.FileResource;
@@ -25,6 +22,7 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class UpdateMavenCommand extends AbstractProjectUICommand {
 
@@ -90,6 +88,9 @@ public class UpdateMavenCommand extends AbstractProjectUICommand {
     protected void copyRadesProjectToPomModel(final RadesProject radesProject, final Model pomModel) {
         pomModel.setModelVersion("4.0.0");
         pomModel.setModelEncoding("UTF-8");
+        pomModel.addProperty("project.build.sourceEncoding","UTF-8");
+        pomModel.addProperty("maven.compiler.source","1.8");
+        pomModel.addProperty("maven.compiler.target","1.8");
 
         // projekt maven coordinaten + beschreibung
         pomModel.setGroupId(radesProject.getGroupID());
@@ -97,8 +98,30 @@ public class UpdateMavenCommand extends AbstractProjectUICommand {
         pomModel.setVersion(radesProject.getVersion());
         pomModel.setDescription(radesProject.getProjectDescription());
 
+        // license
+        final License license = new License();
+        license.setUrl("./LICENSE");
+        pomModel.setLicenses(Arrays.asList(license));
+
         // add github support
         if (hasFullGithubSupportInfo(radesProject)) {
+
+            // ci support
+            final CiManagement ciManagement = new CiManagement();
+            ciManagement.setSystem("Travis");
+            ciManagement.setUrl("https://travis-ci.org/"+radesProject.getGithubUsername()+"/"
+                    +radesProject.getGithubRepositoryname());
+            pomModel.setCiManagement(ciManagement);
+
+            // issues
+            final IssueManagement isssueManagement=new IssueManagement();
+            isssueManagement.setSystem("GitHub");
+            isssueManagement.setUrl("https://github.com/"
+                            +radesProject.getGithubUsername()+"/"
+                            +radesProject.getGithubRepositoryname()+"/issues/new");
+            pomModel.setIssueManagement(isssueManagement);
+
+            // scm
             final Scm scm = new Scm();
             scm.setUrl("https://github.com/" + radesProject.getGithubUsername() + "/"
                     + radesProject.getGithubRepositoryname());
