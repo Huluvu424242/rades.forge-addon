@@ -8,6 +8,7 @@ import com.github.funthomas424242.rades.project.RadesProjectBuilder;
 import org.apache.maven.model.DeploymentRepository;
 import org.apache.maven.model.DistributionManagement;
 import org.apache.maven.model.Model;
+import org.apache.maven.model.Scm;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.jboss.forge.addon.resource.FileResource;
@@ -96,7 +97,22 @@ public class UpdateMavenCommand extends AbstractProjectUICommand {
         pomModel.setVersion(radesProject.getVersion());
         pomModel.setDescription(radesProject.getProjectDescription());
 
-        //
+        // add github support
+        if (hasFullGithubSupportInfo(radesProject)) {
+            final Scm scm = new Scm();
+            scm.setUrl("https://github.com/" + radesProject.getGithubUsername() + "/"
+                    + radesProject.getGithubRepositoryname());
+            scm.setConnection("scm:git:https://github.com/"
+                    + radesProject.getGithubUsername() + "/"
+                    + radesProject.getGithubRepositoryname() + ".git");
+            scm.setDeveloperConnection("scm:git:git@github.com:"
+                    + radesProject.getGithubUsername() + "/"
+                    + radesProject.getGithubRepositoryname() + ".git"
+            );
+            pomModel.setScm(scm);
+        }
+
+        //add bintray support
         if (hasFullBintraySupportInfo(radesProject)) {
             final DistributionManagement distributionManagement = new DistributionManagement();
             final DeploymentRepository deploymentRepository = new DeploymentRepository();
@@ -112,10 +128,14 @@ public class UpdateMavenCommand extends AbstractProjectUICommand {
         }
     }
 
+    protected boolean hasFullGithubSupportInfo(RadesProject radesProject) {
+        return (radesProject.getGithubUsername() != null)
+                && (radesProject.getGithubRepositoryname() != null);
+    }
+
     protected boolean hasFullBintraySupportInfo(final RadesProject radesProject) {
         return (radesProject.getBintrayUsername() != null)
                 && (radesProject.getBintrayRepositoryname() != null)
                 && (radesProject.getBintrayPackagename() != null);
-
     }
 }
