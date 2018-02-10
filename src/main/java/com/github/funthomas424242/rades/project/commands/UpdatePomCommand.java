@@ -24,7 +24,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-public class UpdateMavenCommand extends AbstractProjectUICommand {
+public class UpdatePomCommand extends AbstractProjectUICommand {
 
     public static final String COMMAND_NAME = "rades-pom-update";
 
@@ -33,7 +33,7 @@ public class UpdateMavenCommand extends AbstractProjectUICommand {
 
     @Override
     public UICommandMetadata getMetadata(UIContext context) {
-        return Metadata.forCommand(UpdateMavenCommand.class)
+        return Metadata.forCommand(UpdatePomCommand.class)
                 .name(COMMAND_NAME)
                 .description("Update pom.xml of a RADES project.")
                 .category(Categories.create(CATEGORY_RADES_PROJECT));
