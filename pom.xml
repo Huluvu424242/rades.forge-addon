@@ -15,6 +15,12 @@
   </properties>
   <dependencyManagement>
     <dependencies>
+      <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-jdk14 -->
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-jdk14</artifactId>
+        <version>1.8.0-beta1</version>
+      </dependency>
       <dependency>
         <groupId>javax.annotation</groupId>
         <artifactId>jsr250-api</artifactId>
@@ -126,6 +132,16 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <!--<dependency>-->
+        <!--<groupId>org.asciidoctor</groupId>-->
+        <!--<artifactId>asciidoctorj</artifactId>-->
+        <!--<version>1.5.6</version>-->
+      <!--</dependency>-->
+      <dependency>
+        <groupId>io.github.swagger2markup</groupId>
+        <artifactId>markup-document-builder</artifactId>
+        <version>1.1.2</version>
+      </dependency>
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
@@ -135,6 +151,11 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+    <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-jdk14 -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-jdk14</artifactId>
+    </dependency>
     <dependency>
       <groupId>javax.annotation</groupId>
       <artifactId>jsr250-api</artifactId>
@@ -229,6 +250,16 @@
       <classifier>forge-addon</classifier>
       <scope>provided</scope>
     </dependency>
+    <!-- 3d libs -->
+    <!--<dependency>-->
+      <!--<groupId>org.asciidoctor</groupId>-->
+      <!--<artifactId>asciidoctorj</artifactId>-->
+    <!--</dependency>-->
+    <dependency>
+      <groupId>io.github.swagger2markup</groupId>
+      <artifactId>markup-document-builder</artifactId>
+    </dependency>
+    <!--test-->
     <dependency>
       <groupId>org.jboss.forge.furnace.test</groupId>
       <artifactId>furnace-test-harness</artifactId>
