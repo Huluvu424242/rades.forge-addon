@@ -154,7 +154,7 @@ public class NewProjectCommand extends AbstractProjectUICommand {
             updateBintrayCommand.execute(context);
         }
 
-        final UICommand updateProjectCommand = commandFactory.getCommandByName(uiContext, UpdateMavenCommand.COMMAND_NAME);
+        final UICommand updateProjectCommand = commandFactory.getCommandByName(uiContext, UpdatePomCommand.COMMAND_NAME);
         log.info(log.out(), "updateProjectCommand: " + updateProjectCommand);
         if (updateProjectCommand.isEnabled(uiContext)) {
             updateProjectCommand.execute(context);
