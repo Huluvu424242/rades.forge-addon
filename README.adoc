@@ -6,3 +6,6 @@ image:https://badge.waffle.io/FunThomas424242/rades.forge-addon.svg?columns=all[
 # rades.forge-addon
 JBoss Forge Addon für https://github.com/FunThomas424242/RADeS[RADeS]
 
+
+
+image:https://api.codacy.com/project/badge/Grade/0c2558b13f174205976b28f987035578[link="https://app.codacy.com/app/FunThomas424242/rades.forge-addon?utm_source=github.com&utm_medium=referral&utm_content=FunThomas424242/rades.forge-addon&utm_campaign=badger"]
