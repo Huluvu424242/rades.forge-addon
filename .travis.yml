@@ -1,18 +1,20 @@
 language: java
 
+env:
+  global:
+    secure: LxVpNKTFkmWmOLPgCZ98dkWn0vKs/dVXSze03yufMG23vC10Gmt6LH5+42Ey0HssTSClTa12D72MS8G7E8ZTiSsCuaZhj6haaShgzeBTPTzOCMW+nykRjyetM3LFvdBpEJo8dEClyKscALlNJ2A//c3YC724kOZrG8r7nD8WITtvNOJ/7Dix+6k3o/ZEUsS/sGvCPD4Jc+XT3LE782Fi5A1gpIPVhIfGg5OzcdE0rIBI4OlMwbPEqob1TkJ2GsPUavaHovlo6k+k1kHxIt9EeL2ZCpXQMpJOX6vgGi8GQPmU23uS9F+OSxkh3GH5iPZ7INl+an++qb08Fa+3/KqQyMmDt7OEmE6DJXGAjK86DT0H0JsHSPr6PeKjcbap9b4QVCw33UJ5K39gXoQCepWTQvcUTG+nXHdSePf5U5+5BEPwQ8E1pI3bjmypF0IsY3V6CKwMz1Nml8f1eXfpEJuN7na+qLPm8hwNb7zJcDEi1CjCac2rB3cyYpAefK3ZZl60iRKFWE7Sy2QJynQL3Qlm7nbI+H1xlEt9UgdDUipeJSEtj9ELx7pdB8sH4nctW5RZ58VwVM87JXA0KRGZ88CCQY3Km/IvyTER49ps9M+RlsugEpBit30D6oWJEwYGOsr0+enIYwffRKEwdyJaBb8BWrvsKUituc83rjmILlVEnIg=
+
+
 jdk:
   - oraclejdk8
-  #- openjdk9
-
-
 
 before_install:
   - sudo apt-get install jq
   - wget -O ~/codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r .assets[0].browser_download_url)
 
-
-script: "mvn clean install"
+script: mvn clean install
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - java -cp ~/codacy-coverage-reporter-assembly-latest.jar com.codacy.CodacyCoverageReporter -l Java -r build/reports/jacoco/test/jacocoTestReport.xml
+
