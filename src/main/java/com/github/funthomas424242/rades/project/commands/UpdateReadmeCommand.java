@@ -65,39 +65,46 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
 
         if (!readmeFileResource.exists() || readmeFileResource.getContents(StandardCharsets.UTF_8).isEmpty()) {
             // create new README.adoc
-            final MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
-            final List<MarkupTableColumn> tableRowsInPSV = new ArrayList<>();
-            final MarkupTableColumn column = new MarkupTableColumn("Header 1 | Header 2 | Header2",true,1);
-            builder.documentTitle("Test title")
-                    .sectionTitleLevel1("Section Level 1a")
-                    .sectionTitleLevel2("Section Level 2a")
-                    .sectionTitleLevel3("Section Level 3a")
-                    .paragraph("Paragraph with long text bla bla bla bla bla")
-                    .listingBlock("Source code listing")
-                    .block("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC)", MarkupBlockStyle.LISTING)
-                    .tableWithColumnSpecs(Arrays.asList(column),Arrays.asList(Arrays.asList("Hallo","Du","da")))
-                    .sectionTitleLevel1("Section Level 1b")
-                    .sectionTitleLevel2("Section Level 2b")
-                    .boldTextLine("Bold text line b")
-                    .italicTextLine("Italic text line b")
-                    .unorderedList(Arrays.asList("Entry1", "Entry2", "Entry 2"))
-                    .writeToFile(Paths.get(readmeFileResource.getParent().getFullyQualifiedName(), "README"), StandardCharsets.UTF_8);
-//
-//            final Model pomModel = new Model();
-//            copyRadesProjectToPomModel(radesProject, pomModel);
-//            writeModelToPomXml(pomModel, readmeFileResource);
+            copyContentTo(readmeFileResource);
         } else {
-//            // Update existing pom.xml
-//            final boolean shouldOverride = prompt.promptBoolean("Soll die aktuelle pom.xml ersetzt werden?", false);
-//            if (shouldOverride) {
-//                final MavenXpp3Reader pomReader = new MavenXpp3Reader();
-//                final Model pomModel = pomReader.read(readmeFileResource.getResourceInputStream());
-//                copyRadesProjectToPomModel(radesProject, pomModel);
-//                writeModelToPomXml(pomModel, readmeFileResource);
-//            }
+            // Update existing pom.xml
+            final boolean shouldOverride = prompt.promptBoolean("Soll die aktuelle pom.xml ersetzt werden?", false);
+            if (shouldOverride) {
+                copyContentTo(readmeFileResource);
+            }
         }
         return Results
                 .success("Kommando '" + COMMAND_NAME + "' wurde erfolgreich ausgeführt.");
+    }
+
+    public void copyContentTo(FileResource readmeFileResource) {
+        final MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+        final List<MarkupTableColumn> tableRowsInPSV = new ArrayList<>();
+        final MarkupTableColumn column = new MarkupTableColumn("Header 1 | Header 2 | Header2", true, 1);
+        builder.anchor("image:https://travis-ci.org/FunThomas424242/rades.forge-addon.svg?branch=master",
+                "Build STatus")
+                .newLine()
+                .documentTitle("Test title1")
+                .sectionTitleLevel1("Section Level 1a")
+                .sectionTitleLevel2("Section Level 2a")
+                .sectionTitleLevel3("Section Level 3a")
+                .block("Example", MarkupBlockStyle.EXAMPLE)
+                .block("Example", MarkupBlockStyle.EXAMPLE, "Example", null)
+                .block("Example", MarkupBlockStyle.EXAMPLE, null, MarkupAdmonition.IMPORTANT)
+                .block("Listing", MarkupBlockStyle.LISTING, null, MarkupAdmonition.CAUTION)
+                .block("Literal", MarkupBlockStyle.LITERAL, null, MarkupAdmonition.NOTE)
+                .block("Sidebar", MarkupBlockStyle.SIDEBAR, null, MarkupAdmonition.TIP)
+                .block("Passthrough", MarkupBlockStyle.PASSTHROUGH, null, MarkupAdmonition.WARNING)
+                .paragraph("Paragraph with long text bla bla bla bla bla")
+                .listingBlock("Source code listing")
+                .block("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC)", MarkupBlockStyle.LISTING)
+                .tableWithColumnSpecs(Arrays.asList(column), Arrays.asList(Arrays.asList("Hallo", "Du", "da")))
+                .sectionTitleLevel1("Section Level 1b")
+                .sectionTitleLevel2("Section Level 2b")
+                .boldTextLine("Bold text line b")
+                .italicTextLine("Italic text line b")
+                .unorderedList(Arrays.asList("Entry1", "Entry2", "Entry 2"))
+                .writeToFile(Paths.get(readmeFileResource.getParent().getFullyQualifiedName(), "README"), StandardCharsets.UTF_8);
     }
 
     protected void writeModelToPomXml(final Model pomModel, final FileResource pomXML) throws IOException {
