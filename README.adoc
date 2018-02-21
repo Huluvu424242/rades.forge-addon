@@ -5,6 +5,7 @@ image:https://api.codacy.com/project/badge/Grade/64f23754fdc1426a9216521cf5362d7
 image:https://codecov.io/gh/FunThomas424242/rades.forge-addon/branch/master/graph/badge.svg[link="https://codecov.io/gh/FunThomas424242/rades.forge-addon"]
 image:https://badge.waffle.io/FunThomas424242/rades.forge-addon.svg?columns=all["Waffle.io - Columns and their card count", link="https://waffle.io/FunThomas424242/rades.forge-addon"]
 
+[#document]
 = rades.forge-addon
 JBoss Forge Addon für https://github.com/FunThomas424242/RADeS[RADeS]
 
