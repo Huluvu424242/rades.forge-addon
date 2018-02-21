@@ -8,6 +8,9 @@ import com.github.funthomas424242.rades.project.RadesProjectBuilder;
 import io.github.swagger2markup.markup.builder.*;
 import org.apache.maven.model.*;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
+//import org.asciidoctor.Asciidoctor;
+//import org.asciidoctor.ast.DocumentHeader;
+//import org.asciidoctor.ast.StructuredDocument;
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UIExecutionContext;
@@ -23,9 +26,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class UpdateReadmeCommand extends AbstractProjectUICommand {
 
@@ -67,6 +68,19 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
             // create new README.adoc
             copyContentTo(readmeFileResource);
         } else {
+//            final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+//            final Document adocDocument=asciidoctor.load(readmeFileResource.getContents(),null);
+//            final Map options = new HashMap<String,Object>();
+//            final StructuredDocument adocDocument=asciidoctor.readDocumentStructure(readmeFileResource.getContents(),options);
+//            final DocumentHeader header = adocDocument.getHeader();
+//            System.out.println("####DOC:"+adocDocument.toString());
+//            List<ContentPart> images = document.getPartsByContext("image");
+//            for (ContentPart image : images){
+//                String src = (String) image.getAttributes().get("target");
+//                String alt = (String) image.getAttributes().get("alt");
+//                String link = (String) image.getAttributes().get("link");
+//            }
+
             // Update existing pom.xml
             final boolean shouldOverride = prompt.promptBoolean("Soll die aktuelle pom.xml ersetzt werden?", false);
             if (shouldOverride) {
@@ -81,7 +95,7 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
         final MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
         final List<MarkupTableColumn> tableRowsInPSV = new ArrayList<>();
         final MarkupTableColumn column = new MarkupTableColumn("Header 1 | Header 2 | Header2", true, 1);
-        builder.anchor("image:https://travis-ci.org/FunThomas424242/rades.forge-addon.svg?branch=master",
+        builder .anchor("image:https://travis-ci.org/FunThomas424242/rades.forge-addon.svg?branch=master",
                 "Build STatus")
                 .newLine()
                 .documentTitle("Test title1")
