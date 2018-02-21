@@ -1,7 +1,11 @@
 image:https://api.bintray.com/packages/funthomas424242/funthomas424242-libs/rades.forge-addon/images/download.svg[link="https://bintray.com/funthomas424242/funthomas424242-libs/rades.forge-addon/_latestVersion"]
+
 image:https://travis-ci.org/FunThomas424242/rades.forge-addon.svg?branch=master["Build Status", link="https://travis-ci.org/FunThomas424242/rades.forge-addon"]
+
 image:https://api.codacy.com/project/badge/Grade/64f23754fdc1426a9216521cf5362d71["Codacy code quality", link="https://www.codacy.com/app/FunThomas424242/rades.forge-addon?utm_source=github.com&utm_medium=referral&utm_content=FunThomas424242/rades.forge-addon&utm_campaign=Badge_Grade"]
+
 image:https://codecov.io/gh/FunThomas424242/rades.forge-addon/branch/master/graph/badge.svg[link="https://codecov.io/gh/FunThomas424242/rades.forge-addon"]
+
 image:https://badge.waffle.io/FunThomas424242/rades.forge-addon.svg?columns=all["Waffle.io - Columns and their card count", link="https://waffle.io/FunThomas424242/rades.forge-addon"]
 
 # rades.forge-addon
