@@ -67,7 +67,7 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
 
         if (!readmeFileResource.exists() || readmeFileResource.getContents(StandardCharsets.UTF_8).isEmpty()) {
             // create new README.adoc
-            copyContentTo(readmeFileResource);
+            copyContentTo(readmeFileResource,radesProject);
         } else {
             System.out.println("####ASCIIDOCTOR:");
             final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
@@ -101,7 +101,7 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
             // Update existing pom.xml
             final boolean shouldOverride = prompt.promptBoolean("Soll die aktuelle README.adoc ersetzt werden?", false);
             if (shouldOverride) {
-                copyContentTo(readmeFileResource);
+                copyContentTo(readmeFileResource,radesProject);
             }
         }
         return Results
@@ -118,13 +118,33 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
         System.out.println("##################:");
     }
 
-    public void copyContentTo(FileResource readmeFileResource) {
+    public void copyContentTo(FileResource readmeFileResource, final RadesProject radesProject) {
         final MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
         final List<MarkupTableColumn> tableRowsInPSV = new ArrayList<>();
         final MarkupTableColumn column = new MarkupTableColumn("Header 1 | Header 2 | Header2", true, 1);
-        builder .anchor("image:https://travis-ci.org/FunThomas424242/rades.forge-addon.svg?branch=master",
-                "Build STatus")
+
+        builder
+                .textLine("[#status]")
+                .textLine("image:https://api.bintray.com/packages/"+radesProject.getBintrayUsername()
+                        +"/"+radesProject.getBintrayRepositoryname()
+                        +"/"+radesProject.getBintrayPackagename()
+                        +"/images/download.svg[link=\"https://bintray.com/"
+                        +radesProject.getBintrayUsername()
+                        +"/"+radesProject.getBintrayRepositoryname()
+                        +"/"+radesProject.getBintrayPackagename()+"/_latestVersion")
+                .textLine("image:https://travis-ci.org"
+                        +"/"+radesProject.getGithubUsername()
+                        +"/"+radesProject.getGithubRepositoryname()+".svg?branch=master[\"Build Status\", link=\"https://travis-ci.org"
+                        +"/"+radesProject.getGithubUsername()
+                        +"/"+radesProject.getGithubRepositoryname())
+                .textLine("image:https://api.codacy.com/project/badge/Grade/64f23754fdc1426a9216521cf5362d71[\"Codacy code quality\", link=\"https://www.codacy.com/app/FunThomas424242/rades.forge-addon?utm_source=github.com&utm_medium=referral&utm_content=FunThomas424242/rades.forge-addon&utm_campaign=Badge_Grade")
+                .textLine("image:https://codecov.io/gh/FunThomas424242/rades.forge-addon/branch/master/graph/badge.svg[link=\"https://codecov.io/gh/FunThomas424242/rades.forge-addon")
+                .textLine("image:https://badge.waffle.io/FunThomas424242/rades.forge-addon.svg?columns=all[\"Waffle.io - Columns and their card count\", link=\"https://waffle.io/FunThomas424242/rades.forge-addon")
+
+
+
                 .newLine()
+                .sectionTitleWithAnchorLevel1("titel der section","status")
                 .documentTitle("Test title1")
                 .sectionTitleLevel1("Section Level 1a")
                 .sectionTitleLevel2("Section Level 2a")
