@@ -72,17 +72,17 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
             System.out.println("####ASCIIDOCTOR:");
             final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
             System.out.println("####ASCIIDOCTOR:"+asciidoctor);
-//            final Document adocDocument=asciidoctor.load(readmeFileResource.getContents(),null);
             final Map options = new HashMap<String,Object>();
             final StructuredDocument adocDocument=asciidoctor.readDocumentStructure(readmeFileResource.getContents(),options);
             final DocumentHeader header = adocDocument.getHeader();
             System.out.println("####DOCHeader:"+header.toString());
 
             final List<ContentPart> parts=adocDocument.getParts();
-//            for( ContentPart part : parts) {
-//                System.out.println("####PART:\n" +part.getContent());
-//            }
-            final ContentPart part0= parts.get(0);
+            for( ContentPart part : parts) {
+              showPart("####PART:",part);
+            }
+//            final ContentPart part0= parts.get(0);
+            final ContentPart part0= adocDocument.getPartById("status");
             showPart("0" ,part0);
             System.out.println("###Context:"+part0.getContext());
             System.out.println("###Content:"+part0.getContent());
