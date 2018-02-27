@@ -6,6 +6,7 @@ import com.github.funthomas424242.rades.core.resources.UIResourceHelper;
 import com.github.funthomas424242.rades.project.RadesProject;
 import com.github.funthomas424242.rades.project.RadesProjectBuilder;
 import io.github.swagger2markup.markup.builder.*;
+import io.github.swagger2markup.markup.builder.internal.asciidoc.AsciiDocBuilder;
 import org.apache.maven.model.*;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.asciidoctor.Asciidoctor;
@@ -67,41 +68,41 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
 
         if (!readmeFileResource.exists() || readmeFileResource.getContents(StandardCharsets.UTF_8).isEmpty()) {
             // create new README.adoc
-            copyContentTo(readmeFileResource,radesProject);
+            copyContentTo(readmeFileResource, radesProject);
         } else {
             System.out.println("####ASCIIDOCTOR:");
             final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
-            System.out.println("####ASCIIDOCTOR:"+asciidoctor);
-            final Map options = new HashMap<String,Object>();
-            final StructuredDocument adocDocument=asciidoctor.readDocumentStructure(readmeFileResource.getContents(),options);
+            System.out.println("####ASCIIDOCTOR:" + asciidoctor);
+            final Map options = new HashMap<String, Object>();
+            final StructuredDocument adocDocument = asciidoctor.readDocumentStructure(readmeFileResource.getContents(), options);
             final DocumentHeader header = adocDocument.getHeader();
-            System.out.println("####DOCHeader:"+header.toString());
+            System.out.println("####DOCHeader:" + header.toString());
 
-            final List<ContentPart> parts=adocDocument.getParts();
-            for( ContentPart part : parts) {
-              showPart("####PART:",part);
+            final List<ContentPart> parts = adocDocument.getParts();
+            for (ContentPart part : parts) {
+                showPart("####PART:", part);
             }
 //            final ContentPart part0= parts.get(0);
-            final ContentPart part0= adocDocument.getPartById("status");
-            showPart("0" ,part0);
-            System.out.println("###Context:"+part0.getContext());
-            System.out.println("###Content:"+part0.getContent());
+            final ContentPart part0 = adocDocument.getPartById("status");
+            showPart("0", part0);
+            System.out.println("###Context:" + part0.getContext());
+            System.out.println("###Content:" + part0.getContent());
 
 
             List<ContentPart> images = adocDocument.getPartsByContext("image");
-            for (ContentPart image : images){
+            for (ContentPart image : images) {
                 String src = (String) image.getAttributes().get("target");
                 String alt = (String) image.getAttributes().get("alt");
                 String link = (String) image.getAttributes().get("link");
-                System.out.println("###SRC:"+src);
-                System.out.println("###ALT:"+alt);
-                System.out.println("###Link:"+link);
+                System.out.println("###SRC:" + src);
+                System.out.println("###ALT:" + alt);
+                System.out.println("###Link:" + link);
             }
 
             // Update existing pom.xml
             final boolean shouldOverride = prompt.promptBoolean("Soll die aktuelle README.adoc ersetzt werden?", false);
             if (shouldOverride) {
-                copyContentTo(readmeFileResource,radesProject);
+                copyContentTo(readmeFileResource, radesProject);
             }
         }
         return Results
@@ -109,12 +110,12 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
     }
 
     public void showPart(final String partID, ContentPart part) {
-        System.out.println("####Style"+partID+":"+ part.getStyle());
-        System.out.println("####Role"+partID+":"+ part.getRole());
-        System.out.println("####Id"+partID+":"+ part.getId());
-        System.out.println("####Title:"+partID+":"+ part.getTitle());
-        System.out.println("####Level:"+partID+":"+ part.getLevel());
-        System.out.println("####Attributes:"+partID+":"+ part.getAttributes().toString());
+        System.out.println("####Style" + partID + ":" + part.getStyle());
+        System.out.println("####Role" + partID + ":" + part.getRole());
+        System.out.println("####Id" + partID + ":" + part.getId());
+        System.out.println("####Title:" + partID + ":" + part.getTitle());
+        System.out.println("####Level:" + partID + ":" + part.getLevel());
+        System.out.println("####Attributes:" + partID + ":" + part.getAttributes().toString());
         System.out.println("##################:");
     }
 
@@ -123,49 +124,45 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
         final List<MarkupTableColumn> tableRowsInPSV = new ArrayList<>();
         final MarkupTableColumn column = new MarkupTableColumn("Header 1 | Header 2 | Header2", true, 1);
 
-        builder
+        final String projectDescription = radesProject.getProjectDescription();
+        final MarkupDocBuilder document = builder
                 .textLine("[#status]")
-                .textLine("image:https://api.bintray.com/packages/"+radesProject.getBintrayUsername()
-                        +"/"+radesProject.getBintrayRepositoryname()
-                        +"/"+radesProject.getBintrayPackagename()
-                        +"/images/download.svg[link=\"https://bintray.com/"
-                        +radesProject.getBintrayUsername()
-                        +"/"+radesProject.getBintrayRepositoryname()
-                        +"/"+radesProject.getBintrayPackagename()+"/_latestVersion")
+                .textLine("image:https://api.bintray.com/packages/" + radesProject.getBintrayUsername()
+                        + "/" + radesProject.getBintrayRepositoryname()
+                        + "/" + radesProject.getBintrayPackagename()
+                        + "/images/download.svg[link=\"https://bintray.com/"
+                        + radesProject.getBintrayUsername()
+                        + "/" + radesProject.getBintrayRepositoryname()
+                        + "/" + radesProject.getBintrayPackagename() + "/_latestVersion")
                 .textLine("image:https://travis-ci.org"
-                        +"/"+radesProject.getGithubUsername()
-                        +"/"+radesProject.getGithubRepositoryname()+".svg?branch=master[\"Build Status\", link=\"https://travis-ci.org"
-                        +"/"+radesProject.getGithubUsername()
-                        +"/"+radesProject.getGithubRepositoryname())
-                .textLine("image:https://api.codacy.com/project/badge/Grade/64f23754fdc1426a9216521cf5362d71[\"Codacy code quality\", link=\"https://www.codacy.com/app/FunThomas424242/rades.forge-addon?utm_source=github.com&utm_medium=referral&utm_content=FunThomas424242/rades.forge-addon&utm_campaign=Badge_Grade")
-                .textLine("image:https://codecov.io/gh/FunThomas424242/rades.forge-addon/branch/master/graph/badge.svg[link=\"https://codecov.io/gh/FunThomas424242/rades.forge-addon")
-                .textLine("image:https://badge.waffle.io/FunThomas424242/rades.forge-addon.svg?columns=all[\"Waffle.io - Columns and their card count\", link=\"https://waffle.io/FunThomas424242/rades.forge-addon")
-
-
-
+                        + "/" + radesProject.getGithubUsername()
+                        + "/" + radesProject.getGithubRepositoryname() + ".svg?branch=master[\"Build Status\", link=\"https://travis-ci.org"
+                        + "/" + radesProject.getGithubUsername()
+                        + "/" + radesProject.getGithubRepositoryname())
+                .textLine("image:https://api.codacy.com/project/badge/Grade/64f23754fdc1426a9216521cf5362d71[\"Codacy code quality\", link=\"https://www.codacy.com/app"
+                        + "/" + radesProject.getGithubUsername()
+                        + "/" + radesProject.getGithubRepositoryname() + "?utm_source=github.com&utm_medium=referral&utm_content="
+                        + radesProject.getGithubUsername()
+                        + "/" + radesProject.getGithubRepositoryname() + "&utm_campaign=Badge_Grade")
+                .textLine("image:https://codecov.io/gh"
+                        + "/" + radesProject.getGithubUsername()
+                        + "/" + radesProject.getGithubRepositoryname() + "/branch/master/graph/badge.svg[link=\"https://codecov.io/gh"
+                        + "/" + radesProject.getGithubUsername()
+                        + "/" + radesProject.getGithubRepositoryname())
+                .textLine("image:https://badge.waffle.io"
+                        + "/" + radesProject.getGithubUsername()
+                        + "/" + radesProject.getGithubRepositoryname() + ".svg?columns=all[\"Waffle.io - Columns and their card count\", link=\"https://waffle.io"
+                        + "/" + radesProject.getGithubUsername()
+                        + "/" + radesProject.getGithubRepositoryname())
                 .newLine()
-                .sectionTitleWithAnchorLevel1("titel der section","status")
-                .documentTitle("Test title1")
-                .sectionTitleLevel1("Section Level 1a")
-                .sectionTitleLevel2("Section Level 2a")
-                .sectionTitleLevel3("Section Level 3a")
-                .block("Example", MarkupBlockStyle.EXAMPLE)
-                .block("Example", MarkupBlockStyle.EXAMPLE, "Example", null)
-                .block("Example", MarkupBlockStyle.EXAMPLE, null, MarkupAdmonition.IMPORTANT)
-                .block("Listing", MarkupBlockStyle.LISTING, null, MarkupAdmonition.CAUTION)
-                .block("Literal", MarkupBlockStyle.LITERAL, null, MarkupAdmonition.NOTE)
-                .block("Sidebar", MarkupBlockStyle.SIDEBAR, null, MarkupAdmonition.TIP)
-                .block("Passthrough", MarkupBlockStyle.PASSTHROUGH, null, MarkupAdmonition.WARNING)
-                .paragraph("Paragraph with long text bla bla bla bla bla")
-                .listingBlock("Source code listing")
-                .block("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC)", MarkupBlockStyle.LISTING)
-                .tableWithColumnSpecs(Arrays.asList(column), Arrays.asList(Arrays.asList("Hallo", "Du", "da")))
-                .sectionTitleLevel1("Section Level 1b")
-                .sectionTitleLevel2("Section Level 2b")
-                .boldTextLine("Bold text line b")
-                .italicTextLine("Italic text line b")
-                .unorderedList(Arrays.asList("Entry1", "Entry2", "Entry 2"))
-                .writeToFile(Paths.get(readmeFileResource.getParent().getFullyQualifiedName(), "README"), StandardCharsets.UTF_8);
+                .textLine("[#main]")
+                .documentTitle(radesProject.getGithubRepositoryname())
+                .newLine();
+
+        if (projectDescription != null) {
+            builder.paragraph(radesProject.getProjectDescription());
+        }
+        builder.writeToFile(Paths.get(readmeFileResource.getParent().getFullyQualifiedName(), "README"), StandardCharsets.UTF_8);
     }
 
     protected void writeModelToPomXml(final Model pomModel, final FileResource pomXML) throws IOException {
