@@ -41,7 +41,7 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
     public UICommandMetadata getMetadata(UIContext context) {
         return Metadata.forCommand(UpdateReadmeCommand.class)
                 .name(COMMAND_NAME)
-                .description("Update README.asciidoc of a RADES project.")
+                .description("Update README.adoc of a RADES project.")
                 .category(Categories.create(CATEGORY_RADES_PROJECT));
     }
 
@@ -61,7 +61,7 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
 
         final FileResource radesProjectDescriptionFile = commandHelper.getFileResourceFromCurrentDir(uiContext, RADES_PROJECTDESCRIPTION_FILE);
         final String jsonTxt = radesProjectDescriptionFile.getContents(CHARSET_UTF_8);
-        final RadesProject radesProject = new ObjectMapper().readValue(jsonTxt, RadesProjectBuilder.RadesProjectImpl.class);
+        final RadesProjectBuilder.RadesProjectImpl radesProject = new ObjectMapper().readValue(jsonTxt, RadesProjectBuilder.RadesProjectImpl.class);
 
         // Read README.asciidoc
         final FileResource readmeFileResource = commandHelper.getFileResourceFromCurrentDir(uiContext, "README.adoc");
