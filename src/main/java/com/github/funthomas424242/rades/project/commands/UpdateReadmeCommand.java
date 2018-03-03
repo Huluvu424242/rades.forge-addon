@@ -9,7 +9,6 @@ import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilders;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.ast.StructuredDocument;
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UIExecutionContext;
@@ -68,7 +67,7 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
         } else {
             final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
             final Map options = new HashMap<String, Object>();
-            final StructuredDocument adocDocument = asciidoctor.readDocumentStructure(readmeFileResource.getContents(), options);
+//            final StructuredDocument adocDocument = asciidoctor.readDocumentStructure(readmeFileResource.getContents(), options);
 //            final ContentPart part0 = adocDocument.getPartById("status");
 
             // TODO Ersetzung parts aus Readme.adoc
