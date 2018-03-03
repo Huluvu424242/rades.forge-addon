@@ -22,9 +22,6 @@ import org.jboss.forge.addon.ui.util.Categories;
 import org.jboss.forge.addon.ui.util.Metadata;
 
 import javax.inject.Inject;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.List;
 
 public class UpdateMavenCoordsCommand extends AbstractProjectUICommand {
 
