@@ -89,8 +89,7 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
 //        final MarkupTableColumn column = new MarkupTableColumn("Header 1 | Header 2 | Header2", true, 1);
 
         final String projectDescription = radesProject.getProjectDescription();
-        final MarkupDocBuilder document = builder
-                .textLine("[#status]")
+        builder.textLine("[#status]")
                 .textLine("image:https://api.bintray.com/packages/" + radesProject.getBintrayUsername()
                         + "/" + radesProject.getBintrayRepositoryname()
                         + "/" + radesProject.getBintrayPackagename()
