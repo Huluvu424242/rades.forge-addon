@@ -24,7 +24,8 @@ public class NewTravisFileGenerator {
 
         FileResource<?> travisFile = null;
         try {
-            travisFile = new FileResourceFactory(prompt, log).createFileResourceInteractive(projectDir, TRAVIS_FILE_NAME);
+            travisFile = new FileResourceFactory(prompt, log).createFileResourceInteractive
+                    (projectDir, TRAVIS_FILE_NAME);
         } catch (UserVetoException e) {
             return;
         } finally {

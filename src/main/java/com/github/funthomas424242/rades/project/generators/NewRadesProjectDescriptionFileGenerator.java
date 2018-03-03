@@ -19,7 +19,11 @@ public class NewRadesProjectDescriptionFileGenerator {
 
     public static final String RADES_JSON = "rades.json";
 
-    public void generateProjectDescriptionFile(final UIPrompt prompt, final UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws IOException {
+    public void generateProjectDescriptionFile(final UIPrompt prompt
+            , final UIOutput log
+            , final DirectoryResource projectDir
+            , final RadesProject radesProject
+            , final boolean forceOverrideFile) throws IOException {
 
         log.info(log.out(), "Generiere RadesDescriptionfile " +
                 RADES_JSON +
@@ -27,7 +31,7 @@ public class NewRadesProjectDescriptionFileGenerator {
 
         FileResource<?> radesProjectFile = null;
         try {
-            radesProjectFile = new FileResourceFactory(prompt, log).createFileResourceInteractive(projectDir, RADES_JSON);
+            radesProjectFile = new FileResourceFactory(prompt, log).createFileResource(projectDir, RADES_JSON, !forceOverrideFile);
         } catch (UserVetoException e) {
             return;
         } finally {
