@@ -11,7 +11,6 @@ import org.jboss.forge.addon.ui.context.UIBuilder;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UIExecutionContext;
 import org.jboss.forge.addon.ui.input.UIInput;
-import org.jboss.forge.addon.ui.input.UIPrompt;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.metadata.WithAttributes;
 import org.jboss.forge.addon.ui.output.UIOutput;
@@ -27,7 +26,7 @@ public class NewProjectCommand extends AbstractProjectUICommand {
     public static final String COMMAND_NAME = "rades-project-new";
 
     @Inject
-    CommandFactory commandFactory;
+    protected CommandFactory commandFactory;
 
     @Inject
     protected NewLibraryProjectFacetsGenerator newLibProjectGenerator;
@@ -115,7 +114,7 @@ public class NewProjectCommand extends AbstractProjectUICommand {
 
         final UIContext uiContext = context.getUIContext();
         final UIOutput log = uiContext.getProvider().getOutput();
-        final UIPrompt prompt = context.getPrompt();
+//        final UIPrompt prompt = context.getPrompt();
 
         setProjectDirToSubdirectory(uiContext, log, projectDirName.getValue());
 
