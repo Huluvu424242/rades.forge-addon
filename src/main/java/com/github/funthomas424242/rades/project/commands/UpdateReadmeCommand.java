@@ -65,8 +65,8 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
             // create new README.adoc
             copyContentTo(readmeFileResource, radesProject);
         } else {
-            final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
-            final Map options = new HashMap<String, Object>();
+//            final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+//            final Map options = new HashMap<String, Object>();
 //            final StructuredDocument adocDocument = asciidoctor.readDocumentStructure(readmeFileResource.getContents(), options);
 //            final ContentPart part0 = adocDocument.getPartById("status");
 
