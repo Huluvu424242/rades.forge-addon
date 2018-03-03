@@ -73,13 +73,6 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
             final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
             final Map options = new HashMap<String, Object>();
             final StructuredDocument adocDocument = asciidoctor.readDocumentStructure(readmeFileResource.getContents(), options);
-//            final DocumentHeader header = adocDocument.getHeader();
-//            System.out.println("####DOCHeader:" + header.toString());
-
-//            final List<ContentPart> parts = adocDocument.getParts();
-//            for (ContentPart part : parts) {
-//                showPart("####PART:", part);
-//            }
             final ContentPart part0 = adocDocument.getPartById("status");
 
             // TODO Ersetzung parts aus Readme.adoc
