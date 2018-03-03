@@ -73,7 +73,7 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
             final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
             final Map options = new HashMap<String, Object>();
             final StructuredDocument adocDocument = asciidoctor.readDocumentStructure(readmeFileResource.getContents(), options);
-            final ContentPart part0 = adocDocument.getPartById("status");
+//            final ContentPart part0 = adocDocument.getPartById("status");
 
             // TODO Ersetzung parts aus Readme.adoc
 
@@ -89,8 +89,8 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
 
     public void copyContentTo(FileResource readmeFileResource, final RadesProject radesProject) {
         final MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
-        final List<MarkupTableColumn> tableRowsInPSV = new ArrayList<>();
-        final MarkupTableColumn column = new MarkupTableColumn("Header 1 | Header 2 | Header2", true, 1);
+//        final List<MarkupTableColumn> tableRowsInPSV = new ArrayList<>();
+//        final MarkupTableColumn column = new MarkupTableColumn("Header 1 | Header 2 | Header2", true, 1);
 
         final String projectDescription = radesProject.getProjectDescription();
         final MarkupDocBuilder document = builder
