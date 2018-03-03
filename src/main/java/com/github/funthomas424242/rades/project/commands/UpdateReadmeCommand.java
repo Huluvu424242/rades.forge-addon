@@ -8,9 +8,7 @@ import com.github.funthomas424242.rades.project.RadesProjectBuilder;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilders;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
-import io.github.swagger2markup.markup.builder.MarkupTableColumn;
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.ast.ContentPart;
 import org.asciidoctor.ast.StructuredDocument;
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.ui.context.UIContext;
@@ -25,9 +23,7 @@ import org.jboss.forge.addon.ui.util.Metadata;
 import javax.inject.Inject;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class UpdateReadmeCommand extends AbstractProjectUICommand {
