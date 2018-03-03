@@ -92,27 +92,27 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
                         + "/images/download.svg[link=\"https://bintray.com/"
                         + radesProject.getBintrayUsername()
                         + "/" + radesProject.getBintrayRepositoryname()
-                        + "/" + radesProject.getBintrayPackagename() + "/_latestVersion")
+                        + "/" + radesProject.getBintrayPackagename() + "/_latestVersion"+"\"]")
                 .textLine("image:https://travis-ci.org"
                         + "/" + radesProject.getGithubUsername()
                         + "/" + radesProject.getGithubRepositoryname() + ".svg?branch=master[\"Build Status\", link=\"https://travis-ci.org"
                         + "/" + radesProject.getGithubUsername()
-                        + "/" + radesProject.getGithubRepositoryname())
+                        + "/" + radesProject.getGithubRepositoryname()+"\"]")
                 .textLine("image:https://api.codacy.com/project/badge/Grade/64f23754fdc1426a9216521cf5362d71[\"Codacy code quality\", link=\"https://www.codacy.com/app"
                         + "/" + radesProject.getGithubUsername()
                         + "/" + radesProject.getGithubRepositoryname() + "?utm_source=github.com&utm_medium=referral&utm_content="
                         + radesProject.getGithubUsername()
-                        + "/" + radesProject.getGithubRepositoryname() + "&utm_campaign=Badge_Grade")
+                        + "/" + radesProject.getGithubRepositoryname() + "&utm_campaign=Badge_Grade"+"\"]")
                 .textLine("image:https://codecov.io/gh"
                         + "/" + radesProject.getGithubUsername()
                         + "/" + radesProject.getGithubRepositoryname() + "/branch/master/graph/badge.svg[link=\"https://codecov.io/gh"
                         + "/" + radesProject.getGithubUsername()
-                        + "/" + radesProject.getGithubRepositoryname())
+                        + "/" + radesProject.getGithubRepositoryname()+"\"]")
                 .textLine("image:https://badge.waffle.io"
                         + "/" + radesProject.getGithubUsername()
                         + "/" + radesProject.getGithubRepositoryname() + ".svg?columns=all[\"Waffle.io - Columns and their card count\", link=\"https://waffle.io"
                         + "/" + radesProject.getGithubUsername()
-                        + "/" + radesProject.getGithubRepositoryname())
+                        + "/" + radesProject.getGithubRepositoryname()+"\"]")
                 .newLine()
                 .textLine("[#main]")
                 .documentTitle(radesProject.getGithubRepositoryname())
