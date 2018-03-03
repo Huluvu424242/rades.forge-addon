@@ -3,9 +3,7 @@ package com.github.funthomas424242.rades.project.commands;
 import com.github.funthomas424242.rades.project.RadesProject;
 import com.github.funthomas424242.rades.project.RadesProjectBuilder;
 import com.github.funthomas424242.rades.project.generators.NewRadesProjectDescriptionFileGenerator;
-import com.github.funthomas424242.rades.project.validationrules.ProjectArtifactId;
-import com.github.funthomas424242.rades.project.validationrules.ProjectGroupId;
-import com.github.funthomas424242.rades.project.validationrules.ProjectVersion;
+import com.github.funthomas424242.rades.project.validationrules.*;
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.ui.context.UIBuilder;
 import org.jboss.forge.addon.ui.context.UIContext;
@@ -21,65 +19,46 @@ import org.jboss.forge.addon.ui.util.Categories;
 import org.jboss.forge.addon.ui.util.Metadata;
 
 import javax.inject.Inject;
-import java.util.concurrent.Callable;
 
-public class RadesProjectAddRadesCommand extends RadesAbstractProjectUICommand {
+public class UpdateGithubCommand extends AbstractProjectUICommand {
 
-    public static final String COMMAND_NAME = "rades-project-addrades";
+    public static final String COMMAND_NAME = "rades-project-updategithub";
 
     @Inject
     protected NewRadesProjectDescriptionFileGenerator newRadesProjectDescriptionFileGeneratorGenerator;
 
+    @Inject
+    @WithAttributes(label = "Github Username:", required = true, defaultValue = "myGithubUsername")
+    @GithubUsername
+    protected UIInput<String> githubUsername;
 
     @Inject
-    @WithAttributes(label = "Group ID:", required = true, defaultValue = "com.github.myGithubUsername")
-    @ProjectGroupId
-    protected UIInput<String> groupId;
-
-    @Inject
-    @WithAttributes(label = "Artifact ID:", required = true)
-    @ProjectArtifactId
-    protected UIInput<String> artifactId;
-
-    @Inject
-    @WithAttributes(label = "Version:", required = true, defaultValue = "1.0.0-SNAPSHOT")
-    @ProjectVersion
-    protected UIInput<String> version;
+    @WithAttributes(label = "Github Repositoryname:", required = true)
+    @GithubRepositoryname
+    protected UIInput<String> githubRepositoryname;
 
 
     @Override
     public UICommandMetadata getMetadata(UIContext context) {
-        return Metadata.forCommand(RadesProjectAddRadesCommand.class)
+        return Metadata.forCommand(UpdateGithubCommand.class)
                 .name(COMMAND_NAME)
                 .description("Add maven Koordinaten zur RADeS Projektbeschreibung")
                 .category(Categories.create(CATEGORY_RADES_PROJECT));
+    }
+
+    @Override
+    public boolean isEnabled(UIContext context) {
+        final boolean isEnabled = super.isEnabled(context);
+        return isEnabled && existRadesProjectDescriptionfileAtCurrentDirectory(context);
     }
 
 
     @Override
     public void initializeUI(UIBuilder builder) throws Exception {
         super.initializeUI(builder);
-//        final UIOutput log = getLogger(builder.getUIContext());
-//        final RadesProject radesProject = getRadesProjectBuilderFromFile(builder.getUIContext()).build();
-
-        // init handler
-
-//        artifactId.setDefaultValue(
-//                new Callable<String>() {
-//                    @Override
-//                    public String call() {
-//                        if (artifactId.getValue() == null) {
-//                            return "Wert aus rades.json";
-//                        }
-//                        return artifactId.getValue();
-//                    }
-//                });
-
         // add the inputs
-        builder.add(groupId);
-        builder.add(artifactId);
-        builder.add(version);
-
+        builder.add(githubUsername);
+        builder.add(githubRepositoryname);
     }
 
 
@@ -93,13 +72,14 @@ public class RadesProjectAddRadesCommand extends RadesAbstractProjectUICommand {
         final RadesProjectBuilder builder = getRadesProjectBuilderFromFile(uiContext);
         // Create RadesProjectDescription
         final RadesProject radesProject = builder
-                .withGroupID(groupId.getValue())
-                .withArtifactID(artifactId.getValue())
-                .withVersion(version.getValue())
+                .withGithubUsername(githubUsername.getValue())
+                .withGithubRepositoryname(githubRepositoryname.getValue())
                 .build();
 
+        final boolean permitInteractions = true;
         final DirectoryResource projectDirectoryResource = getCurrentDirectoryAsResource(uiContext);
-        newRadesProjectDescriptionFileGeneratorGenerator.generateProjectDescriptionFile(prompt, log, projectDirectoryResource, radesProject);
+        newRadesProjectDescriptionFileGeneratorGenerator.generateProjectDescriptionFile
+                (prompt, log, projectDirectoryResource, radesProject,permitInteractions);
 
         return Results
                 .success("Kommando " + COMMAND_NAME + " wurde erfolgreich ausgeführt.");

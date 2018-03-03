@@ -7,7 +7,8 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 
-//@RadesAbstractDomainobject
+//@RadesAddBuilder
+//@RadesAddAccessor
 public abstract class RadesProject implements RadesProjectAccessor {
 
 
