@@ -26,22 +26,11 @@ public class NewProjectCommand extends AbstractProjectUICommand {
 
     public static final String COMMAND_NAME = "rades-project-new";
 
-//    protected static final List<String> MAVEN_REPO_LIST = Arrays.asList(
-//            "https://mvnrepository.com/artifact", "https://jcenter.bintray.com/");
-
-
     @Inject
     CommandFactory commandFactory;
 
-//    @Inject
-//    CommandControllerFactory commandControllerFactory;
-
     @Inject
     protected NewLibraryProjectFacetsGenerator newLibProjectGenerator;
-
-
-//    @Inject
-//    protected NewProjectReadmeFileGenerator newProjectReadmeFileGeneratorGenerator;
 
     @Inject
     protected NewTravisFileGenerator newTravisFileGenerator;
@@ -71,9 +60,6 @@ public class NewProjectCommand extends AbstractProjectUICommand {
 
     @Override
     public boolean isEnabled(UIContext context) {
-//        final UIOutput logger = getLogger(context);
-//        logger.info(logger.out(),"\nCONTAINER"+context);
-//        logger.info(logger.out(),"\nprojectDIR"+projectDirName);
         final boolean isEnabled = super.isEnabled(context);
         final FileResource radesProjectDescription = getRadesProjectDescriptionfileAsResource(context);
         return isEnabled && !radesProjectDescription.exists();
@@ -92,16 +78,13 @@ public class NewProjectCommand extends AbstractProjectUICommand {
         }
 
         final UICommand updateGithubCommand = commandFactory.getCommandByName(uiContext, UpdateGithubCommand.COMMAND_NAME);
-//        if (updateGithubCommand.isEnabled(uiContext)) {
         updateGithubCommand.initializeUI(builder);
-//        }
-
 
         final UICommand updateBintrayCommand = commandFactory.getCommandByName(uiContext, UpdateBintrayCommand.COMMAND_NAME);
-//        if (updateBintrayCommand.isEnabled(uiContext)) {
         updateBintrayCommand.initializeUI(builder);
-//        }
 
+        final UICommand updateReadmeCommand = commandFactory.getCommandByName(uiContext, UpdateReadmeCommand.COMMAND_NAME);
+        updateReadmeCommand.initializeUI(builder);
 
         // Auswahlen initialisieren
 //        repositories.setValueChoices(MAVEN_REPO_LIST);
@@ -158,6 +141,12 @@ public class NewProjectCommand extends AbstractProjectUICommand {
         log.info(log.out(), "updateProjectCommand: " + updateProjectCommand);
         if (updateProjectCommand.isEnabled(uiContext)) {
             updateProjectCommand.execute(context);
+        }
+
+        final UICommand updateReadmeCommand = commandFactory.getCommandByName(uiContext, UpdateReadmeCommand.COMMAND_NAME);
+        log.info(log.out(), "updateReadmeCommand: " + updateReadmeCommand);
+        if (updateReadmeCommand.isEnabled(uiContext)) {
+            updateReadmeCommand.execute(context);
         }
 
 
