@@ -11,5 +11,7 @@ JBoss Forge Addon für https://github.com/FunThomas424242/RADeS[RADeS]
 
 :toc: left
 
+image:http://bitrad.io/images/BRO234x60.gif["BitRadio",link="http://bitrad.io/?ref=159444"]
+
 
 
