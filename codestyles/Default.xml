@@ -1,7 +1,8 @@
 <code_scheme name="Default" version="173">
   <JavaCodeStyleSettings>
-    <option name="USE_FQ_CLASS_NAMES" value="true" />
-    <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="500" />
-    <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="500" />
+    <option name="GENERATE_FINAL_LOCALS" value="true" />
+    <option name="GENERATE_FINAL_PARAMETERS" value="true" />
+    <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="5000" />
+    <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="5000" />
   </JavaCodeStyleSettings>
 </code_scheme>
