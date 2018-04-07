@@ -302,9 +302,9 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <id>bintray-funthomas424242-funthomas424242-libs</id>
+            <id>central</id>
             <name>bintray</name>
-            <url>https://dl.bintray.com/funthomas424242/funthomas424242-libs</url>
+            <url>https://jcenter.bintray.com</url>
         </repository>
         <repository>
             <snapshots>
