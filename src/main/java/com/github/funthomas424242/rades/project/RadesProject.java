@@ -1,15 +1,16 @@
 package com.github.funthomas424242.rades.project;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.github.funthomas424242.rades.annotations.RadesAddBuilder;
 import com.github.funthomas424242.rades.project.validationrules.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 
-//@RadesAddBuilder
+@RadesAddBuilder
 //@RadesAddAccessor
-public abstract class RadesProject implements RadesProjectAccessor {
+public class RadesProject{
 
 
     // MAVEN Koordinaten TODO extract into separate class with builder

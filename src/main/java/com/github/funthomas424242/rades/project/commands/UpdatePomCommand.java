@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.funthomas424242.flowdesign.Integration;
 import com.github.funthomas424242.rades.core.resources.UIResourceHelper;
 import com.github.funthomas424242.rades.project.RadesProject;
+import com.github.funthomas424242.rades.project.RadesProjectAccessor;
 import com.github.funthomas424242.rades.project.RadesProjectBuilder;
 import org.apache.maven.model.*;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
@@ -55,7 +56,7 @@ public class UpdatePomCommand extends AbstractProjectUICommand {
 
         final FileResource radesProjectDescriptionFile = commandHelper.getFileResourceFromCurrentDir(uiContext, RADES_PROJECTDESCRIPTION_FILE);
         final String jsonTxt = radesProjectDescriptionFile.getContents(CHARSET_UTF_8);
-        final RadesProject radesProject = new ObjectMapper().readValue(jsonTxt, RadesProjectBuilder.RadesProjectImpl.class);
+        final RadesProject radesProject = new ObjectMapper().readValue(jsonTxt, RadesProject.class);
 
         // Replace info in pom.xml
         final FileResource pomXML = commandHelper.getFileResourceFromCurrentDir(uiContext, "pom.xml");
@@ -92,11 +93,13 @@ public class UpdatePomCommand extends AbstractProjectUICommand {
         pomModel.addProperty("maven.compiler.source","1.8");
         pomModel.addProperty("maven.compiler.target","1.8");
 
+        final RadesProjectAccessor radesProjectAccessor = new RadesProjectAccessor(radesProject);
+
         // projekt maven coordinaten + beschreibung
-        pomModel.setGroupId(radesProject.getGroupID());
-        pomModel.setArtifactId(radesProject.getArtifactID());
-        pomModel.setVersion(radesProject.getVersion());
-        pomModel.setDescription(radesProject.getProjectDescription());
+        pomModel.setGroupId(radesProjectAccessor.getGroupID());
+        pomModel.setArtifactId(radesProjectAccessor.getArtifactID());
+        pomModel.setVersion(radesProjectAccessor.getVersion());
+        pomModel.setDescription(radesProjectAccessor.getProjectDescription());
 
         // license
         final License license = new License();
@@ -104,59 +107,59 @@ public class UpdatePomCommand extends AbstractProjectUICommand {
         pomModel.setLicenses(Arrays.asList(license));
 
         // add github support
-        if (hasFullGithubSupportInfo(radesProject)) {
+        if (hasFullGithubSupportInfo(radesProjectAccessor)) {
 
             // ci support
             final CiManagement ciManagement = new CiManagement();
             ciManagement.setSystem("Travis");
-            ciManagement.setUrl("https://travis-ci.org/"+radesProject.getGithubUsername()+"/"
-                    +radesProject.getGithubRepositoryname());
+            ciManagement.setUrl("https://travis-ci.org/"+radesProjectAccessor.getGithubUsername()+"/"
+                    +radesProjectAccessor.getGithubRepositoryname());
             pomModel.setCiManagement(ciManagement);
 
             // issues
             final IssueManagement isssueManagement=new IssueManagement();
             isssueManagement.setSystem("GitHub");
             isssueManagement.setUrl("https://github.com/"
-                            +radesProject.getGithubUsername()+"/"
-                            +radesProject.getGithubRepositoryname()+"/issues/new");
+                            +radesProjectAccessor.getGithubUsername()+"/"
+                            +radesProjectAccessor.getGithubRepositoryname()+"/issues/new");
             pomModel.setIssueManagement(isssueManagement);
 
             // scm
             final Scm scm = new Scm();
-            scm.setUrl("https://github.com/" + radesProject.getGithubUsername() + "/"
-                    + radesProject.getGithubRepositoryname());
+            scm.setUrl("https://github.com/" + radesProjectAccessor.getGithubUsername() + "/"
+                    + radesProjectAccessor.getGithubRepositoryname());
             scm.setConnection("scm:git:https://github.com/"
-                    + radesProject.getGithubUsername() + "/"
-                    + radesProject.getGithubRepositoryname() + ".git");
+                    + radesProjectAccessor.getGithubUsername() + "/"
+                    + radesProjectAccessor.getGithubRepositoryname() + ".git");
             scm.setDeveloperConnection("scm:git:git@github.com:"
-                    + radesProject.getGithubUsername() + "/"
-                    + radesProject.getGithubRepositoryname() + ".git"
+                    + radesProjectAccessor.getGithubUsername() + "/"
+                    + radesProjectAccessor.getGithubRepositoryname() + ".git"
             );
             pomModel.setScm(scm);
         }
 
         //add bintray support
-        if (hasFullBintraySupportInfo(radesProject)) {
+        if (hasFullBintraySupportInfo(radesProjectAccessor)) {
             final DistributionManagement distributionManagement = new DistributionManagement();
             final DeploymentRepository deploymentRepository = new DeploymentRepository();
-            deploymentRepository.setId("bintray-" + radesProject.getBintrayUsername() + "-" + radesProject.getBintrayRepositoryname());
-            deploymentRepository.setName(radesProject.getBintrayUsername() + "-" + radesProject.getBintrayRepositoryname());
+            deploymentRepository.setId("bintray-" + radesProjectAccessor.getBintrayUsername() + "-" + radesProjectAccessor.getBintrayRepositoryname());
+            deploymentRepository.setName(radesProjectAccessor.getBintrayUsername() + "-" + radesProjectAccessor.getBintrayRepositoryname());
             deploymentRepository.setUrl("https://api.bintray.com/maven/"
-                    + radesProject.getBintrayUsername() + "/"
-                    + radesProject.getBintrayRepositoryname() + "/"
-                    + radesProject.getBintrayPackagename() + "/;publish=1"
+                    + radesProjectAccessor.getBintrayUsername() + "/"
+                    + radesProjectAccessor.getBintrayRepositoryname() + "/"
+                    + radesProjectAccessor.getBintrayPackagename() + "/;publish=1"
             );
             distributionManagement.setRepository(deploymentRepository);
             pomModel.setDistributionManagement(distributionManagement);
         }
     }
 
-    protected boolean hasFullGithubSupportInfo(RadesProject radesProject) {
+    protected boolean hasFullGithubSupportInfo(RadesProjectAccessor radesProject) {
         return (radesProject.getGithubUsername() != null)
                 && (radesProject.getGithubRepositoryname() != null);
     }
 
-    protected boolean hasFullBintraySupportInfo(final RadesProject radesProject) {
+    protected boolean hasFullBintraySupportInfo(final RadesProjectAccessor radesProject) {
         return (radesProject.getBintrayUsername() != null)
                 && (radesProject.getBintrayRepositoryname() != null)
                 && (radesProject.getBintrayPackagename() != null);

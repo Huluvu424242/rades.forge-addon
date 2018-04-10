@@ -1,10 +1,10 @@
 package com.github.funthomas424242.rades.project.generators;
 
-import com.github.funthomas424242.rades.core.resources.FileResourceFactory;
-import com.github.funthomas424242.rades.core.resources.UserVetoException;
 import com.github.funthomas424242.flowdesign.Integration;
 import com.github.funthomas424242.flowdesign.Operation;
-import com.github.funthomas424242.rades.project.RadesProject;
+import com.github.funthomas424242.rades.core.resources.FileResourceFactory;
+import com.github.funthomas424242.rades.core.resources.UserVetoException;
+import com.github.funthomas424242.rades.project.RadesProjectAccessor;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.jboss.forge.addon.maven.projects.MavenBuildSystem;
@@ -33,7 +33,7 @@ public class NewLibraryProjectFacetsGenerator {
     protected MavenBuildSystem buildSystem;
 
     @Integration
-    public void generate(final UIPrompt prompt, UIOutput log, final DirectoryResource projectDir, final RadesProject radesProject) throws Exception {
+    public void generate(final UIPrompt prompt, UIOutput log, final DirectoryResource projectDir, final RadesProjectAccessor radesProject) throws Exception {
 
         log.info(log.out(), "Generiere Projektfacetten wie pom.xml und ähnliches im Ordner " + projectDir.getName());
 
@@ -52,7 +52,7 @@ public class NewLibraryProjectFacetsGenerator {
 
     @Operation
     protected void initializeIfEmpty(FileResource<?> pomXML
-            , final RadesProject radesProject) throws Exception {
+            , final RadesProjectAccessor radesProject) throws Exception {
 
         if (pomXML.getContents(StandardCharsets.UTF_8).isEmpty()) {
             final Model pomModel = new Model();

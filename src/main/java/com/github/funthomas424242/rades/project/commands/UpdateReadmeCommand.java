@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.funthomas424242.flowdesign.Integration;
 import com.github.funthomas424242.rades.core.resources.UIResourceHelper;
 import com.github.funthomas424242.rades.project.RadesProject;
-import com.github.funthomas424242.rades.project.RadesProjectBuilder;
+import com.github.funthomas424242.rades.project.RadesProjectAccessor;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilders;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
@@ -53,14 +53,15 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
 
         final FileResource radesProjectDescriptionFile = commandHelper.getFileResourceFromCurrentDir(uiContext, RADES_PROJECTDESCRIPTION_FILE);
         final String jsonTxt = radesProjectDescriptionFile.getContents(CHARSET_UTF_8);
-        final RadesProjectBuilder.RadesProjectImpl radesProject = new ObjectMapper().readValue(jsonTxt, RadesProjectBuilder.RadesProjectImpl.class);
+        final RadesProject readesProject = new ObjectMapper().readValue(jsonTxt, RadesProject.class);
+        final RadesProjectAccessor radesProjectAccessor = new RadesProjectAccessor(readesProject);
 
         // Read README.asciidoc
         final FileResource readmeFileResource = commandHelper.getFileResourceFromCurrentDir(uiContext, "README.adoc");
 
         if (!readmeFileResource.exists() || readmeFileResource.getContents(StandardCharsets.UTF_8).isEmpty()) {
             // create new README.adoc
-            copyContentTo(readmeFileResource, radesProject);
+            copyContentTo(readmeFileResource, radesProjectAccessor);
         } else {
 //            final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
 //            final Map options = new HashMap<String, Object>();
@@ -72,14 +73,14 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
             // Update existing pom.xml
             final boolean shouldOverride = prompt.promptBoolean("Soll die aktuelle README.adoc ersetzt werden?", false);
             if (shouldOverride) {
-                copyContentTo(readmeFileResource, radesProject);
+                copyContentTo(readmeFileResource, radesProjectAccessor);
             }
         }
         return Results
                 .success("Kommando '" + COMMAND_NAME + "' wurde erfolgreich ausgeführt.");
     }
 
-    public void copyContentTo(FileResource readmeFileResource, final RadesProject radesProject) {
+    public void copyContentTo(FileResource readmeFileResource, final RadesProjectAccessor radesProject) {
         final MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
 //        final List<MarkupTableColumn> tableRowsInPSV = new ArrayList<>();
 //        final MarkupTableColumn column = new MarkupTableColumn("Header 1 | Header 2 | Header2", true, 1);
@@ -92,27 +93,27 @@ public class UpdateReadmeCommand extends AbstractProjectUICommand {
                         + "/images/download.svg[link=\"https://bintray.com/"
                         + radesProject.getBintrayUsername()
                         + "/" + radesProject.getBintrayRepositoryname()
-                        + "/" + radesProject.getBintrayPackagename() + "/_latestVersion"+"\"]")
+                        + "/" + radesProject.getBintrayPackagename() + "/_latestVersion" + "\"]")
                 .textLine("image:https://travis-ci.org"
                         + "/" + radesProject.getGithubUsername()
                         + "/" + radesProject.getGithubRepositoryname() + ".svg?branch=master[\"Build Status\", link=\"https://travis-ci.org"
                         + "/" + radesProject.getGithubUsername()
-                        + "/" + radesProject.getGithubRepositoryname()+"\"]")
+                        + "/" + radesProject.getGithubRepositoryname() + "\"]")
                 .textLine("image:https://api.codacy.com/project/badge/Grade/64f23754fdc1426a9216521cf5362d71[\"Codacy code quality\", link=\"https://www.codacy.com/app"
                         + "/" + radesProject.getGithubUsername()
                         + "/" + radesProject.getGithubRepositoryname() + "?utm_source=github.com&utm_medium=referral&utm_content="
                         + radesProject.getGithubUsername()
-                        + "/" + radesProject.getGithubRepositoryname() + "&utm_campaign=Badge_Grade"+"\"]")
+                        + "/" + radesProject.getGithubRepositoryname() + "&utm_campaign=Badge_Grade" + "\"]")
                 .textLine("image:https://codecov.io/gh"
                         + "/" + radesProject.getGithubUsername()
                         + "/" + radesProject.getGithubRepositoryname() + "/branch/master/graph/badge.svg[link=\"https://codecov.io/gh"
                         + "/" + radesProject.getGithubUsername()
-                        + "/" + radesProject.getGithubRepositoryname()+"\"]")
+                        + "/" + radesProject.getGithubRepositoryname() + "\"]")
                 .textLine("image:https://badge.waffle.io"
                         + "/" + radesProject.getGithubUsername()
                         + "/" + radesProject.getGithubRepositoryname() + ".svg?columns=all[\"Waffle.io - Columns and their card count\", link=\"https://waffle.io"
                         + "/" + radesProject.getGithubUsername()
-                        + "/" + radesProject.getGithubRepositoryname()+"\"]")
+                        + "/" + radesProject.getGithubRepositoryname() + "\"]")
                 .newLine()
                 .textLine("[#main]")
                 .documentTitle(radesProject.getGithubRepositoryname())

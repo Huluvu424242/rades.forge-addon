@@ -3,6 +3,7 @@ package com.github.funthomas424242.rades.project.generators;
 import com.github.funthomas424242.rades.core.resources.FileResourceFactory;
 import com.github.funthomas424242.rades.core.resources.UserVetoException;
 import com.github.funthomas424242.rades.project.RadesProject;
+import com.github.funthomas424242.rades.project.RadesProjectAccessor;
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.ui.input.UIPrompt;
@@ -32,14 +33,15 @@ public class NewProjectReadmeFileGenerator {
             }
         }
 
+        final RadesProjectAccessor radesProjectAccessor = new RadesProjectAccessor(radesProject);
 
-        final String githubUsername = radesProject.getGithubUsername();
-        final String githubRepositoryname = radesProject.getGithubRepositoryname();
+        final String githubUsername = radesProjectAccessor.getGithubUsername();
+        final String githubRepositoryname = radesProjectAccessor.getGithubRepositoryname();
         final String githubProjectDescription = "Kurze Beschreibung des Projektes in einem Satz.";
-        final String bintrayUsername = radesProject.getBintrayUsername();
-        final String bintrayRepositoryname = radesProject.getBintrayRepositoryname();
-        final String bintrayPackagename = radesProject.getBintrayPackagename();
-        final String projectDirname = radesProject.getProjectDirName();
+        final String bintrayUsername = radesProjectAccessor.getBintrayUsername();
+        final String bintrayRepositoryname = radesProjectAccessor.getBintrayRepositoryname();
+        final String bintrayPackagename = radesProjectAccessor.getBintrayPackagename();
+        final String projectDirname = radesProjectAccessor.getProjectDirName();
 
 
         final OutputStream outStream = readmeFile.getResourceOutputStream(false);

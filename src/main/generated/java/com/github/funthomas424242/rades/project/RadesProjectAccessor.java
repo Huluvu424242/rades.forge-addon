@@ -3,29 +3,58 @@ package com.github.funthomas424242.rades.project;
 import javax.annotation.Generated;
 
 @Generated("com.github.funthomas424242.rades.builder.annotation.RadesAbstractDomainobject")
-public interface RadesProjectAccessor {
+public class RadesProjectAccessor {
 
-    String getGroupID();
 
-    String getArtifactID();
+    final protected RadesProject radesProject;
 
-    String getClassifier();
+    public RadesProjectAccessor(final RadesProject radesProject){
+        this.radesProject=radesProject;
+    }
 
-    String getVersion();
+    public String getGroupID(){
+        return radesProject.groupID;
+    }
 
-    String getProjectDescription();
+    public String getArtifactID(){
+        return radesProject.artifactID;
+    }
 
-    String getProjectDirName();
+    String getClassifier(){
+        return radesProject.classifier;
+    }
 
-    String getGithubUsername();
+    public String getVersion(){
+        return radesProject.version;
+    }
 
-    String getGithubRepositoryname();
+    public String getProjectDescription(){
+        return radesProject.projectDescription;
+    }
 
-    String getBintrayUsername();
+    public String getProjectDirName(){
+        return radesProject.projectDirName;
+    }
 
-    String getBintrayRepositoryname();
+    public String getGithubUsername(){
+        return radesProject.githubUsername;
+    }
 
-    String getBintrayPackagename();
+    public String getGithubRepositoryname(){
+        return radesProject.githubRepositoryname;
+    }
+
+    public String getBintrayUsername(){
+        return radesProject.bintrayUsername;
+    }
+
+    public String getBintrayRepositoryname(){
+        return radesProject.bintrayRepositoryname;
+    }
+
+    public String getBintrayPackagename(){
+        return radesProject.bintrayPackagename;
+    }
 
 
 }

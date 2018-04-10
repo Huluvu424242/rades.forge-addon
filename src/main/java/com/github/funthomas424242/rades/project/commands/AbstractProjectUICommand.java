@@ -34,7 +34,7 @@ public abstract class AbstractProjectUICommand extends RadesAbstractUICommand im
         if (radesProjectDescriptionFile.exists()) {
             log.info(log.out(), "Radesfile exists");
             final String jsonContent = radesProjectDescriptionFile.getContents(CHARSET_UTF_8);
-            final RadesProject oldRadesProject = new ObjectMapper().readValue(jsonContent, RadesProjectBuilder.RadesProjectImpl.class);
+            final RadesProject oldRadesProject = new ObjectMapper().readValue(jsonContent, RadesProject.class);
             builder = new RadesProjectBuilder(oldRadesProject);
         } else {
             log.info(log.out(), "Radesfile does not exists");
