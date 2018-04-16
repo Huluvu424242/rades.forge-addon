@@ -1,6 +1,7 @@
 package com.github.funthomas424242.rades.project;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.github.funthomas424242.rades.annotations.accessors.RadesAddAccessor;
 import com.github.funthomas424242.rades.annotations.builder.RadesAddBuilder;
 import com.github.funthomas424242.rades.project.validationrules.BintrayPackagename;
 import com.github.funthomas424242.rades.project.validationrules.BintrayRepositoryname;
@@ -19,7 +20,7 @@ import java.util.Set;
 
 
 @RadesAddBuilder
-//@RadesAddAccessor
+@RadesAddAccessor
 public class RadesProject {
 
 
