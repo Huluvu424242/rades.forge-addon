@@ -1,12 +1,14 @@
 package com.github.funthomas424242.rades.project;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.github.funthomas424242.rades.annotations.accessors.AddAccessor;
 import com.github.funthomas424242.rades.annotations.builder.AddBuilder;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
 @AddBuilder
+@AddAccessor
 public class RepositoryDescription {
 
     @NotNull
